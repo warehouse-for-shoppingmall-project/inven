@@ -13,7 +13,7 @@ public interface RequestMapper {
 	public List<Map<String, Object>> searchDetail(Map<String, Object> map);
 	public List<Map<String, Object>> searchWhere(Map<String, Object> map);
 
-	// Ajax Method
+	// Ajax Method+
 	public int upStatus(Map<String, Object> map);
 
 //	public List<Map<String, Object>> selectAll(Map<String, Object> map);
