@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inven.mapper.RequestMapper">
+	<!-- 봐 join을 하면 column들이 겹치거나 많거나 하자나? 그 때 정해준 컬럼만 가져오게끔 미리 여기서 정의를 해두는거야 -->
+	<sql id="joinColumns">
+		*
+	</sql>
+	<!-- 조인 시 공통으로 사용되는 놈을 따로 빼놨음 -->
+	<sql id="commonQuery">
+		select
+		<include refid="joinColumns" />
+		from request_title rt
+		join request_detail rd
+		on rt.request_code = rd.request_code
+	</sql>
+
+
+	<!-- 사용 될 쿼리 시작 (searchTitle,searchDetail,searchWhere)-->
+
+	<!-- 타이틀 테이블만 조회 -->
+	<select id="searchTitle" parameterType="hashMap" resultType="hashmap">
+		select *
+		from request_title
+	</select>
+
+	<!-- 디테일 테이블만 조회 -->
+	<select id="searchDetail" parameterType="hashMap" resultType="hashmap">
+		select *
+		from request_detail
+	</select>
+
+	<select id="searchWhere" parameterType="hashMap" resultType="hashmap">
+		select *
+		from request_title
+		<choose>
+			<when test="key.equals('request_code')">
+				where request_code = #{request_code}
+			</when>
+			<when test="key.equals('product_code')">
+				where product_code = #{product_code}
+			</when>
+			<when test="key.equals('request_date')">
+				where Date(request_date) between #{first_request_date} and
+				#{last_request_date}
+			</when>
+			<when test="key.equals('request_status')">
+				where request_status = #{request_status}
+			</when>
+		</choose>
+	</select>
+
+	<update id="upStatus" parameterType="hashMap">
+		UPDATE request_title
+		SET request_status = #{request_status}
+		WHERE request_code = #{request_code}
+	</update>
+</mapper>
+
+		<!-- 조건 없이 조인해서 모두 조회 <select id="selectAll" parameterType="hashMap" resultType="hashmap">
+            <include refid="commonQuery" /> </select> 발주코드를 기준으로 한 조인 조회 <select id="searchRequestCode"
+            parameterType="hashMap" resultType="hashmap"> <include refid="commonQuery"
+            /> and rt.request_code = '201216-01' </select> 상품코드를 기준으로 한 조인 조회 <select
+            id="searchProductCode" parameterType="hashMap" resultType="hashmap"> <include
+            refid="commonQuery" /> and rt.product_code = "CT002" </select> 발주 요청일을 기준으로
+            한 조인 조회 <select id="searchRequestDate" parameterType="hashMap" resultType="hashmap">
+            <include refid="commonQuery" /> and DATE(request_date) = '2020/12/17' </select>
+            발주 요청기간(몇일~몇일 or 몇월~몇월)으로 한 조인 조회 <select id="searchRequestDates" parameterType="hashMap"
+            resultType="hashmap"> <include refid="commonQuery" /> and DATE(request_date)
+            between '2020/12/16' and '2020/12/17' </select> 발주 상태를 기준으로 한 조인 조회 <select
+            id="searchRequestStatus" parameterType="hashMap" resultType="hashmap"> <include
+            refid="commonQuery" /> and request_status = "신청" </select> -->
+

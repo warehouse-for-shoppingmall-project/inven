@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inven.mapper.ProductMapper">
+
+	<sql id="columns">
+		*
+	</sql>
+
+	<select id="selectAll" parameterType="hashMap" resultType="hashmap">
+		select <include refid="columns"/>
+		from product_title pt
+		join product_detail pd
+		on pt.product_code = pd.product_code
+	</select>
+
+</mapper>
