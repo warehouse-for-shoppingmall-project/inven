@@ -21,7 +21,7 @@ public interface ProductMapper {
 //	ProductTitle getProductTitle(@Param("product_code") String query);
 
 	@Select("SELECT * FROM product_title where product_code = #{query} ")
-	List<ProductTitle> searchByProductCode(String query);
+	List<ProductTitle> searchByProductCode(@Param("query") String query);
 
 	@Select("SELECT * FROM product_title where final_update = #{query}")
 	List<ProductTitle> searchByDate(String query);
