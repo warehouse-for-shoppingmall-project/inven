@@ -16,6 +16,7 @@ public interface RequestMapper {
 	// Ajax Method
 	public int upStatus(Map<String, Object> map);
 
+	
 //	public List<Map<String, Object>> selectAll(Map<String, Object> map);
 //	public List<Map<String, Object>> searchProductCode(Map<String, Object> map);
 //	public List<Map<String, Object>> searchRequestDate(Map<String, Object> map);

@@ -33,18 +33,18 @@
 		select *
 		from request_title
 		<choose>
-			<when test="key.equals('request_code')">
-				where request_code = #{request_code}
+			<when test="confirm.equals('request_code') and !value.equals('')">
+				where request_code = #{value}
 			</when>
-			<when test="key.equals('product_code')">
-				where product_code = #{product_code}
+			<when test="confirm.equals('product_code')">
+				where product_code = #{value}
 			</when>
-			<when test="key.equals('request_date')">
-				where Date(request_date) between #{first_request_date} and
-				#{last_request_date}
+			<when test="confirm.equals('request_date')">
+				where Date(request_date) between #{value} and
+				#{value}
 			</when>
-			<when test="key.equals('request_status')">
-				where request_status = #{request_status}
+			<when test="confirm.equals('request_status')">
+				where request_status = #{value}
 			</when>
 		</choose>
 	</select>

@@ -40,27 +40,6 @@ public class RequestAjaxController {
 	 * 200 : Success
 	 * 400 : Error */
 
-	@GetMapping("/reqTest")
-//	@RequestMapping(value = "/index.do", method = RequestMethod.GET)
-	public JSONObject test(@RequestParam Map<String, Object> map) {
-		log.info("Request Parameter : " + map);
-
-		JSONObject jobj = new JSONObject();
-		jobj.put("code", 400);
-		if(!map.containsKey("key")) {
-			map.put("key", "");
-			map.put("value", "");
-		}
-		log.info(map.toString());
-		List<Map<String, Object>> list = reqService.searchWhere(map);
-
-		if(list != null) {
-			jobj.put("code", 200);
-			jobj.put("list", list);
-		}
-
-		return jobj;
-	}
 
 	@PostMapping("/upStatus")
 	public JSONObject upStatus(@RequestParam Map<String, Object> map) {
@@ -75,5 +54,39 @@ public class RequestAjaxController {
 		return jobj;
 	}
 
+	@GetMapping("/reqTest")
+//	@RequestMapping(value = "/index.do", method = RequestMethod.GET)
+	public JSONObject test(@RequestParam Map<String, Object> map) {
+		log.info("Request Parameter : " + map);
+		
+		JSONObject jobj = new JSONObject();
+		jobj.put("code", 400);
+		if(!map.containsKey("key")) {
+			map.put("key", "");
+			map.put("value", "");
+		}
+		log.info(map.toString());
+		List<Map<String, Object>> list = reqService.searchWhere(map);
+		
+		if(list != null) {
+			jobj.put("code", 200);
+			jobj.put("list", list);
+		}
+		
+		return jobj;
+	}
+
+	@GetMapping("/searchWhere")
+	public JSONObject searchWhere(@RequestParam Map<String, Object> map) {
+		log.info("Request Parameter : " + map);
+		JSONObject jobj = new JSONObject();
+		jobj.put("code", 400);
+		
+		int rs = reqService.upStatus(map);
+		if(rs > 0)
+			jobj.put("code", 200);
+		
+		return jobj;
+	}
 
 }

@@ -49,21 +49,14 @@ public class RequestController {
 		log.info("Request Parameter : " + map);
 		ModelAndView mv = new ModelAndView("/request_fd/request_main");
 
-		List<Map<String, Object>> list = reqService.searchTitle(map);
+		if(!map.containsKey("confirm")) map.put("confirm", "");
+		if(!map.containsKey("value")) map.put("value", "");
+		
+		List<Map<String, Object>> list = reqService.searchWhere(map);
+		
 		mv.addObject("list", list);
 
 		return mv;
 	}
 
-	//
-	@RequestMapping(value = "/searchList" , method = RequestMethod.GET)
-	public ModelAndView SearchList(@RequestParam Map<String, Object> map) {
-		log.info("Request Parameter : " + map);
-		ModelAndView mv = new ModelAndView("/request_fd/request_main");
-
-		List<Map<String, Object>> list = reqService.searchTitle(map);
-		mv.addObject("list", list);
-
-		return mv;
-	}
 }

@@ -28,3 +28,29 @@ $('select[name=status]').change(function () {
         });
     }
 });
+
+/*
+console.log($("input[name=searchInput]").text());
+
+// console.log($("tr[name=reqest_table]:eq(0)").children().first().text());
+$('button[name=searchButton]').click(function(){
+    let search = $("input[name=searchInput]").text();
+    let data;
+    switch($("select[name=searchSelect]").val()){
+        case 0 :
+            data =  {
+                request_code: $("tr[name=reqest_table]").children().first().text()
+            }
+    }
+
+	console.log(search);
+	console.log($("input[name=searchInput]").text());
+
+    // $.ajax({
+    //     type='get',
+    //     url : '/req/acyn/searchWhere',
+    //     dataType: "json",
+    //     //data : 
+    // });
+});
+*/

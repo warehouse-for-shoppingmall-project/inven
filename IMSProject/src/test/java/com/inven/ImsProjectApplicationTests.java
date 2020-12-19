@@ -32,11 +32,11 @@ class ImsProjectApplicationTests {
 		JSONObject jobj = new JSONObject();
 		jobj.put("code", 400); 
 
-		List<Map<String, Object>> list = prodService.selectAll(map);
-		if(list != null) {
-			jobj.put("code", 200);
-			jobj.put("list", list);
-		}
+//		List<Map<String, Object>> list = prodService.(map);
+//		if(list != null) {
+//			jobj.put("code", 200);
+//			jobj.put("list", list);
+//		}
 		
 		return jobj;
 	}
