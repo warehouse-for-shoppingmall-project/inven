@@ -1,27 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.inven.mapper.RequestMapper">
-	<!-- 봐 join을 하면 column들이 겹치거나 많거나 하자나? 그 때 정해준 컬럼만 가져오게끔 미리 여기서 정의를 해두는거야 -->
-	<sql id="joinColumns">
-		*
+
+	<sql id="titleColumn">
+		request_code, product_code, request_status, unit_price, factory_name, etc, file_name, total_order_quantity,
+		date(request_date) as request_date, date(get_Date) as get_date, date(manufacturing_date) as manufacturing_date
 	</sql>
-	<!-- 조인 시 공통으로 사용되는 놈을 따로 빼놨음 -->
+
 	<sql id="commonQuery">
-		select
-		<include refid="joinColumns" />
+		select *
 		from request_title rt
 		join request_detail rd
 		on rt.request_code = rd.request_code
 	</sql>
-
-
-	<!-- 사용 될 쿼리 시작 (searchTitle,searchDetail,searchWhere)-->
-
-	<!-- 타이틀 테이블만 조회 -->
-	<select id="searchTitle" parameterType="hashMap" resultType="hashmap">
-		select *
-		from request_title
-	</select>
 
 	<!-- 디테일 테이블만 조회 -->
 	<select id="searchDetail" parameterType="hashMap" resultType="hashmap">
@@ -29,24 +20,45 @@
 		from request_detail
 	</select>
 
-	<select id="searchWhere" parameterType="hashMap" resultType="hashmap">
-		select *
+	<!-- 조회 전체 카운트 -->
+	<select id="searchCount" parameterType="hashMap" resultType="int">
+		select count(*)
 		from request_title
 		<choose>
 			<when test="confirm.equals('request_code') and !value.equals('')">
 				where request_code = #{value}
 			</when>
-			<when test="confirm.equals('product_code')">
+			<when test="confirm.equals('product_code') and !value.equals('')">
 				where product_code = #{value}
 			</when>
-			<when test="confirm.equals('request_date')">
-				where Date(request_date) between #{value} and
-				#{value}
+			<when test="confirm.equals('request_date') and !start_date.equals('') and !end_date.equals('')">
+				where Date(request_date) between #{start_date} and #{end_date}
 			</when>
-			<when test="confirm.equals('request_status')">
+			<when test="confirm.equals('request_status') and !value.equals('')">
 				where request_status = #{value}
 			</when>
 		</choose>
+	</select>
+
+	<!-- 검색 및 페이징 -->
+	<select id="searchWhere" parameterType="hashMap" resultType="hashmap">
+		select <include refid="titleColumn"/>
+		from request_title
+		<choose>
+			<when test="confirm.equals('request_code') and !value.equals('')">
+				where request_code = #{value}
+			</when>
+			<when test="confirm.equals('product_code') and !value.equals('')">
+				where product_code = #{value}
+			</when>
+			<when test="confirm.equals('request_date') and !start_date.equals('') and !end_date.equals('')">
+				where Date(request_date) between #{start_date} and #{end_date}
+			</when>
+			<when test="confirm.equals('request_status') and !value.equals('')">
+				where request_status = #{value}
+			</when>
+		</choose>
+		LIMIT #{start_idx}, #{end_idx}
 	</select>
 
 	<update id="upStatus" parameterType="hashMap">

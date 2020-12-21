@@ -8,6 +8,16 @@
 	form 요소들 jobj로 만들기 
 	jobj = { key : value}
 */
+
+var keyCodeBlock = function (e){
+	// f12, 새로고침, 엔터 막기,
+	console.log(e.keyCode);
+	if(e.keyCode === 123 || e.keyCode === 13 || (e.ctrlKey && e.keyCode === 82)){
+		e.preventDefault();
+		e.returnValue = false;
+	}
+}
+
 var serializeForm = function(form) {
 	var obj = {};
 	var formData = new FormData(form);
@@ -17,10 +27,7 @@ var serializeForm = function(form) {
 	return obj;
 };
 
-/* 
-	아니 여기는 왜 까맣냐고;;
-	깃허브라서..?ㅎ
-	절대 그럴리 없죠?
+/*
 	jobj를 파라미터 형식으로 변환해준다.
 	method='GET' 방식에서만 사용한다.
 */
@@ -34,24 +41,23 @@ var toparamJson = function(jobj){
 	}
 	return str;
 }
-
-function ajax_submit(frm) { 
-
+/*
+function ajax_submit(frm) {
 	var xhr = new XMLHttpRequest();
-	/* 준비상태가 변하면 실행한다. */
+	/!* 준비상태가 변하면 실행한다. *!/
 	xhr.onreadystatechange = function() {
 		if (xhr.readyState === xhr.DONE) {
-			/* 상태가 200, 201 이면 서버 통신 성공 */
+			/!* 상태가 200, 201 이면 서버 통신 성공 *!/
 			if (xhr.status === 200 || xhr.status === 201) {
 				console.log(xhr.responseText);
 			} else {
-				/* 서버통신 실패 */
+				/!* 서버통신 실패 *!/
 				console.error(xhr.responseText);
 			}
 		}
 	};
 	console.log(2);
-	/* 메소드에 따라 다른방식의 접근을 해줘야한다. */
+	/!* 메소드에 따라 다른방식의 접근을 해줘야한다. *!/
 	if(frm.method == 'get'){
 		xhr.open(frm.method, frm.action+toparamJson(serializeForm(frm)), false);
 		xhr.send();
@@ -61,4 +67,4 @@ function ajax_submit(frm) {
 	}
 	console.log(3);
 	
-}
+}*/

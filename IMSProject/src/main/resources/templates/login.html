@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/cmnHead :: main-head">
+</head>
+<body>
+<div class="container">
+    <div class="row justify-content-md-center">
+        <div class="col-lg-5">
+            <form class="form-signin" action="loginCheck" method="get" id="frm" onsubmit="return passCheck(this)">
+                <h2 class="form-signin-heading">Press Password</h2>
+                <label for="inputPassword" class="sr-only">Password</label>
+                <input type="password" id="inputPassword" name="pwd" class="form-control" placeholder="Password" required>
+                <button class="btn btn-lg btn-primary btn-block" id="submit_btn" type="submit">Sign in</button>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Optional JavaScript; choose one of the two! -->
+
+<!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
+        crossorigin="anonymous"></script>
+<script th:src="@{/js/utils.js}"></script>
+<script>
+    window.onload = function (){
+        $('#submit_btn').css('display', 'none');
+        document.onkeydown = keyCodeBlock;
+
+        document.addEventListener('keydown', function (e){
+            if(e.shiftKey && e.keyCode == 107)
+                $('#submit_btn').css('display', '');
+        });
+    }
+
+    function passCheck(frm) {
+        let xhr = new XMLHttpRequest();
+        /* 준비상태가 변하면 실행한다. */
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === xhr.DONE) {
+                /* 상태가 200, 201 이면 서버 통신 성공 */
+                if (xhr.status === 200 || xhr.status === 201) {
+                    let jobj = JSON.parse(xhr.responseText);
+                    if (jobj.code == 200) {
+                        location.href = "req/list";
+                    } else {
+                        alert('비밀번호 잘못입력');
+                        frm.pwd.value = '';/* 틀린 비밀번호 지워주기 */
+                    }
+                } else {
+                    /* 서버통신 실패 */
+                    console.error(xhr.responseText);
+                }
+            }
+        };
+        /* 메소드에 따라 다른방식의 접근을 해줘야한다. */
+        if (frm.method == 'get') {
+            xhr.open(frm.method, frm.action + toparamJson(serializeForm(frm)), false);
+            xhr.send();
+        } else {
+            xhr.open(frm.method, frm.action, false);
+            xhr.send(new FormData(frm));
+        }
+        return false;
+    }
+
+</script>
+<!-- Option 2: jQuery, Popper.js, and Bootstrap JS
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>
+-->
+</body>
+</html>
