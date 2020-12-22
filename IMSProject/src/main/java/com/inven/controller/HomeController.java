@@ -40,8 +40,6 @@ import com.inven.common.CommandMap;
 @Controller
 public class HomeController {
 
-    private final Logger log = LoggerFactory.getLogger(this.getClass());
-
     @Autowired
     CommonService commonService;
 

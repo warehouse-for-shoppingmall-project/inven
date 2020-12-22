@@ -4,6 +4,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,12 +26,10 @@ import com.inven.service.ProductServiceImpl;
  * ex) 여기에 RequestMapping(value="common")
  * 해두면 이 밑에 맵핑들은 다 common/___ 으로 접근해야함
  */
-
+@Slf4j
 @RestController
 @RequestMapping(value = "/rest")
 public class RestAPIController {
-
-	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@Resource(name="productService")
 	ProductServiceImpl prodService = new ProductServiceImpl();

@@ -20,9 +20,6 @@ import com.inven.service.inter.CommonService;
 @Slf4j
 @Service("commonService")
 public class CommonServiceImpl implements CommonService {
-
-    private final Logger log = LoggerFactory.getLogger(this.getClass());
-
     @Autowired
     private CommonMapper cmnMapper;
 

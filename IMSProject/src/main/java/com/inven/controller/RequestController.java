@@ -21,8 +21,6 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping(value = "/req/*")
 public class RequestController {
 
-    private final Logger log = LoggerFactory.getLogger(this.getClass());
-
     @Autowired
     RequestService reqService;
 

@@ -23,6 +23,6 @@ public interface ProductService {
 
     void productTitlesAdd(ProductTitle productTitle);
 
-    void productDetailsAdd();
+//    void productDetailsAdd();
 }
 
