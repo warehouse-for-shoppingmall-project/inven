@@ -15,7 +15,6 @@
         </div>
     </div>
 </div>
-<!-- Optional JavaScript; choose one of the two! -->
 
 <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
@@ -31,7 +30,7 @@
         document.onkeydown = keyCodeBlock;
 
         document.addEventListener('keydown', function (e){
-            if(e.shiftKey && e.keyCode == 107)
+            if(e.ctrlKey && e.keyCode == 32)
                 $('#submit_btn').css('display', '');
         });
     }

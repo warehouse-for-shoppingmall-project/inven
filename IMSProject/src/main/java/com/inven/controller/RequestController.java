@@ -3,12 +3,12 @@ package com.inven.controller;
 import java.util.List;
 import java.util.Map;
 
-
 import com.inven.common.Paging;
 import com.inven.service.inter.RequestService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -64,9 +64,19 @@ public class RequestController {
             List<Map<String, Object>> list = reqService.searchWhere(map);
 
             mv.addObject("list", list);
-        }
 
+        }
         return mv;
     }
 
+    @GetMapping(value="/add")
+    public ModelAndView add(@RequestParam Map<String, Object> map) {
+        log.info("Request Parameter : " + map);
+        ModelAndView mv = new ModelAndView("request_fd/request_add");
+        List<String> list = reqService.selectProductCode();
+
+        mv.addObject("list",list);
+
+        return mv;
+    }
 }
