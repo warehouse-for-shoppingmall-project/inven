@@ -24,7 +24,7 @@ import com.inven.service.ProductServiceImpl;
  */
 
 @SuppressWarnings("unchecked")
-@RequestMapping(value = "/prod/acyn/*")
+@RequestMapping(value = "/prod/async/*")
 @RestController
 public class ProductAjaxController {
 

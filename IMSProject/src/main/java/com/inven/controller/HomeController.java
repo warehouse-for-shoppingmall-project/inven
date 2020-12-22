@@ -1,16 +1,21 @@
 package com.inven.controller;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.inven.service.inter.CommonService;
+import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,8 +25,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.inven.common.CommandMap;
-import com.inven.common.CommonUtils;
-import com.inven.service.CommonServiceImpl;
 
 
 /*
@@ -31,67 +34,82 @@ import com.inven.service.CommonServiceImpl;
  */
 
 @SuppressWarnings("unchecked")
+@Slf4j
 @Controller
 public class HomeController {
 
-	private final Logger log = LoggerFactory.getLogger(this.getClass());
+    @Autowired
+    CommonService commonService;
 
-	@Resource(name="commonService")
-	CommonServiceImpl commonService = new CommonServiceImpl();
+    /*
+     * url annotation
+     * 복수 지정방식 : value = { "url", "url", "url"}
+     * 단일 지정방식 : value = "url"
+     * */
 
+    @GetMapping(value = {"/", "login"})
+    public ModelAndView home(HttpServletRequest req) {
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("login");
+        if(req.getSession().getAttribute("connect") != null)
+            mv.setViewName("redirect:/req/list");
 
-	/*
-	 * url annotation
-	 * 복수 지정방식 : value = { "url", "url", "url"}
-	 * 단일 지정방식 : value = "url"
-	 * */
+        return mv;
+    }
 
-	@GetMapping(value = {"/", "/index", "index.do"})
-	public ModelAndView home(@RequestParam Map<String, Object> map) {
-		log.debug("Request Parameter : " + map);
+    @GetMapping(value = "logout")
+    public ModelAndView logout(HttpServletRequest req) {
+        HttpSession s = req.getSession();
+        if(s.getAttribute("connect") != null)
+            s.invalidate();
+        return new ModelAndView("redirect:/");
+    }
 
-		ModelAndView mv = new ModelAndView("index");
+    @GetMapping(value = "main")
+    public ModelAndView movePageMain(@RequestParam Map<String, Object> map) {
+        return new ModelAndView("pageMain");
+    }
 
-		return mv;
-	}
-
-	@RequestMapping(value = "main.do" , method = RequestMethod.GET)
-	public ModelAndView movePageMain(@RequestParam Map<String, Object> map) {
-		return new ModelAndView("pageMain");
-	}
-
-	/* 비동기 서버통신(Ajax) 접근할 때 @ResponseBody */
 	@ResponseBody
-	@RequestMapping(value = "loginCheck.do", method = RequestMethod.GET)
-	public JSONObject loginCheck(@RequestParam Map<String, Object> map, HttpServletRequest req) {
-		log.debug("Request Parameter : " + map);
-		// JSONObject = {key : value, key : value.....} 형식으로 저장됨 하나의 중괄호 안에 여러가지의 key, value를 적재함
-		JSONObject jobj = new JSONObject();
-		jobj.put("code", 400); // key 값이 중복되면 덮어씌워짐
-		if(map.containsKey("pwd")) {
-			map.put("pwd", CommonUtils.getEncrypt(map.get("pwd").toString(), "cloth")); // 암호화 CommonUtils에 있음. 구글링으로 이게 뭔지만 알면 됨
-			Map<String, Object> rs = commonService.loginCheck(map); // ___Service -> ___DAO -> ___SQL.xml 순으로 접근함 
-			if(rs != null) {
-				jobj.put("code", 200);	// 정의된 요소값을 찾았는지 확인
-				HttpSession s = req.getSession();
-				s.setAttribute("key", "value");
-			}
-		}
-		return jobj;
+	@GetMapping(value="readFile")
+	public String readFileTest() throws IOException {
+		DefaultResourceLoader drl = new DefaultResourceLoader();
+		Resource resource = drl.getResource("classpath:static/pass/pwd.txt");
+
+		return Files.readString(Path.of(resource.getURI()));
 	}
 
-	@RequestMapping(value = "/sample/testMapArgumentResolver.do")
-	public ModelAndView testMapArgumentResolver(CommandMap commandMap) throws Exception {
-		ModelAndView mv = new ModelAndView("");
-		if (!commandMap.isEmpty()) {
-			Iterator<Entry<String, Object>> iterator = commandMap.getMap().entrySet().iterator();
-			Entry<String, Object> entry = null;
-			while (iterator.hasNext()) {
-				entry = iterator.next();
-				log.debug("key : " + entry.getKey() + ", value : " + entry.getValue());
-			}
-		}
-		return mv;
-	}
+    /* 비동기 서버통신(Ajax) 접근할 때 @ResponseBody */
+    @ResponseBody
+    @RequestMapping(value = "loginCheck", method = RequestMethod.GET)
+    public JSONObject loginCheck(@RequestParam Map<String, Object> map, HttpServletRequest req) throws IOException {
+        log.debug("Request Parameter : " + map);
+        JSONObject jobj = new JSONObject();
+        jobj.put("code", 400);
+        if (map.containsKey("pwd")) {
+            boolean rs = commonService.loginCheck(map);
+            if (rs) {
+                jobj.put("code", 200);
+                HttpSession s = req.getSession();
+                s.setAttribute("connect", true);
+                s.setMaxInactiveInterval(60 * 60);
+            }
+        }
+        return jobj;
+    }
+
+    @RequestMapping(value = "/sample/testMapArgumentResolver")
+    public ModelAndView testMapArgumentResolver(CommandMap commandMap) throws Exception {
+        ModelAndView mv = new ModelAndView();
+        if (!commandMap.isEmpty()) {
+            Iterator<Entry<String, Object>> iterator = commandMap.getMap().entrySet().iterator();
+            Entry<String, Object> entry;
+            while (iterator.hasNext()) {
+                entry = iterator.next();
+                log.debug("key : " + entry.getKey() + ", value : " + entry.getValue());
+            }
+        }
+        return mv;
+    }
 
 }

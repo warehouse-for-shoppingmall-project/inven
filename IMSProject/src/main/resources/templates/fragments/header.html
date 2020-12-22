@@ -1,17 +1,35 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-	<head th:fragment="main-head">
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-		<meta name="description" content="">
-		<meta name="author" content="">
-
-		<th:block layout:fragment="title"></th:block>
-
-		<link rel="stylesheet" th:href="@{/css/style.css}" />
-		<link rel="stylesheet" th:href="@{/plugin/mCustomScrollbar/jquery.mCustomScrollbar.min.css}" />
-
-		<th:block layout:fragment="add-css"></th:block>
-	</head>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+	<th:block th:fragment="nav-header">
+	<!-- header navbar -->
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		<a class="navbar-brand" href="#">Navbar</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#header-navbar"
+				aria-controls="header-navbar" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="header-navbar">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item">
+					<a class="nav-link" href="#">발주관리<span class="sr-only">request</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#">상품관리</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#">주문관리</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#">발송내역</a>
+				</li>
+			</ul>
+			<ul class="navbar-nav ml-auto">
+				<li class="nav-item">
+					<a class="nav-link" href="/logout">로그아웃</a>
+				</li>
+			</ul>
+		</div>
+	</nav>
+	<!-- End of navbar -->
+	</th:block>
 </html>

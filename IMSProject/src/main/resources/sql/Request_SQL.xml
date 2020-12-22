@@ -1,112 +1,84 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.inven.mapper.RequestMapper">
-	<!-- 봐 join을 하면 column들이 겹치거나 많거나 하자나? 그 때 정해준 컬럼만 가져오게끔 미리 여기서 정의를 해두는거야 -->
-	<sql id="joinColumns">
-		*
+
+	<sql id="titleColumn">
+		request_code, product_code, request_status, unit_price, factory_name, etc, file_name, total_order_quantity,
+		date(request_date) as request_date, date(get_Date) as get_date, date(manufacturing_date) as manufacturing_date
 	</sql>
-	<!-- 조인 시 공통으로 사용되는 놈을 따로 빼놨음 -->
+
 	<sql id="commonQuery">
-		select
-		<include refid="joinColumns" />
+		select *
 		from request_title rt
 		join request_detail rd
-		on rt.request_code =
-		rd.request_code
+		on rt.request_code = rd.request_code
 	</sql>
 
-
-	<!-- 사용 될 쿼리 시작 (searchTitle,searchDetail,searchWhere) -->
-
-	<!-- 타이틀 테이블만 조회 -->
-	<select id="searchTitle" parameterType="hashMap"
-		resultType="hashmap">
-		select *
-		from request_title
-	</select>
-
 	<!-- 디테일 테이블만 조회 -->
-	<select id="searchDetail" parameterType="hashMap"
-		resultType="hashmap">
+	<select id="searchDetail" parameterType="hashMap" resultType="hashmap">
 		select *
 		from request_detail
 	</select>
 
-	<select id="searchWhere" parameterType="hashMap"
-		resultType="hashmap">
-		select *
+	<!-- 조회 전체 카운트 -->
+	<select id="searchCount" parameterType="hashMap" resultType="int">
+		select count(*)
 		from request_title
 		<choose>
-			<when
-				test="confirm.equals('request_code') and !value.equals('')">
+			<when test="confirm.equals('request_code') and !value.equals('')">
 				where request_code = #{value}
 			</when>
-			<when test="confirm.equals('product_code')">
+			<when test="confirm.equals('product_code') and !value.equals('')">
 				where product_code = #{value}
 			</when>
-			<when test="confirm.equals('request_date')">
-				where Date(request_date) between #{value} and
-				#{value}
+			<when test="confirm.equals('request_date') and !start_date.equals('') and !end_date.equals('')">
+				where Date(request_date) between #{start_date} and #{end_date}
 			</when>
-			<when test="confirm.equals('request_status')">
+			<when test="confirm.equals('request_status') and !value.equals('')">
 				where request_status = #{value}
 			</when>
 		</choose>
 	</select>
 
-	<update id="upStatus" parameterType="hashMap" >
+	<!-- 검색 및 페이징 -->
+	<select id="searchWhere" parameterType="hashMap" resultType="hashmap">
+		select <include refid="titleColumn"/>
+		from request_title
+		<choose>
+			<when test="confirm.equals('request_code') and !value.equals('')">
+				where request_code = #{value}
+			</when>
+			<when test="confirm.equals('product_code') and !value.equals('')">
+				where product_code = #{value}
+			</when>
+			<when test="confirm.equals('request_date') and !start_date.equals('') and !end_date.equals('')">
+				where Date(request_date) between #{start_date} and #{end_date}
+			</when>
+			<when test="confirm.equals('request_status') and !value.equals('')">
+				where request_status = #{value}
+			</when>
+		</choose>
+		LIMIT #{start_idx}, #{end_idx}
+	</select>
+
+	<update id="upStatus" parameterType="hashMap">
 		UPDATE request_title
-		SET
-		request_status = #{request_status}
+		SET request_status = #{request_status}
 		WHERE request_code = #{request_code}
 	</update>
-	
-	<insert id="addTitle" parameterType="hashMap" >
-		insert into request_title(
-		request_code, product_code,
-		request_status,
-		unit_price, factory_name, manufacturing_date,etc
-		)
-		values(
-		#{request_code},
-		#{product_code}, #{request_status.val()},
-		${unit_price}, #{factory_name}, #{manufacturing_date},#{etc}
-		)
-	</insert>
-	
-	<insert id="addDetail" parameterType="hashMap">
-		insert into request_detail(
-		request_code,product_code,gender,color_name,s,m,l,xl,free,total
-		)
-		values(
-		#{request_code},#{product_code},#{gender},#{color_name},#{s},#{m},#{l},#{xl},#{free},#{total}
-		)
-	</insert>
-	<select id="makeReqCode" resultType="String">
-		SELECT FN_MAKE_REQ_CODE()
-	</select>
-	
-	<select id="selectProductCode" resultType="String">
-		SELECT product_code from product_title
-	</select>
-
 </mapper>
 
-
-<!-- 발주코드 생성해주는 함수인데 안되길래 일단 보류 <select id="makeReqCode" resultType="hashmap"> 
-	SELECT FN_MAKE_REQ_CODE() </select> -->
-
-<!-- 조건 없이 조인해서 모두 조회 <select id="selectAll" parameterType="hashMap" resultType="hashmap"> 
-	<include refid="commonQuery" /> </select> 발주코드를 기준으로 한 조인 조회 <select id="searchRequestCode" 
-	parameterType="hashMap" resultType="hashmap"> <include refid="commonQuery" 
-	/> and rt.request_code = '201216-01' </select> 상품코드를 기준으로 한 조인 조회 <select 
-	id="searchProductCode" parameterType="hashMap" resultType="hashmap"> <include 
-	refid="commonQuery" /> and rt.product_code = "CT002" </select> 발주 요청일을 기준으로 
-	한 조인 조회 <select id="searchRequestDate" parameterType="hashMap" resultType="hashmap"> 
-	<include refid="commonQuery" /> and DATE(request_date) = '2020/12/17' </select> 
-	발주 요청기간(몇일~몇일 or 몇월~몇월)으로 한 조인 조회 <select id="searchRequestDates" parameterType="hashMap" 
-	resultType="hashmap"> <include refid="commonQuery" /> and DATE(request_date) 
-	between '2020/12/16' and '2020/12/17' </select> 발주 상태를 기준으로 한 조인 조회 <select 
-	id="searchRequestStatus" parameterType="hashMap" resultType="hashmap"> <include 
-	refid="commonQuery" /> and request_status = "신청" </select> -->
+		<!-- 조건 없이 조인해서 모두 조회 <select id="selectAll" parameterType="hashMap" resultType="hashmap">
+            <include refid="commonQuery" /> </select> 발주코드를 기준으로 한 조인 조회 <select id="searchRequestCode"
+            parameterType="hashMap" resultType="hashmap"> <include refid="commonQuery"
+            /> and rt.request_code = '201216-01' </select> 상품코드를 기준으로 한 조인 조회 <select
+            id="searchProductCode" parameterType="hashMap" resultType="hashmap"> <include
+            refid="commonQuery" /> and rt.product_code = "CT002" </select> 발주 요청일을 기준으로
+            한 조인 조회 <select id="searchRequestDate" parameterType="hashMap" resultType="hashmap">
+            <include refid="commonQuery" /> and DATE(request_date) = '2020/12/17' </select>
+            발주 요청기간(몇일~몇일 or 몇월~몇월)으로 한 조인 조회 <select id="searchRequestDates" parameterType="hashMap"
+            resultType="hashmap"> <include refid="commonQuery" /> and DATE(request_date)
+            between '2020/12/16' and '2020/12/17' </select> 발주 상태를 기준으로 한 조인 조회 <select
+            id="searchRequestStatus" parameterType="hashMap" resultType="hashmap"> <include
+            refid="commonQuery" /> and request_status = "신청" </select> -->
 

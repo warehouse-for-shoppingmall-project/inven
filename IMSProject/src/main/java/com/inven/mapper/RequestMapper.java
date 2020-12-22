@@ -9,17 +9,12 @@ import org.apache.ibatis.annotations.Mapper;
 public interface RequestMapper {
 
 	// 방금 만든 sql문을 접근하는 함수를 만들어봐
-	public List<Map<String, Object>> searchTitle(Map<String, Object> map);
-	public List<Map<String, Object>> searchDetail(Map<String, Object> map);
-	public List<Map<String, Object>> searchWhere(Map<String, Object> map);
-	public List<String> selectProductCode();
-	
+	int searchCount(Map<String, Object> map);
+	List<Map<String, Object>> searchDetail(Map<String, Object> map);
+	List<Map<String, Object>> searchWhere(Map<String, Object> map);
 
 	// Ajax Method+
-	public List<Map<String, Object>> addTitle(Map<String, Object> map);
-	public List<Map<String, Object>> addDetail(Map<String, Object> map);
-	public int upStatus(Map<String, Object> map);
-	public String makeReqCode();
+	int upStatus(Map<String, Object> map);
 
 	
 //	public List<Map<String, Object>> selectAll(Map<String, Object> map);

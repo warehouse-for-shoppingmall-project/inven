@@ -12,24 +12,30 @@ import com.inven.service.inter.RequestService;
 
 
 @Service("requestService")
-public class RequestServiceImpl implements RequestService{
-	private final Logger log = LoggerFactory.getLogger(this.getClass());
+public class RequestServiceImpl implements RequestService {
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-	@Autowired
-	private RequestMapper reqMapper;
+    @Autowired
+    private RequestMapper reqMapper;
 
-	// searchTitle함수를 반환하는 함수를 만들어봐 잘했어
-	// Controller Method
-	public List<Map<String, Object>> searchTitle(Map<String, Object> map){ return reqMapper.searchTitle(map); }
-	public List<Map<String, Object>> searchDetail(Map<String, Object> map){ return reqMapper.searchDetail(map); }
-	public List<Map<String, Object>> searchWhere(Map<String, Object> map){ return reqMapper.searchWhere(map); }
-	public List<String> selectProductCode(){ return reqMapper.selectProductCode(); }
+    // searchTitle함수를 반환하는 함수를 만들어봐 잘했어
+    // Controller Method
+    public int searchCount(Map<String, Object> map) {
+        return reqMapper.searchCount(map);
+    }
 
-	// Ajax Method
-	public int upStatus(Map<String, Object> map) {return reqMapper.upStatus(map);}
-	public String makeReqCode(){ return reqMapper.makeReqCode(); }
-	public List<Map<String, Object>> addTitle(Map<String, Object> map){ return reqMapper.addTitle(map);}
-	public List<Map<String, Object>> addDetail(Map<String, Object> map){ return reqMapper.addDetail(map); }
+    public List<Map<String, Object>> searchDetail(Map<String, Object> map) {
+        return reqMapper.searchDetail(map);
+    }
+
+    // Ajax Method
+    public int upStatus(Map<String, Object> map) {
+        return reqMapper.upStatus(map);
+    }
+
+    public List<Map<String, Object>> searchWhere(Map<String, Object> map) {
+        return reqMapper.searchWhere(map);
+    }
 
 
 //	public List<Map<String, Object>> selectAll(Map<String, Object> map){ return reqMapper.selectAll(map); }
