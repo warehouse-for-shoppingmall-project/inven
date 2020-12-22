@@ -12,9 +12,14 @@ public interface RequestMapper {
 	public List<Map<String, Object>> searchTitle(Map<String, Object> map);
 	public List<Map<String, Object>> searchDetail(Map<String, Object> map);
 	public List<Map<String, Object>> searchWhere(Map<String, Object> map);
+	public List<String> selectProductCode();
+	
 
 	// Ajax Method+
+	public List<Map<String, Object>> addTitle(Map<String, Object> map);
+	public List<Map<String, Object>> addDetail(Map<String, Object> map);
 	public int upStatus(Map<String, Object> map);
+	public String makeReqCode();
 
 	
 //	public List<Map<String, Object>> selectAll(Map<String, Object> map);

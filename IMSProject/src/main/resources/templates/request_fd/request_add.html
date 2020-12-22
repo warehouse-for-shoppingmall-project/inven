@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>발주 등록</title>
+<style>
+#request_title_table {
+	width: 240px;
+	display: inline-block;
+	float: left;
+}
+
+#request_title_table input {
+	width: 100px;
+}
+
+#request_title_table #file {
+	width: 200px;
+}
+
+#request_title_table #manufacturing_date {
+	width: 120px;
+}
+
+#request_detail_table {
+	display: inline-table;
+	width: 300px;
+	/* float: right; */
+}
+
+#request_detail_table input {
+	width: 30px;
+}
+</style>
+</head>
+
+<body>
+	<h1>발주 등록하기</h1>
+	<div id="wrap">
+		<!-- enctype : 파일 첨부 기능이 있다면 꼭 추가해라했음.. -->
+		<form name="titleForm" onsubmit="return false">
+			발주 코드 <input type="text" id="request_code" readonly>
+			<button type="button" name="makeReqCode">발주코드 생성</button>  <br> 
+			상품 코드 <select class="custom-select" name="product_code">
+						<option th:each="code : ${list}" th:text="${code}" th:value="${code}"></option>
+					</select><br>
+			 발주 상태 <select class="custom-select" name="request_status">
+						<option value="신청">신청</option>
+						<option value="대기">대기</option>
+						<option value="승인">승인</option>
+						<option value="취소">취소</option>
+						<option value="수령">수령</option>
+					</select><br> 
+			단가 <input type="number" name="unit_price" value="0">원<br>
+			공장 이름 <input type="text" name="factory_name" placeholder="제조사 명 입력"><br>
+			제조일 <input type="date" name="manufacturing_date"><br>
+			<!-- 주문 총 양 <input type="text" name="total"><br> -->
+			<!-- 제조 코드 <input type="text" name="request_code"><br> -->
+			파일 <input type="file" id="file"><br>
+			비고 <input type="text"><br>
+		</form>
+		<form name="detailForm" onsubmit="return false">
+			<table id="request_detail_table">
+				<thead>
+					<tr>
+						<th>성별</th>
+						<th>색상</th>
+						<th>s</th>
+						<th>m</th>
+						<th>l</th>
+						<th>xl</th>
+						<th>free</th>
+						<th>total</th>
+						<th><input type="button" value="+" id="addButton"
+							onclick="addDetail()"></th>
+						<!-- <th>삭제</th> -->
+					</tr>
+				</thead>
+				<tbody id="request_detail_tbody">
+					<tr>
+						<td><select name="gender">
+								<option value="C">공용</option>
+								<option value="W">여자</option>
+								<option value="M">남자</option>
+						</select></td>
+						<td><input type="text" name="color_name"></td>
+						<td><input type="number" name="s"></td>
+						<td><input type="number" name="m"></td>
+						<td><input type="number" name="l"></td>
+						<td><input type="number" name="xl"></td>
+						<td><input type="number" name="free"></td>
+						<td><input type="number" name="total"></td>
+					</tr>
+				</tbody>
+			</table>
+			<br> 
+			<input type="submit" id="reqAdd" value="발주 등록">
+		</form>
+		<!-- end of outer form -->
+	</div>
+	<!-- end of wrap-->
+
+	<!-- 버튼 클릭 시 detail 테이블 열 추가 -->
+	<script>
+		window.onload = function() {
+			$('input[type=number]').val(0);
+		}
+
+		let request_detail_tbody = document.getElementById("request_detail_tbody");
+		let rowName = [ 's', 'm', 'l', 'xl', 'free', 'total' ];
+
+		function addDetail() {
+			let row = request_detail_tbody.insertRow();
+
+			//성별 
+			row.insertCell(0).innerHTML += '<select name="gender">'
+					+ '<option value="C">공용</option>'
+					+ '<option value="W">여자</option>'
+					+ '<option value="M">남자</option>' + '</select>';
+			//색상
+			row.insertCell(1).innerHTML += '<input type="text" name="color_name">';
+			//사이즈(s~free), 총 수량
+			for (var i = 0; i < rowName.length; i++) {
+				row.insertCell(i + 2).innerHTML += '<input type="number" name="' + rowName[i] + '" value="0">';
+			}
+			row.insertCell().innerHTML += '<input type="button" value="-" id="delButton" onclick="delDetail(this)">';
+
+		}
+		// 해당 행 삭제 버튼
+		function delDetail(row) {
+			let tr = row.parentNode.parentNode;
+			tr.parentNode.removeChild(tr);
+		}
+	</script>
+
+	<!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
+	<script src="https://code.jquery.com/jquery-3.5.1.js"
+		integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+		crossorigin="anonymous"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
+		crossorigin="anonymous"></script>
+	<script th:src="@{/js/req_js/add.js}"></script>
+</body>
+</html>
+
+
+<!-- 
+    지금 해야할 것.
+    1. 발주코드 함수 불러와서 사용하기 => ajax를 통해서 발주등록 페이지 활성화 시 input안에 value 삽입
+    2. 사용자가 입력한 영어를 대문자로 바꾸어주기 => upperCase 하면 될걸?
+    3. 사이즈추가 버튼 활성화 -> 함수 만들기 => js
+    4. 수량을 입력하면 총 수량에 합계 합산
+    5. 단가 입력 시 수량*단가 = 총 금액 input 에 값 넣어주기
+
+ -->

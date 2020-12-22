@@ -12,9 +12,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.inven.service.CommonServiceImpl;
 import com.inven.service.RequestServiceImpl;
@@ -54,6 +56,58 @@ public class RequestAjaxController {
 		return jobj;
 	}
 
+	
+	@GetMapping("/searchWhere")
+	public JSONObject searchWhere(@RequestParam Map<String, Object> map) {
+		log.info("Request Parameter : " + map);
+		JSONObject jobj = new JSONObject();
+		jobj.put("code", 400);
+		
+		int rs = reqService.upStatus(map);
+		if(rs > 0)
+			jobj.put("code", 200);
+		
+		return jobj;
+	}
+	
+
+	
+	@GetMapping(value = "/makeReqCode")
+	public JSONObject makeReqCode() {
+		log.info("Request Parameter : 발주코드 생성 버튼 클릭");
+		
+		JSONObject jobj = new JSONObject();
+		jobj.put("code", 400);
+		
+		String request_code = reqService.makeReqCode();
+		if(request_code != null) {
+			jobj.put("code", 200);
+			jobj.put("request_code", request_code);
+		}
+		
+		jobj.put("request_code", request_code);
+		
+		return jobj;
+	}
+	
+	@GetMapping(value = "/add")
+	public JSONObject add(@RequestParam Map<String, Object> map) {
+		log.info("Request Parameter : " + map);
+		JSONObject jobj = new JSONObject();
+		
+		jobj.put("code", 400);
+		
+		List<Map<String, Object>> addTitle = reqService.addTitle(map);
+		List<Map<String, Object>> addDetail = reqService.addDetail(map);
+		
+		if(addTitle != null && addDetail != null) {
+			jobj.put("code", 200);
+		}
+		
+		return jobj;
+	}
+
+	
 	@GetMapping("/reqTest")
 //	@RequestMapping(value = "/index.do", method = RequestMethod.GET)
 	public JSONObject test(@RequestParam Map<String, Object> map) {
@@ -72,19 +126,6 @@ public class RequestAjaxController {
 			jobj.put("code", 200);
 			jobj.put("list", list);
 		}
-		
-		return jobj;
-	}
-
-	@GetMapping("/searchWhere")
-	public JSONObject searchWhere(@RequestParam Map<String, Object> map) {
-		log.info("Request Parameter : " + map);
-		JSONObject jobj = new JSONObject();
-		jobj.put("code", 400);
-		
-		int rs = reqService.upStatus(map);
-		if(rs > 0)
-			jobj.put("code", 200);
 		
 		return jobj;
 	}
