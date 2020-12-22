@@ -9,11 +9,20 @@ public interface ProductService {
 
     List<ProductTitle> printProduct();
 
-    List<ProductTitle> searchByProductCode(String query);
-
-    List<ProductTitle> searchByDate(String query);
+//    List<ProductTitle> searchByProductCode(String query);
+//
+//    List<ProductTitle> searchByDate(String query);
 
 //    List<Map<String, Object>> selectAll(Map<String, Object> map);
 
-//    List<ProductTitle> search(String where, String query);
+    List<Map<String, Object>> detail(Map<String, Object> map);
+
+    List<Map<String, Object>> search(Map<String, Object> map);
+
+    List<String> productAdd();
+
+    void productTitlesAdd(ProductTitle productTitle);
+
+    void productDetailsAdd();
 }
+

@@ -26,15 +26,36 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public List<ProductTitle> searchByProductCode(String query) {
-		List<ProductTitle> productTitles = prodMapper.searchByProductCode(query);
-		return productTitles;
+	public List<Map<String, Object>> detail(Map<String, Object> map) {
+		return prodMapper.detail(map);
 	}
+
 	@Override
-	public List<ProductTitle> searchByDate(String query) {
-		List<ProductTitle> productTitles = prodMapper.searchByDate(query);
-		return productTitles;
+	public List<Map<String, Object>> search(Map<String, Object> map) {
+		return prodMapper.search(map);
 	}
+
+	@Override
+	public List<String> productAdd() {
+		return prodMapper.productAdd();
+	}
+
+	@Override
+	public void productTitlesAdd(ProductTitle productTitle){
+		prodMapper.productTitlesAdd(productTitle);
+	}
+
+//	@Override
+//	public List<ProductTitle> searchByProductCode(String query) {
+//		List<ProductTitle> productTitles = prodMapper.searchByProductCode(query);
+//		return productTitles;
+//	}
+//
+//	@Override
+//	public List<ProductTitle> searchByDate(String query) {
+//		List<ProductTitle> productTitles = prodMapper.searchByDate(query);
+//		return productTitles;
+//	}
 //	@Override
 //	public List<ProductTitle> search(String where, String query) {
 //		List<ProductTitle> search = prodMapper.search(where, query);
@@ -47,10 +68,7 @@ public class ProductServiceImpl implements ProductService {
 //		return prodMapper.selectAll(map);
 //	}
 
-//	@Override
-//	public List<Map<String, Object>> search(Map<String, Object> map) {
-//		return prodMapper.search(map);
-//	}
+
 
 
 }

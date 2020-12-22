@@ -2,15 +2,53 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.inven.mapper.ProductMapper">
 
-	<sql id="columns">
+    <sql id="columns">
 		*
 	</sql>
 
-	<select id="selectAll" parameterType="hashMap" resultType="hashmap">
-		select <include refid="columns"/>
-		from product_title pt
-		join product_detail pd
-		on pt.product_code = pd.product_code
+    <select id="selectAll" parameterType="hashMap" resultType="hashmap">
+        select
+        <include refid="columns"/>
+        from product_title pt
+        join product_detail pd
+        on pt.product_code = pd.product_code
+    </select>
+
+    <select id="detail" parameterType="hashMap" resultType="hashmap">
+		select *
+		from product_detail
 	</select>
+
+    <!-- 검색 및 페이징 -->
+    <select id="search" parameterType="hashMap" resultType="hashmap">
+        select
+        <include refid="columns"/>
+        from product_title
+        <choose>
+            <when test="searchType.equals('product_code') and !searchText.equals('')">
+                where product_code = #{value}
+            </when>
+            <when test="searchType.equals('final_update') and !start_date.equals('') and !end_date.equals('')">
+                where final_update between date(#{start_date}) and date(#{end_date})
+            </when>
+
+        </choose>
+    </select>
+
+    <!-- ADD -->
+    <insert id="productTitlesAdd" parameterType="com.inven.common.model.ProductTitle">
+      insert into product_title(
+      product_code,
+      make_factory,
+      unit_price,
+		final_update,
+		make_code
+      )
+      values(
+      #{product_code},
+      #{make_factory}, #{unit_price},
+      #{final_update}, #{make_code}
+      )
+   </insert>
 
 </mapper>

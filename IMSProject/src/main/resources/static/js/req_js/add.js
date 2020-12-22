@@ -22,7 +22,7 @@ $('button[name = makeReqCode]').click(function() {
 	console.log("하는중");
 	$.ajax({
 		type: "get",
-		url: "/req/acyn/makeReqCode",
+		url: "/req/acync/makeReqCode",
 		dataType: "json",
 		success: function(xml) {
 			if (xml.code == 200) {

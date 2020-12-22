@@ -13,6 +13,8 @@ import javax.servlet.http.HttpSession;
 import com.inven.service.inter.CommonService;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
@@ -37,6 +39,8 @@ import com.inven.common.CommandMap;
 @Slf4j
 @Controller
 public class HomeController {
+
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     CommonService commonService;

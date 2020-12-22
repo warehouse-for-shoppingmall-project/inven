@@ -7,6 +7,8 @@ import java.util.*;
 
 import com.inven.common.CommonUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
@@ -18,6 +20,9 @@ import com.inven.service.inter.CommonService;
 @Slf4j
 @Service("commonService")
 public class CommonServiceImpl implements CommonService {
+
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
     private CommonMapper cmnMapper;
 
