@@ -37,18 +37,18 @@
 
     <!-- ADD -->
     <insert id="productTitlesAdd" parameterType="com.inven.common.model.ProductTitle">
-      insert into product_title(
-      product_code,
-      make_factory,
-      unit_price,
-		final_update,
-		make_code
-      )
-      values(
-      #{product_code},
-      #{make_factory}, #{unit_price},
-      #{final_update}, #{make_code}
-      )
+        insert into product_title(
+            product_code,
+            make_factory,
+            unit_price,
+            final_update,
+            make_code
+        )
+        values(
+            #{product_code},
+            #{make_factory}, #{unit_price},
+            #{final_update}, #{make_code}
+        )
    </insert>
 
 </mapper>

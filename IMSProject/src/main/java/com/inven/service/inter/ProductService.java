@@ -21,7 +21,7 @@ public interface ProductService {
 
     List<String> productAdd();
 
-    void productTitlesAdd(ProductTitle productTitle);
+    int productTitlesAdd(ProductTitle productTitle);
 
 //    void productDetailsAdd();
 }

@@ -41,8 +41,8 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public void productTitlesAdd(ProductTitle productTitle){
-		prodMapper.productTitlesAdd(productTitle);
+	public int productTitlesAdd(ProductTitle productTitle){
+		return prodMapper.productTitlesAdd(productTitle);
 	}
 
 //	@Override

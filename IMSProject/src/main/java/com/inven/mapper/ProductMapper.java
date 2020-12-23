@@ -23,7 +23,7 @@ public interface ProductMapper {
 
 	List<String> productAdd();
 
-	void productTitlesAdd(ProductTitle productTitle);
+	int productTitlesAdd(ProductTitle productTitle);
 
 
 

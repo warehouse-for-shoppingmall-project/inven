@@ -8,20 +8,32 @@
 	form 요소들 jobj로 만들기 
 	jobj = { key : value}
 */
+/* 전화번호와 같이 숫자만 입력제한 */
+function onlyNumber(obj){
+	$(obj).keyup(function(){
+		$(this).val($(this).val().replace(/[^0-9]/g,""));
+	});
+}
 
-var keyCodeBlock = function (e){
+/* 입력되는 글 숫자만 입력제한 하여 int Type 으로 Return */
+function onlyInt() {
+	$(this).keyup(function(){
+		$(this).val(parseInt($(this).val().replace(/[^0-9]/g,"")));
+	});
+}
+
+let keyCodeBlock = function (e){
 	// f12, 새로고침, 엔터 막기,
-	console.log(e.keyCode);
 	if(e.keyCode === 123 || e.keyCode === 13 || (e.ctrlKey && e.keyCode === 82)){
 		e.preventDefault();
 		e.returnValue = false;
 	}
 }
 
-var serializeForm = function(form) {
-	var obj = {};
-	var formData = new FormData(form);
-	for (var key of formData.keys()) {
+let serializeForm = function(form) {
+	let obj = {};
+	let formData = new FormData(form);
+	for (let key of formData.keys()) {
 		obj[key] = formData.get(key);
 	}
 	return obj;
@@ -31,10 +43,10 @@ var serializeForm = function(form) {
 	jobj를 파라미터 형식으로 변환해준다.
 	method='GET' 방식에서만 사용한다.
 */
-var toparamJson = function(jobj){
-	var str = "?";
-	var idx = 0;
-	for (var key in jobj) {
+let toparamJson = function(jobj){
+	let str = "?";
+	let idx = 0;
+	for (let key in jobj) {
 		if(idx > 0) str += "&";
 		str += key + "=" + jobj[key];
 		idx++;
@@ -43,7 +55,7 @@ var toparamJson = function(jobj){
 }
 /*
 function ajax_submit(frm) {
-	var xhr = new XMLHttpRequest();
+	let xhr = new XMLHttpRequest();
 	/!* 준비상태가 변하면 실행한다. *!/
 	xhr.onreadystatechange = function() {
 		if (xhr.readyState === xhr.DONE) {

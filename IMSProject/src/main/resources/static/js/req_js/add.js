@@ -18,15 +18,6 @@ jQuery.fn.serializeObject = function() {
     return obj;
 };
 
-
-
-$('#request_detail_tbody').find('input[type=number]').keydown(function (){
-	console.log($(this).val());
-	$(this).closest('tr').find('input[type=number]').each(function (i, e){
-
-	});
-});
-
 $('button[name=makeReqCode]').click(function() {
 	console.log("하는중");
 	$.ajax({
@@ -59,23 +50,32 @@ $('#reqAdd').click(function() {
 	let title = $('form[name=titleForm]').serializeObject();
 	let tr = $('#request_detail_tbody').find('tr');
 	let details = [];
+	let total_order_quantity = 0; // int
 	tr.each(function(i, e){
 		let row_data = {};
 		row_data['request_code'] = title.request_code;
 		row_data['product_code'] = title.product_code;
 		$(e).children().each(function(i, e){
-			let child_tag = $(e).children();
-			row_data[$(child_tag).attr('name')] = $(child_tag).val();
+			let tag = $(e).children();
+			let value = $(tag).val();
+			if(value !== '') value = $(tag).val();
+			else value = '0';
+			row_data[$(tag).attr('name')] = value;
+			if($(tag).attr('name') === 'total')
+				total_order_quantity += parseInt($(tag).val());
 		});
 		details.push(row_data);
 	});
-
+	title["total_order_quantity"] = total_order_quantity;
+	console.log(title);
+	console.log(details);
 	let data = {
 		title : JSON.stringify(title),
 		details : JSON.stringify(details)
 	};
 	console.log(data);
 
+	// return;
 	$.ajax({
 		type: "post",
 		url: "/req/async/reqAdd",

@@ -25,15 +25,14 @@
         crossorigin="anonymous"></script>
 <script th:src="@{/js/utils.js}"></script>
 <script>
-    window.onload = function (){
-        $('#submit_btn').css('display', 'none');
-        document.onkeydown = keyCodeBlock;
+    $('#submit_btn').css('display', 'none');
+    document.onkeydown = keyCodeBlock;
 
-        document.addEventListener('keydown', function (e){
-            if(e.ctrlKey && e.keyCode == 32)
-                $('#submit_btn').css('display', '');
-        });
+    let keyDownEvent = function (e) {
+        if (e.ctrlKey && e.keyCode == 32)
+            $('#submit_btn').css('display', '');
     }
+    document.addEventListener('keydown', keyDownEvent);
 
     function passCheck(frm) {
         let xhr = new XMLHttpRequest();

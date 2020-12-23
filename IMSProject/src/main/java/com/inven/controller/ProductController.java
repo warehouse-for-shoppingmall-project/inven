@@ -77,7 +77,7 @@ public class ProductController {
 	public ModelAndView add(@RequestParam Map<String, Object> map) {
 		log.info("Request Parameter : " + map);
 		ModelAndView mv = new ModelAndView("product_fd/product_add");
-//		List<String> productAdd = productService.productAdd();
+//		int productAdd = productService.productAdd();
 
 //		mv.addObject("list",list);
 
@@ -96,7 +96,7 @@ public class ProductController {
 	// @RequestBody Map
 	// @RequestBody ProductInformationParam
 
-	@PostMapping(value = "/add", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)// Post는 RequestParam 못받는다 ㅡㅡ
+	@PostMapping(value = "/add", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)// Post는 RequestParam 못받는다 ㅡㅡ?? 	받을수있따
 	public ModelAndView addProduct(@ModelAttribute ProductInformation productInformation) {
 
 		// ProductInformation --> ProductTitle
@@ -107,11 +107,9 @@ public class ProductController {
 													 productInformation.getFinal_update(),
 													 productInformation.getMake_code());
 
-
-
-
 		ModelAndView mv = new ModelAndView();
-		productService.productTitlesAdd(productTitle);
+		int rs = productService.productTitlesAdd(productTitle);
+		if(rs == 0){} // insert 실패
 		// productService.productDetailsAdd(productDetail);
 
 
