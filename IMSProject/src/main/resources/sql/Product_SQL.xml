@@ -14,7 +14,7 @@
         on pt.product_code = pd.product_code
     </select>
 
-    <select id="detail" parameterType="hashMap" resultType="hashmap">
+    <select id="detail" parameterType="com.inven.common.model.ProductDetail" resultType="com.inven.common.model.ProductDetail">
 		select *
 		from product_detail
 	</select>
@@ -41,8 +41,8 @@
       product_code,
       make_factory,
       unit_price,
-		final_update,
-		make_code
+      final_update,
+      make_code
       )
       values(
       #{product_code},
@@ -50,5 +50,23 @@
       #{final_update}, #{make_code}
       )
    </insert>
+
+    <insert id="productDetailsAdd" parameterType="com.inven.common.model.ProductDetail">
+    insert into product_detail(
+    product_code,
+    color_name,
+    gender,
+    s,
+    m,
+    l,
+    xl,
+    f,
+    total,
+    manufacture_day
+    )
+    values(
+    #{product_code},#{color_name},#{gender},#{s},#{m},#{l},#{xl},#{f},#{total},#{manufacture_day}
+    )
+    </insert>
 
 </mapper>

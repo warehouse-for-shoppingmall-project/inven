@@ -1,5 +1,6 @@
 package com.inven.service.inter;
 
+import com.inven.common.model.ProductDetail;
 import com.inven.common.model.ProductTitle;
 
 import java.util.List;
@@ -23,6 +24,6 @@ public interface ProductService {
 
     void productTitlesAdd(ProductTitle productTitle);
 
-//    void productDetailsAdd();
+    void productDetailsAdd(ProductDetail productDetail);
 }
 

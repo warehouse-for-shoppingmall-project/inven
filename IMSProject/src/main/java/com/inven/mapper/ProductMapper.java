@@ -1,5 +1,6 @@
 package com.inven.mapper;
 
+import com.inven.common.model.ProductDetail;
 import com.inven.common.model.ProductTitle;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -25,9 +26,7 @@ public interface ProductMapper {
 
 	void productTitlesAdd(ProductTitle productTitle);
 
-
-
-
+    void productDetailsAdd(ProductDetail productDetail);
 
 
 //	@Select("SELECT * FROM product_title where product_code = #{query}")
