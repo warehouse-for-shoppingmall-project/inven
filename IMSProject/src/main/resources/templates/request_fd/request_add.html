@@ -41,75 +41,122 @@
 	<div id="wrap">
 		<!-- enctype : 파일 첨부 기능이 있다면 꼭 추가해라했음.. -->
 		<form name="titleForm" onsubmit="return false">
-			발주 코드 <input type="text" id="request_code" readonly>
-			<button type="button" name="makeReqCode">발주코드 생성</button>  <br> 
-			상품 코드 <select class="custom-select" name="product_code">
-						<option th:each="code : ${list}" th:text="${code}" th:value="${code}"></option>
-					</select><br>
-			 발주 상태 <select class="custom-select" name="request_status">
-						<option value="신청">신청</option>
-						<option value="대기">대기</option>
-						<option value="승인">승인</option>
-						<option value="취소">취소</option>
-						<option value="수령">수령</option>
-					</select><br> 
-			단가 <input type="number" name="unit_price" value="0">원<br>
-			공장 이름 <input type="text" name="factory_name" placeholder="제조사 명 입력"><br>
-			제조일 <input type="date" name="manufacturing_date"><br>
-			<!-- 주문 총 양 <input type="text" name="total"><br> -->
-			<!-- 제조 코드 <input type="text" name="request_code"><br> -->
-			파일 <input type="file" id="file"><br>
-			비고 <input type="text"><br>
-		</form>
-		<form name="detailForm" onsubmit="return false">
-			<table id="request_detail_table">
-				<thead>
-					<tr>
-						<th>성별</th>
-						<th>색상</th>
-						<th>s</th>
-						<th>m</th>
-						<th>l</th>
-						<th>xl</th>
-						<th>free</th>
-						<th>total</th>
-						<th><input type="button" value="+" id="addButton"
-							onclick="addDetail()"></th>
-						<!-- <th>삭제</th> -->
-					</tr>
-				</thead>
-				<tbody id="request_detail_tbody">
-					<tr>
-						<td><select name="gender">
-								<option value="C">공용</option>
-								<option value="W">여자</option>
-								<option value="M">남자</option>
-						</select></td>
-						<td><input type="text" name="color_name"></td>
-						<td><input type="number" name="s"></td>
-						<td><input type="number" name="m"></td>
-						<td><input type="number" name="l"></td>
-						<td><input type="number" name="xl"></td>
-						<td><input type="number" name="free"></td>
-						<td><input type="number" name="total"></td>
-					</tr>
-				</tbody>
+			<table>
+				<tr>
+					<th>발주 코드</th>
+					<td>
+						<input type="text" name="request_code" id="request_code" readonly>
+						<button type="button" name="makeReqCode">발주코드 생성</button>
+					</td>
+				</tr>
+				<tr>
+					<th>상품 코드</th>
+					<td>
+						<select class="custom-select" name="product_code">
+							<option th:each="code : ${list}" th:text="${code}" th:value="${code}"></option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th>발주 상태</th>
+					<td>
+						<select class="custom-select" name="request_status">
+							<option value="신청">신청</option>
+							<option value="대기">대기</option>
+							<option value="승인">승인</option>
+							<option value="취소">취소</option>
+							<option value="수령">수령</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th>단가</th>
+					<td>
+						<input type="number" name="unit_price" value="0">원
+					</td>
+				</tr>
+				<tr>
+					<th>공장 이름</th>
+					<td>
+						<input type="text" name="factory_name" placeholder="제조사 명 입력">
+					</td>
+				</tr>
+				<tr>
+					<th>제조일</th>
+					<td>
+						<input type="date" name="manufacturing_date">
+					</td>
+				</tr>
+				<tr>
+					<th>파일</th>
+					<td>
+						<input type="file" name="file" id="file">
+					</td>
+				</tr>
+				<tr>
+					<th>비고</th>
+					<td>
+						<input type="text" name="etc">
+					</td>
+				</tr>
 			</table>
-			<br> 
-			<input type="submit" id="reqAdd" value="발주 등록">
 		</form>
+		<table id="request_detail_table">
+			<thead>
+				<tr>
+					<th>성별</th>
+					<th>색상</th>
+					<th>s</th>
+					<th>m</th>
+					<th>l</th>
+					<th>xl</th>
+					<th>free</th>
+					<th>total</th>
+					<th><input type="button" value="+" id="addButton" onclick="addDetail()"></th>
+				</tr>
+			</thead>
+			<tbody id="request_detail_tbody">
+				<tr>
+					<td><select name="gender">
+							<option value="C">공용</option>
+							<option value="W">여자</option>
+							<option value="M">남자</option>
+					</select></td>
+					<td><input type="text" name="color_name"></td>
+					<td><input type="number" name="s"></td>
+					<td><input type="number" name="m"></td>
+					<td><input type="number" name="l"></td>
+					<td><input type="number" name="xl"></td>
+					<td><input type="number" name="free"></td>
+					<td><input type="text" name="total" value="0" readonly></td>
+				</tr>
+			</tbody>
+		</table>
+		<br>
+		<input type="button" id="reqAdd" value="발주 등록">
 		<!-- end of outer form -->
 	</div>
 	<!-- end of wrap-->
 
+	<!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
+	<script src="https://code.jquery.com/jquery-3.5.1.js"
+			integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+			crossorigin="anonymous"></script>
+	<script
+			src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+			integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
+			crossorigin="anonymous"></script>
+	<script th:src="@{/js/req_js/add.js}"></script>
+
 	<!-- 버튼 클릭 시 detail 테이블 열 추가 -->
 	<script>
-		window.onload = function() {
-			$('input[type=number]').val(0);
-		}
+		$('input[type=number]').val(0);
+
+
 
 		let request_detail_tbody = document.getElementById("request_detail_tbody");
-		let rowName = [ 's', 'm', 'l', 'xl', 'free', 'total' ];
+		let rowName = ['color_name', 's', 'm', 'l', 'xl', 'free', 'total'];
+		let rowType = ['text', 'number', 'number', 'number', 'number', 'number', 'text'];
 
 		function addDetail() {
 			let row = request_detail_tbody.insertRow();
@@ -120,13 +167,13 @@
 					+ '<option value="W">여자</option>'
 					+ '<option value="M">남자</option>' + '</select>';
 			//색상
-			row.insertCell(1).innerHTML += '<input type="text" name="color_name">';
 			//사이즈(s~free), 총 수량
-			for (var i = 0; i < rowName.length; i++) {
-				row.insertCell(i + 2).innerHTML += '<input type="number" name="' + rowName[i] + '" value="0">';
+			for (let i = 0; i < rowName.length; i++) {
+				row.insertCell(i+1).innerHTML += '<input type="'+rowType[i]+'" name="' + rowName[i] + '">';
 			}
 			row.insertCell().innerHTML += '<input type="button" value="-" id="delButton" onclick="delDetail(this)">';
-
+			$(row).find('input[name=total]').attr('readonly', 'readonly').val(0);
+			$(row).find('input[type=number]').val(0);
 		}
 		// 해당 행 삭제 버튼
 		function delDetail(row) {
@@ -135,15 +182,6 @@
 		}
 	</script>
 
-	<!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
-	<script src="https://code.jquery.com/jquery-3.5.1.js"
-		integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
-		crossorigin="anonymous"></script>
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
-		integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
-		crossorigin="anonymous"></script>
-	<script th:src="@{/js/req_js/add.js}"></script>
 </body>
 </html>
 

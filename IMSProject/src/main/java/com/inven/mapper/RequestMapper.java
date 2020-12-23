@@ -10,20 +10,21 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RequestMapper {
 
-	// 방금 만든 sql문을 접근하는 함수를 만들어봐
-
+	// select
 	int searchCount(Map<String, Object> map);
 	List<Map<String, Object>> searchDetail(Map<String, Object> map);
 	List<Map<String, Object>> searchWhere(Map<String, Object> map);
 	List<String> selectProductCode();
-
-
-	// Ajax Method+
-	List<Map<String, Object>> addTitle(Map<String, Object> map);
-	List<Map<String, Object>> addDetail(Map<String, Object> map);
-	int upStatus(Map<String, Object> map);
 	String makeReqCode();
 
+	// insert
+	int addTitle(Map<String, Object> map);
+	int addDetail(List<Map<String, Object>> list);
+
+	// update
+	int upStatus(Map<String, Object> map);
+
+	// delete
 
 
 //	List<Map<String, Object>> selectAll(Map<String, Object> map);

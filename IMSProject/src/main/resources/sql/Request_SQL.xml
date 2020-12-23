@@ -69,25 +69,28 @@
 
 	<insert id="addTitle" parameterType="hashMap" >
       insert into request_title(
-      request_code, product_code,
-      request_status,
-      unit_price, factory_name, manufacturing_date,etc
+		  request_code, product_code, request_status,
+		  unit_price, factory_name, manufacturing_date, etc
       )
       values(
-      #{request_code},
-      #{product_code}, #{request_status.val()},
-      ${unit_price}, #{factory_name}, #{manufacturing_date},#{etc}
+		  #{request_code}, #{product_code}, #{request_status},
+		  #{unit_price}, #{factory_name}, #{manufacturing_date}, #{etc}
       )
    </insert>
 
-	<insert id="addDetail" parameterType="hashMap">
+	<insert id="addDetail" parameterType="java.util.List">
       insert into request_detail(
-      request_code,product_code,gender,color_name,s,m,l,xl,free,total
+      	request_code, product_code, gender, color_name, s, m, l, xl, free, total
       )
-      values(
-      #{request_code},#{product_code},#{gender},#{color_name},#{s},#{m},#{l},#{xl},#{free},#{total}
-      )
+      values
+    	<foreach collection="list" item="item" separator=",">
+    	(
+			#{item.request_code}, #{item.product_code}, #{item.gender}, #{item.color_name},
+            #{item.s}, #{item.m}, #{item.l}, #{item.xl}, #{item.free}, #{item.total}
+		)
+		</foreach>
    </insert>
+
 	<select id="makeReqCode" resultType="String">
       SELECT FN_MAKE_REQ_CODE()
    </select>

@@ -5,10 +5,11 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import com.google.gson.Gson;
+import com.inven.common.CommonUtils;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,7 +53,7 @@ public class RequestAjaxController {
 		return jobj;
 	}
 
-	@GetMapping(value = "/makeReqCode")
+	@GetMapping(value = "/makeReqCode2")
 	public JSONObject makeReqCode() {
 		log.info("Request Parameter : 발주코드 생성 버튼 클릭");
 
@@ -68,19 +69,27 @@ public class RequestAjaxController {
 		return jobj;
 	}
 
-	@GetMapping(value = "/add")
-	public JSONObject add(@RequestParam Map<String, Object> map) {
+	@PostMapping(value = "/reqAdd")
+	public JSONObject reqAdd(@RequestParam Map<String, Object> map) {
 		log.info("Request Parameter : " + map);
 		JSONObject jobj = new JSONObject();
+		jobj.put("code", 999);
+		if(map == null) return jobj;
+		Gson gson = new Gson();
 
-		jobj.put("code", 400);
+		Map<String, Object> title = gson.fromJson(map.get("title").toString(), Map.class);
+		CommonUtils.printMap(title);
 
-		List<Map<String, Object>> addTitle = reqService.addTitle(map);
-		List<Map<String, Object>> addDetail = reqService.addDetail(map);
+		List<Map<String, Object>> details = gson.fromJson(map.get("details").toString(), List.class);
+		CommonUtils.printList(details);
 
-		if(addTitle != null && addDetail != null) {
-			jobj.put("code", 200);
-		}
+		int addTitle = reqService.addTitle(title);
+		int addDetail = reqService.addDetail(details);
+
+		if(addTitle > 0) {
+			if(addDetail > 0) jobj.put("code", 200);
+			else jobj.put("code", 300);
+		} else jobj.put("code", 400);
 
 		return jobj;
 	}
