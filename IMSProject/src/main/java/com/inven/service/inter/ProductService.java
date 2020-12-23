@@ -18,12 +18,12 @@ public interface ProductService {
 
     List<Map<String, Object>> detail(Map<String, Object> map);
 
-    List<Map<String, Object>> search(Map<String, Object> map);
-
     List<String> productAdd();
 
     void productTitlesAdd(ProductTitle productTitle);
 
     void productDetailsAdd(ProductDetail productDetail);
+
+    List<ProductTitle> search(String where, String query);
 }
 

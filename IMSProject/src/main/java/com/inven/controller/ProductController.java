@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.inven.common.CommonUtils;
 import com.inven.common.model.ProductTitle;
 import com.inven.mapper.ProductMapper;
 import com.inven.param.ProductInformation;
@@ -35,23 +34,6 @@ public class ProductController {
     @Autowired
     ProductMapper productMapper;
 
-    // 1. localhost:8080/search?key1=value1 -> RequestParam
-    //  map.get("key1")
-    @GetMapping("/search")
-    public ModelAndView search(@RequestParam Map<String, Object> map) {
-        log.debug("Request Parameter : " + map);
-        ModelAndView mv = new ModelAndView("/product_fd/product_main");
-
-        List<Map<String, Object>> list = productService.search(map);
-
-        for (Map<String, Object> ent : list) {
-            CommonUtils.printMap(ent);
-        }
-        mv.addObject("list", list);
-
-        return mv;
-    }
-
     @GetMapping("/list")
     public ModelAndView list(@RequestParam Map<String, Object> map) {
 
@@ -62,15 +44,15 @@ public class ProductController {
         if (!map.containsKey("searchType")) map.put("searchType", "");
         if (!map.containsKey("searchText")) map.put("searchText", "");
 
-        List<Map<String, Object>> search = productService.search(map);
+//        List<Map<String, Object>> search = productService.search(map);
 
         System.out.println(product_titles);
 
         log.info(String.valueOf(productDetails));
         log.info(String.valueOf(product_titles));
         mv.addObject("productDetail", productDetails);
-        mv.addObject("productList", product_titles);
-        mv.addObject("search", search);
+        mv.addObject("productTitles", product_titles);
+//        mv.addObject("search", search);
 
         return mv; //-> product_main 이라는 html으로 리턴해라
     }
@@ -129,6 +111,30 @@ public class ProductController {
 
         mv.setViewName("redirect:/prod/list");
 
+        return mv;
+    }
+
+    // localhost:8080/prod/search?where=productCode&query=CT001
+    // localhost:8080/prod/search?where=date&query=2020-12-12
+    @GetMapping("/search")
+    public ModelAndView search(@RequestParam String where, @RequestParam String query) {
+        if (query == null || query.equals("")) {
+            final ModelAndView modelAndView = new ModelAndView();
+            modelAndView.setViewName("redirect:/prod/list");
+            return modelAndView;
+        }
+
+        log.info("where: {}, query: {}", where, query);
+        final List<ProductTitle> productTitles = productService.search(where, query);
+        log.info("productTitle: {}", productTitles);
+
+        // where --> code
+        // query --> 박성수
+        // where --> code / date
+
+        final ModelAndView mv = new ModelAndView();
+        mv.setViewName("product_fd/product_main");
+        mv.addObject("productTitles", productTitles);
         return mv;
     }
 

@@ -32,11 +32,6 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Map<String, Object>> search(Map<String, Object> map) {
-        return prodMapper.search(map);
-    }
-
-    @Override
     public List<String> productAdd() {
         return prodMapper.productAdd();
     }
@@ -49,6 +44,16 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void productDetailsAdd(ProductDetail productDetail) {
 		prodMapper.productDetailsAdd(productDetail);
+    }
+
+    @Override
+    public List<ProductTitle> search(String where, String query) {
+        if (where.equals("productCode")) {
+            return prodMapper.searchByProductCode(query);
+        } else if (where.equals("date")) {
+            return prodMapper.searchByDate(query);
+        }
+        return null;
     }
 
 //	@Override

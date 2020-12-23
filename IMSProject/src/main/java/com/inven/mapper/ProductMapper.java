@@ -17,8 +17,6 @@ public interface ProductMapper {
 	@Select("SELECT * FROM product_title")
 	List<ProductTitle> getProductList();
 
-	List<Map<String, Object>> search(Map<String, Object> map);
-
 	List<Map<String, Object>> detail(Map<String, Object> map);
 
 
@@ -28,6 +26,9 @@ public interface ProductMapper {
 
     void productDetailsAdd(ProductDetail productDetail);
 
+	List<ProductTitle> searchByProductCode(String query);
+
+	List<ProductTitle> searchByDate(String query);
 
 //	@Select("SELECT * FROM product_title where product_code = #{query}")
 
