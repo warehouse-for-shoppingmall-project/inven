@@ -11,54 +11,24 @@
 	<title>Product info</title>
 
 </head>
-<body>
-<!-- header navbar -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-	<a class="navbar-brand" href="#">Navbar</a>
-	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#header-navbar"
-			aria-controls="header-navbar" aria-expanded="false" aria-label="Toggle navigation">
-		<span class="navbar-toggler-icon"></span>
-	</button>
-	<div class="collapse navbar-collapse" id="header-navbar">
-		<ul class="navbar-nav mr-auto">
-			<li class="nav-item">
-				<a class="nav-link" href="#">발주관리<span class="sr-only">request</span></a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="#">상품관리</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="#">주문관리</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="#">발송내역</a>
-			</li>
-		</ul>
-		<ul class="navbar-nav ml-auto">
-			<li class="nav-item">
-				<a class="nav-link" href="#">로그아웃</a>
-			</li>
-		</ul>
-	</div>
-</nav>
-<!-- End of navbar -->
+
+<body id="top">
+<th:block th:replace="fragments/header :: nav-header"></th:block>
+
+<!--Contents-->
 <div class="container">
 	<div class="row">
 		<div class="col-lg-12">
 			<nav class="navbar navbar-expand-lg">
 				<div class="collapse navbar-collapse" id="contents-navbar">
 					<ul class="nav mr-auto">
+						<p class="navbar-brand">상품 조회</p>
 						<li class="nav-item">
-							<a class="nav-link active" href="#">10개씩</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="#">Link</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="#">Link</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+							<select class="custom-select" name="pageSize">
+								<option value="request_code">10개씩</option>
+								<option value="product_code">20개씩</option>
+								<option value="request_date">30개씩</option>
+							</select>
 						</li>
 					</ul>
 					<form class="form-inline my-2 my-lg-0" action="/prod/search">
@@ -141,15 +111,23 @@
 					<th scope="col">단가</th>
 					<th scope="col">마지막수정일</th>
 					<th scope="col">제조코드</th>
+					<th scope="col">상품상태</th>
 				</tr>
 				</thead>
 				<tbody>
 				<tr th:each="title : ${productTitles}">
-					<td th:text="${title.product_code}">code</td>
-					<td th:text="${title.make_factory}">factory</td>
-					<td th:text="${title.unit_price}">price</td>
-					<td th:text="${title.final_update}">update</td>
-					<td th:text="${title.make_code}">make_code</td>
+					<td th:text="${title.getProduct_code()}">code</td>
+					<td th:text="${title.getMake_factory()}">factory</td>
+					<td th:text="${title.getUnit_price()}">price</td>
+					<td th:text="${title.getFinal_update()}">update</td>
+					<td th:text="${title.getMake_code()}">make_code</td>
+					<td>
+						<select class="custom-select" name="status">
+							<option value="판매중" th:selected="${title.getProduct_status() == '판매중'}">판매중</option>
+							<option value="품절" th:selected="${title.getProduct_status()} == '품절'">품절</option>
+							<option value="판매중단" th:selected="${title.getProduct_status()} == '판매중단'">판매중단</option>
+						</select>
+					</td>
 				</tr>
 				</tbody>
 			</table>
@@ -207,9 +185,9 @@
 		}
 	});
 </script>
-<!-- ajax파일 참조하는 문장
-	<script th:src="@{/resources/js/req_js/main.js}"></script>
--->
+<!--ajax파일 참조하는 문장-->
+	<script th:src="@{/resources/js/prod_js/main.js}"></script>
+
 
 <!-- Option 2: jQuery, Popper.js, and Bootstrap JS
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>

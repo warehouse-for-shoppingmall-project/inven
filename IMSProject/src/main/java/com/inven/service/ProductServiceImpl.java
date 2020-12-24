@@ -4,37 +4,36 @@ import java.util.*;
 
 import com.inven.common.model.ProductDetail;
 import com.inven.common.model.ProductTitle;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.inven.mapper.ProductMapper;
 import com.inven.service.inter.ProductService;
 
+@Slf4j
 @Service("productService")
 public class ProductServiceImpl implements ProductService {
-    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private ProductMapper prodMapper;
 
-
     @Override
     public List<ProductTitle> printProduct() {
-        List<ProductTitle> product_titles = prodMapper.getProductList();
-        return product_titles;
+        List<ProductTitle> productTitles = prodMapper.getProductList();
+        return productTitles;
     }
 
-    @Override
-    public List<Map<String, Object>> detail(Map<String, Object> map) {
-        return prodMapper.detail(map);
+    public List<ProductDetail> getDetail() {
+        List<ProductDetail> productDetails = prodMapper.getDetail();
+        return productDetails;
     }
 
-    @Override
-    public List<String> productAdd() {
-        return prodMapper.productAdd();
-    }
+
+//    @Override
+//    public List<String> productAdd() {
+//        return prodMapper.productAdd();
+//    }
 
 	@Override
 	public int productTitlesAdd(ProductTitle productTitle){
@@ -54,6 +53,10 @@ public class ProductServiceImpl implements ProductService {
             return prodMapper.searchByDate(query);
         }
         return null;
+    }
+
+    public void upStatus(ProductTitle productTitle) {
+        prodMapper.upStatus(productTitle);
     }
 
 //	@Override
@@ -79,7 +82,10 @@ public class ProductServiceImpl implements ProductService {
 //		return prodMapper.selectAll(map);
 //	}
 
-
+//    @Override
+//    public List<Map<String, Object>> detail(Map<String, Object> map) {
+//        return prodMapper.detail(map);
+//    }
 
 
 }

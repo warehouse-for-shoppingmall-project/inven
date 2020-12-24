@@ -81,4 +81,10 @@
     )
     </insert>
 
+    <update id="upStatus" parameterType="com.inven.common.model.ProductTitle">
+		UPDATE product_title
+		SET product_status = #{product_status}
+		WHERE product_code = #{product_code}
+   </update>
+
 </mapper>

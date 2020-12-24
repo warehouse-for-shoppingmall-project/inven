@@ -1,20 +1,15 @@
 package com.inven.controller;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-
+import com.inven.common.model.ProductTitle;
+import com.inven.param.ProductInformation;
+import com.inven.service.ProductServiceImpl;
+import org.apache.coyote.Response;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.inven.service.ProductServiceImpl;
+import javax.annotation.Resource;
 
 
 /*
@@ -25,13 +20,26 @@ import com.inven.service.ProductServiceImpl;
 
 @SuppressWarnings("unchecked")
 @RequestMapping(value = "/prod/async/*")
-@RestController
+@RestController // <- Json형태로 반환     // Controller <- html을 반환
 public class ProductAjaxController {
-
-	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@Resource(name="productService")
 	ProductServiceImpl prodService = new ProductServiceImpl();
+
+
+	//	json -> @RequestBody 로 받아야함
+	//	x-www-urlencoded -> @RequestParam 로 받아야함
+	//	RestController
+	@PostMapping("/upStatus")
+	public boolean upStatus(@RequestBody ProductInformation productInformation) {
+
+		ProductTitle productTitle = new ProductTitle(productInformation.getProduct_code(),
+				productInformation.getProduct_status());
+
+		prodService.upStatus(productTitle);
+
+		return true;
+	}
 
 	/* JSONObject Key => code
 	 * value 의미

@@ -38,20 +38,20 @@ public class ProductController {
     public ModelAndView list(@RequestParam Map<String, Object> map) {
 
         ModelAndView mv = new ModelAndView("product_fd/product_main");
-        List<ProductTitle> product_titles = productService.printProduct();
-        List<Map<String, Object>> productDetails = productService.detail(map);
+        List<ProductTitle> productTitles = productService.printProduct();
+        List<ProductDetail> productDetails = productService.getDetail();
 
         if (!map.containsKey("searchType")) map.put("searchType", "");
         if (!map.containsKey("searchText")) map.put("searchText", "");
 
 //        List<Map<String, Object>> search = productService.search(map);
 
-        System.out.println(product_titles);
+        System.out.println(productTitles);
 
         log.info(String.valueOf(productDetails));
-        log.info(String.valueOf(product_titles));
+        log.info(String.valueOf(productTitles));
         mv.addObject("productDetail", productDetails);
-        mv.addObject("productTitles", product_titles);
+        mv.addObject("productTitles", productTitles);
 //        mv.addObject("search", search);
 
         return mv; //-> product_main 이라는 html으로 리턴해라
@@ -89,10 +89,10 @@ public class ProductController {
                 productInformation.getMake_factory(),
                 productInformation.getUnit_price(),
                 productInformation.getFinal_update(),
-                productInformation.getMake_code());
+                productInformation.getMake_code(),
+                productInformation.getProduct_status());
 
         productService.productTitlesAdd(productTitle);
-
 
         // ProductInformation --> ProductDetail
         ProductDetail productDetail = new ProductDetail(productInformation.getProduct_code(),
@@ -137,6 +137,7 @@ public class ProductController {
         mv.addObject("productTitles", productTitles);
         return mv;
     }
+
 
 
     // localhost:8080/search?where=code or date &query=박성수

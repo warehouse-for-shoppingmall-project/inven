@@ -17,4 +17,10 @@ public class ProductTitle {
     private String unit_price;
     private String final_update;
     private String make_code;
+    private String product_status;
+
+    public ProductTitle(String product_code, String product_status) {
+        this.product_code = product_code;
+        this.product_status = product_status;
+    }
 }

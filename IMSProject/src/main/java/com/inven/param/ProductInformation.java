@@ -11,6 +11,7 @@ public class ProductInformation {
     private String make_factory;
     private String final_update;
     private String make_code;
+    private String product_status;
 
 
     //detail param
