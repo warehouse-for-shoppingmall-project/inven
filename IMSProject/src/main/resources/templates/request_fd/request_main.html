@@ -12,47 +12,50 @@
 
 <!-- Contents -->
 <div class="container">
-    <div class="row">
-        <!-- row 1 -->
+    <nav class="navbar navbar-light pb-0">
+        <div class="container-fluid">
+            <p class="navbar-brand">발주 조회</p>
+            <form class="d-flex">
+                <input class="form-control me-2" name="start_date" type="date">~
+                <input class="form-control me-2" name="end_date" type="date">
+            </form>
+        </div>
+    </nav>
+    <nav class="navbar navbar-expand-lg pt-0">
+        <div class="collapse navbar-collapse" id="contents-navbar">
+            <ul class="nav mr-auto">
+                <li class="nav-item">
+                    <select class="custom-select" name="pageSize">
+                        <option value="request_code">10개씩</option>
+                        <option value="product_code">20개씩</option>
+                        <option value="request_date">30개씩</option>
+                    </select>
+                </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0" action="list" method="get">
+                <select name="confirm" class="custom-select" id="inputGroupSelect01">
+                    <!-- <option value="0">선택하기</option> -->
+                    <option value="request_code">발주코드</option>
+                    <option value="product_code">상품코드</option>
+                    <option value="request_date">날짜검색</option>
+                </select>
+                <input name="value" class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+        </div>
+    </nav>
+    <!-- row 1 -->
+    <form class="row" action="list" method="get">
         <div class="col-lg-12">
-            <nav class="navbar navbar-expand-lg">
-                <div class="collapse navbar-collapse" id="">
-                    <form class="form-inline my-2 my-lg-0" action="list" method="get">
-                        날짜 검색
-                        <input type="date">~
-                        <input type="date">
-                        <button type="submit">검색</button>
-                    </form>
-                </div>
-            </nav>
+
         </div>
         <div class="col-lg-12">
             <!-- Navbar -->
-            <nav class="navbar navbar-expand-lg">
-                <div class="collapse navbar-collapse" id="contents-navbar">
-                    <ul class="nav mr-auto">
-                        <li class="nav-item">
-                            <select class="custom-select">
-                                <option value="request_code">10개씩</option>
-                                <option value="product_code">20개씩</option>
-                                <option value="request_date">30개씩</option>
-                            </select>
-                        </li>
-                    </ul>
-                    <form class="form-inline my-2 my-lg-0" action="list" method="get">
-                        <select name="confirm" class="custom-select" id="inputGroupSelect01">
-                            <!-- <option value="0">선택하기</option> -->
-                            <option value="request_code">발주코드</option>
-                            <option value="product_code">상품코드</option>
-                            <option value="request_date">날짜검색</option>
-                        </select>
-                        <input name="value" class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                    </form>
-                </div>
-            </nav>
+
             <!-- End of Navbar -->
         </div>
+    </form>
+    <div class="row">
         <!-- End of Row 1 -->
         <!-- Row 2 -->
         <div class="col-lg-12">
@@ -73,43 +76,49 @@
                 </thead>
                 <tbody>
                 <tr name="request_table" th:each="map : ${list}">
-                    <td th:text="${map.request_code}"></td>
-                    <td th:text="${map.product_code}"></td>
-                    <td th:text="${map.request_date}"></td>
-                    <td th:text="${map.factory_name}"></td>
-                    <td th:text="${map.unit_price}"></td>
+                    <td th:text="${map.get('request_code')}"></td>
+                    <td th:text="${map.get('product_code')}"></td>
+                    <td th:text="${map.get('request_date')}"></td>
+                    <td th:text="${map.get('factory_name')}"></td>
+                    <td th:text="${map.get('unit_price')}"></td>
                     <td th:unless="${map.containsKey('get_date')}">-</td>
-                    <td th:if="${map.containsKey('get_date')}" th:text="${map.get_date}"></td>
+                    <td th:if="${map.containsKey('get_date')}" th:text="${map.get('get_date')}"></td>
                     <td th:unless="${map.containsKey('manufacturing_date')}">-</td>
-                    <td th:if="${map.containsKey('manufacturing_date')}" th:text="${map.manufacturing_date}"></td>
-                    <td th:text="${map.total_order_quantity}"></td>
+                    <td th:if="${map.containsKey('manufacturing_date')}" th:text="${map.get('manufacturing_date')}"></td>
+                    <td th:text="${map.get('total_order_quantity')}"></td>
                     <td>
-                        <select class="custom-select" name="status" th:disabled="${map.request_status.equals('수령')}">
-                            <option value="신청" th:selected="${map.request_status}=='신청'">신청</option>
-                            <option value="대기" th:selected="${map.request_status}=='대기'">대기</option>
-                            <option value="승인" th:selected="${map.request_status}=='승인'">승인</option>
-                            <option value="취소" th:selected="${map.request_status}=='취소'">취소</option>
-                            <option value="수령" th:selected="${map.request_status}=='수령'">수령</option>
+                        <select class="custom-select" name="status" th:disabled="${map.get('request_status') == '수령'}">
+                            <option value="신청" th:selected="${map.get('request_status')}=='신청'">신청</option>
+                            <option value="대기" th:selected="${map.get('request_status')}=='대기'">대기</option>
+                            <option value="승인" th:selected="${map.get('request_status')}=='승인'">승인</option>
+                            <option value="취소" th:selected="${map.get('request_status')}=='취소'">취소</option>
+                            <option value="수령" th:selected="${map.get('request_status')}=='수령'">수령</option>
                         </select>
                     </td>
                 </tr>
                 </tbody>
             </table>
+            <!--<p th:text="${paging}"></p>-->
             <!-- End of Table -->
             <!-- Paging -->
             <nav aria-label="Page navigation example ml-auto">
                 <ul class="pagination">
                     <li class="page-item">
-                        <a class="page-link" href="#" aria-label="Previous">
+                        <a class="page-link" href="#" aria-label="Previous" th:disabled="${paging.getPageNo() == paging.getStartPageNo()}">
                             <span aria-hidden="true">&laquo;</span>
+                            <span class="sr-only" th:text="${paging.getPrevPageNo()}"></span>
+                        </a>
+                    </li><!-- ${#numbers.sequence(paging.getStartPageNo(), paging.getEndPageNo())} -->
+                    <li class="page-item" th:each="num : ${#numbers.sequence(1, 5)}" th:classappend="${num} == 1 ? 'active' : ''">
+                        <a class="page-link " href="#">
+                            <span aria-hidden="true" th:text="${num}"></span>
+                            <span class="sr-only" th:text="${num}"></span>
                         </a>
                     </li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
                     <li class="page-item">
-                        <a class="page-link" href="#" aria-label="Next">
+                        <a class="page-link" href="#" aria-label="Next" th:disabled="${paging.getPageNo() == paging.getFinalPageNo()}">
                             <span aria-hidden="true">&raquo;</span>
+                            <span class="sr-only" th:text="${paging.getNextPageNo()}"></span>
                         </a>
                     </li>
                 </ul>
@@ -121,7 +130,11 @@
 </div>
 
 <!-- Optional JavaScript; choose one of the two! -->
-<script th:src="@{/js/req_js/main.js}"></script>
-
+<script th:src="@{/resources/js/req_js/main.js}"></script>
+<script>
+    $('.pagination li').click(function (){
+        console.log($('this').find('.sr-only').text());
+    });
+</script>
 </body>
 </html>

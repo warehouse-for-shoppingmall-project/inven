@@ -76,7 +76,7 @@ public class HomeController {
 	@GetMapping(value="readFile")
 	public String readFileTest() throws IOException {
 		DefaultResourceLoader drl = new DefaultResourceLoader();
-		Resource resource = drl.getResource("classpath:static/pass/pwd.txt");
+		Resource resource = drl.getResource("classpath:static/resources/pass/pwd.txt");
 
 		return Files.readString(Path.of(resource.getURI()));
 	}

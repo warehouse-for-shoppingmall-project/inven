@@ -1,4 +1,4 @@
-#HikariCP 데이터 소스(DataSource)
+# HikariCP 데이터 소스(DataSource)
 spring:
   datasource:
     hikari:
@@ -13,10 +13,11 @@ spring:
   output:
     ansi:
       enabled: always
-#mybatis 설정
+# mybatis 설정
 mybatis:
   configuration:
-    map-underscore-to-camel-case: true #스네이크 형식으로 변경해줌? VO를 안써서 안쓸듯? <-?
+    map-underscore-to-camel-case: true # 스네이크 형식으로 변경해줌? VO를 안써서 안쓸듯? <-?
 
 interceptor:
-  exclude: /js/**, /fonts/**, /css/**, /plugin/**, /file/**
+  exclude: /resources/**, /*.ico
+

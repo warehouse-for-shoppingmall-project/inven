@@ -1,13 +1,14 @@
 package com.inven.configuration;
 
-import com.inven.common.logger.LoginInterceptor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.inven.common.logger.LoggerInterceptor;
+import com.inven.common.interceptor.LoginInterceptor;
+import com.inven.common.interceptor.LoggerInterceptor;
 
 import java.util.List;
 
@@ -27,5 +28,4 @@ public class MvcConfiguration implements WebMvcConfigurer {
 		exclude.add("/logout");
 		registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/**").excludePathPatterns(exclude);
 	}
-
 }

@@ -1,11 +1,9 @@
-package com.inven.common.logger;
+package com.inven.common.interceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import groovy.util.logging.Slf4j;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -13,8 +11,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 @Slf4j
 @Component
 public class LoggerInterceptor extends HandlerInterceptorAdapter{
-	protected Log log = LogFactory.getLog(LoggerInterceptor.class);
-	
+
 	@Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if (log.isDebugEnabled()) {

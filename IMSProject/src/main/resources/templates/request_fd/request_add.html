@@ -179,7 +179,7 @@
 	<!-- ./ .row -->
 </div>
 <!-- ./container -->
-	<script th:src="@{/js/req_js/add.js}"></script>
+	<script th:src="@{/resources/js/req_js/add.js}"></script>
 	<!-- 버튼 클릭 시 detail 테이블 열 추가 -->
 	<script>
 		// type=number 인놈만 사용할 함수
@@ -238,17 +238,5 @@
 			tr.parentNode.removeChild(tr);
 		}
 	</script>
-
 </body>
 </html>
-
-
-<!-- 
-    지금 해야할 것.
-    1. 발주코드 함수 불러와서 사용하기 => ajax를 통해서 발주등록 페이지 활성화 시 input안에 value 삽입
-    2. 사용자가 입력한 영어를 대문자로 바꾸어주기 => upperCase 하면 될걸?
-    3. 사이즈추가 버튼 활성화 -> 함수 만들기 => js
-    4. 수량을 입력하면 총 수량에 합계 합산
-    5. 단가 입력 시 수량*단가 = 총 금액 input 에 값 넣어주기
-
- -->

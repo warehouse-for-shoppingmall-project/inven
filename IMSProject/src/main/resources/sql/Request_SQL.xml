@@ -3,21 +3,21 @@
 <mapper namespace="com.inven.mapper.RequestMapper">
 
 	<sql id="titleColumn">
-      request_code, product_code, request_status, unit_price, factory_name, etc, file_name, total_order_quantity,
-      date(request_date) as request_date, date(get_Date) as get_date, date(manufacturing_date) as manufacturing_date
+		request_code, product_code, request_status, unit_price, factory_name, etc, file_name, total_order_quantity,
+		date(request_date) as request_date, date(get_Date) as get_date, date(manufacturing_date) as manufacturing_date
    </sql>
 
 	<sql id="commonQuery">
-      select *
-      from request_title rt
-      join request_detail rd
-      on rt.request_code = rd.request_code
+		select *
+		from request_title rt
+		join request_detail rd
+		on rt.request_code = rd.request_code
    </sql>
 
 	<!-- 디테일 테이블만 조회 -->
 	<select id="searchDetail" parameterType="hashMap" resultType="hashmap">
-      select *
-      from request_detail
+		select *
+		from request_detail
    </select>
 
 	<!-- 조회 전체 카운트 -->
@@ -62,31 +62,31 @@
 	</select>
 
 	<update id="upStatus" parameterType="hashMap">
-      UPDATE request_title
-      SET request_status = #{request_status}
-      WHERE request_code = #{request_code}
+		UPDATE request_title
+		SET request_status = #{request_status}
+		WHERE request_code = #{request_code}
    </update>
 
 	<insert id="addTitle" parameterType="hashMap" >
-      insert into request_title(
-		  request_code, product_code, request_status,
-		  unit_price, factory_name, manufacturing_date, etc
-      )
-      values(
-		  #{request_code}, #{product_code}, #{request_status},
-		  #{unit_price}, #{factory_name}, #{manufacturing_date}, #{etc}
-      )
+		insert into request_title(
+			request_code, product_code, request_status, unit_price,
+			factory_name, total_order_quantity, manufacturing_date, etc
+		)
+		values(
+			#{request_code}, #{product_code}, #{request_status}, #{unit_price},
+			#{factory_name}, #{total_order_quantity}, #{manufacturing_date}, #{etc}
+		)
    </insert>
 
 	<insert id="addDetail" parameterType="java.util.List">
-      insert into request_detail(
-      	request_code, product_code, gender, color_name, s, m, l, xl, free, total
-      )
-      values
-    	<foreach collection="list" item="item" separator=",">
-    	(
+		insert into request_detail(
+			request_code, product_code, gender, color_name, s, m, l, xl, free, total
+		)
+		values
+		<foreach collection="list" item="item" separator=",">
+		(
 			#{item.request_code}, #{item.product_code}, #{item.gender}, #{item.color_name},
-            #{item.s}, #{item.m}, #{item.l}, #{item.xl}, #{item.free}, #{item.total}
+			#{item.s}, #{item.m}, #{item.l}, #{item.xl}, #{item.free}, #{item.total}
 		)
 		</foreach>
    </insert>

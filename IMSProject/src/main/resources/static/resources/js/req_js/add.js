@@ -14,7 +14,6 @@ jQuery.fn.serializeObject = function() {
         alert(e.message);
     } finally {
     }
- 
     return obj;
 };
 
@@ -29,7 +28,7 @@ $('button[name=makeReqCode]').click(function() {
 				console.log('success');
 				$('input#request_code').val(xml.request_code);
 			} else {
-				console.log('error');
+				console.log(xml.code + ' :: error');
 				alert('생성 실패. 다시 해보셈');
 			}
 		},
@@ -40,10 +39,9 @@ $('button[name=makeReqCode]').click(function() {
 	});
 });
 
-
+// 발주등록 버튼
 $('#reqAdd').click(function() {
-	// 아니다 화면이 작아서 그런거다
-	// js에서는 ' 홑 따옴표를 쓴다'
+	// js 에서는 ' 홑 따옴표를 쓴다'
 	let con = confirm('해당 발주를 등록 하시겠습니까?');
 	if (!con) return;
 

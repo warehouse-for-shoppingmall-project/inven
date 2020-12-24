@@ -6,8 +6,6 @@ import java.util.Map;
 import com.inven.common.Paging;
 import com.inven.service.inter.RequestService;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,6 +49,7 @@ public class RequestController {
         if (!map.containsKey("confirm")) map.put("confirm", "");
         if (!map.containsKey("value")) map.put("value", "");
 
+
         int count = reqService.searchCount(map);
         if (count < 1) mv.addObject("size", 0);
         else {
@@ -64,10 +63,10 @@ public class RequestController {
             map.put("end_idx", paging.getPageSize());
 
             List<Map<String, Object>> list = reqService.searchWhere(map);
-
             mv.addObject("list", list);
-
+            mv.addObject("paging", paging);
         }
+        mv.addObject("map", map);
         return mv;
     }
 

@@ -23,7 +23,7 @@ public class CommonServiceImpl implements CommonService {
 
     public boolean loginCheck(Map<String, Object> map) throws IOException {
         DefaultResourceLoader drl = new DefaultResourceLoader();
-        Resource resource = drl.getResource("classpath:static/pass/pwd.txt");
+        Resource resource = drl.getResource("classpath:static/resources/pass/pwd.txt");
         log.error(String.valueOf(resource.getURI()));
         String txt = Files.readString(Path.of(resource.getURI()));
         String pwd = CommonUtils.getEncrypt(map.get("pwd").toString(), "cloth");
