@@ -6,32 +6,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>상품 등록</title>
     <style>
-        #request_title_table {
+        #product_title_table {
             width: 240px;
             display: inline-block;
             float: left;
         }
 
-        #request_title_table input {
+        #product_title_table input {
             width: 100px;
         }
 
-        #request_title_table #file {
+        #product_title_table #file {
             width: 200px;
         }
 
-        #request_title_table #manufacturing_date {
+        #product_title_table #manufacturing_date {
             width: 120px;
         }
 
-        #request_detail_table {
+        #product_detail_table {
             display: inline-table;
             width: 300px;
             /* float: right; */
         }
 
-        #request_detail_table input {
-            width: 30px;
+        #product_detail_table input {
+            width: 70px;
+        }
+
+        #titleForm {
+            font-weight: bold;
         }
     </style>
 </head>
@@ -41,29 +45,94 @@
 <div id="wrap">
     <!-- enctype : 파일 첨부 기능이 있다면 꼭 추가해라했음.. -->
 
-    <!--        발주 상태 <select class="custom-select" name="request_status">-->
-    <!--        <option value="신청">신청</option>-->
-    <!--        <option value="대기">대기</option>-->
-    <!--        <option value="승인">승인</option>-->
-    <!--        <option value="취소">취소</option>-->
-    <!--        <option value="수령">수령</option>-->
-    <!--    </select>-->
     <br>
 
-    <form name="detailForm" action="/prod/add" method="post" >
-        상품 코드 <input type="text" name="product_code" placeholder="ex: CT001">
-        단가 <input type="number" name="unit_price" value="0">원<br>
-        공장 이름 <input type="text" name="make_factory" placeholder="제조사 명 입력"><br>
-        최종수정일 <input type="date" name="final_update"><br>
-        제조코드 <input type="number" name="make_code"><br>
+    <form name="titleForm" action="/prod/add" method="post" id="titleForm">
+        <table>
+            <tr>
+                <th>상품 코드</th>
+                <td>
+                    <input type="text" name="product_code" placeholder="ex: CT001"><br>
+                </td>
+            </tr>
+            <tr>
+                <th>단가</th>
+                <td>
+                    <input type="number" name="unit_price" value="0">원
+                </td>
+            </tr>
+            <tr>
+                <th>공장 이름</th>
+                <td>
+                    <input type="text" name="make_factory" placeholder="제조사 명 입력">
+                </td>
+            </tr>
+            <tr>
+                <th>최종 수정일</th>
+                <td>
+                    <input type="date" name="final_update">
+                </td>
+            </tr>
+            <tr>
+                <th>제조 코드</th>
+                <td>
+                    <input type="number" name="make_code">
+                </td>
+            </tr>
+            <tr>
+                <th>파일</th>
+                <td>
+                    <input type="file" name="file" id="file">
+                </td>
+            </tr>
+            <tr>
+                <th>비고</th>
+                <td>
+                    <input type="text" name="etc">
+                </td>
+            </tr>
+        </table>
 
+        <table id="product_detail_table">
+            <thead>
+            <tr>
+                <th>색상</th>
+                <th>성별</th>
+                <th>s</th>
+                <th>m</th>
+                <th>l</th>
+                <th>xl</th>
+                <th>free</th>
+                <th>total</th>
+                <th>제조날짜</th>
+                <th><input type="button" value="+" id="addButton" onclick="addDetail()"></th>
+            </tr>
+            </thead>
+            <tbody id="product_detail_tbody">
 
-        <!-- 주문 총 양 <input type="text" name="total"><br> -->
-        <!-- 제조 코드 <input type="text" name="request_code"><br> -->
-
+            <tr>
+                <td><input type="text" name="color_name"></td>
+                <td><select name="gender">
+                    <option value="C">공용</option>
+                    <option value="W">여자</option>
+                    <option value="M">남자</option>
+                </select></td>
+                <td><input type="number" name="s"></td>
+                <td><input type="number" name="m"></td>
+                <td><input type="number" name="l"></td>
+                <td><input type="number" name="xl"></td>
+                <td><input type="number" name="free"></td>
+                <td><input type="text" name="total" value="0" readonly></td>
+                <td><input type="date" name="manufacture_day"></td>
+            </tr>
+            </tbody>
+        </table>
         <br>
+
+
         <input type="submit" id="prodAdd" value="상품 등록">
     </form>
+
     <!-- end of outer form -->
 </div>
 <!-- end of wrap-->
@@ -74,26 +143,32 @@
         $('input[type=number]').val(0);
     }
 
-    let request_detail_tbody = document.getElementById("request_detail_tbody");
-    let rowName = ['s', 'm', 'l', 'xl', 'free', 'total'];
+    let product_detail_tbody = document.getElementById("product_detail_tbody");
+    let rowName = ['color_name', 's', 'm', 'l', 'xl', 'free', 'total'];
+    let rowType = ['text', 'number', 'number', 'number', 'number', 'number', 'text'];
 
     function addDetail() {
-        let row = request_detail_tbody.insertRow();
+        let row = product_detail_tbody.insertRow();
 
+        //색상
+        row.insertCell(0).innerHTML += '<input type="text" name="color_name">';
         //성별
-        row.insertCell(0).innerHTML += '<select name="gender">'
+        row.insertCell(1).innerHTML += '<select name="gender">'
             + '<option value="C">공용</option>'
             + '<option value="W">여자</option>'
             + '<option value="M">남자</option>' + '</select>';
-        //색상
-        row.insertCell(1).innerHTML += '<input type="text" name="color_name">';
+
         //사이즈(s~free), 총 수량
         for (var i = 0; i < rowName.length; i++) {
             row.insertCell(i + 2).innerHTML += '<input type="number" name="' + rowName[i] + '" value="0">';
         }
+        row.insertCell().innerHTML += '<input type="text" name="manufacture_day">';
         row.insertCell().innerHTML += '<input type="button" value="-" id="delButton" onclick="delDetail(this)">';
+        // $(row).find('input[name=total]').attr('readonly', 'readonly').val(0);
+        // $(row).find('input[type=number]').val(0);
 
-    }
+                }
+
 
     // 해당 행 삭제 버튼
     function delDetail(row) {

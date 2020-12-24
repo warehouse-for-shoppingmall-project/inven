@@ -1,5 +1,6 @@
 package com.inven.service.inter;
 
+import com.inven.common.model.ProductDetail;
 import com.inven.common.model.ProductTitle;
 
 import java.util.List;
@@ -17,12 +18,12 @@ public interface ProductService {
 
     List<Map<String, Object>> detail(Map<String, Object> map);
 
-    List<Map<String, Object>> search(Map<String, Object> map);
-
     List<String> productAdd();
 
     int productTitlesAdd(ProductTitle productTitle);
 
-//    void productDetailsAdd();
+    void productDetailsAdd(ProductDetail productDetail);
+
+    List<ProductTitle> search(String where, String query);
 }
 

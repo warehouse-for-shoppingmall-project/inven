@@ -14,26 +14,38 @@
         on pt.product_code = pd.product_code
     </select>
 
-    <select id="detail" parameterType="hashMap" resultType="hashmap">
+    <select id="detail" parameterType="com.inven.common.model.ProductDetail" resultType="com.inven.common.model.ProductDetail">
 		select *
 		from product_detail
 	</select>
 
-    <!-- 검색 및 페이징 -->
-    <select id="search" parameterType="hashMap" resultType="hashmap">
-        select
-        <include refid="columns"/>
-        from product_title
-        <choose>
-            <when test="searchType.equals('product_code') and !searchText.equals('')">
-                where product_code = #{value}
-            </when>
-            <when test="searchType.equals('final_update') and !start_date.equals('') and !end_date.equals('')">
-                where final_update between date(#{start_date}) and date(#{end_date})
-            </when>
+  <select id="searchByProductCode" parameterType="string" resultType="com.inven.common.model.ProductTitle">
+    select *
+    from product_title
+    where product_code = #{query}
+  </select>
 
-        </choose>
-    </select>
+  <select id="searchByDate" parameterType="string" resultType="com.inven.common.model.ProductTitle">
+    select *
+    from product_title
+    where final_update = #{query}
+  </select>
+
+  <!-- 검색 및 페이징 -->
+<!--    <select id="search" parameterType="hashMap" resultType="hashmap">-->
+<!--        select-->
+<!--        <include refid="columns"/>-->
+<!--        from product_title-->
+<!--        <choose>-->
+<!--            <when test="searchType.equals('product_code') and !searchText.equals('')">-->
+<!--                where product_code = #{value}-->
+<!--            </when>-->
+<!--            <when test="searchType.equals('final_update') and !start_date.equals('') and !end_date.equals('')">-->
+<!--                where final_update between date(#{start_date}) and date(#{end_date})-->
+<!--            </when>-->
+
+<!--        </choose>-->
+<!--    </select>-->
 
     <!-- ADD -->
     <insert id="productTitlesAdd" parameterType="com.inven.common.model.ProductTitle">
@@ -50,5 +62,23 @@
             #{final_update}, #{make_code}
         )
    </insert>
+
+    <insert id="productDetailsAdd" parameterType="com.inven.common.model.ProductDetail">
+    insert into product_detail(
+    product_code,
+    color_name,
+    gender,
+    s,
+    m,
+    l,
+    xl,
+    f,
+    total,
+    manufacture_day
+    )
+    values(
+    #{product_code},#{color_name},#{gender},#{s},#{m},#{l},#{xl},#{f},#{total},#{manufacture_day}
+    )
+    </insert>
 
 </mapper>
