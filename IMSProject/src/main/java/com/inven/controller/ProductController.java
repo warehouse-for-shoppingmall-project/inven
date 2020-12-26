@@ -1,10 +1,9 @@
 package com.inven.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.inven.common.model.ProductDetail;
-import com.inven.param.ProductModifiedInformation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.inven.common.model.ProductDetail;
 import com.inven.common.model.ProductTitle;
 import com.inven.mapper.ProductMapper;
 import com.inven.param.ProductInformation;
@@ -114,19 +114,36 @@ public class ProductController {
     }
     @GetMapping("/modify")
     public ModelAndView modify(@RequestParam String productCode) {
+        ModelAndView mv = new ModelAndView();
+
         //1. title , detail 가져오기 : productCode이용 -> mapper에서 select로 일단 가져오자
-        List<ProductInformation> productInformations =  productService.modify(productCode);
-        System.out.println(productInformations);
+        List<ProductInformation> productInformations = productService.modify(productCode);
+        if (productInformations.isEmpty()) {
+            mv.setViewName("redirect:/prod/list");
+        }
 
+        ProductTitle productTitle = new ProductTitle(productInformations.get(0));
 
-    //2. html에 보내주기 -> mv.setViewName("product_fd/productModify")
-    ModelAndView mv = new ModelAndView();
+        // List<ProductInformation> --> List<ProductDetail>
+        // ProductInformation --> ProductDetail
+        List<ProductDetail> productDetailList = new ArrayList<>();
+        for (ProductInformation productInformation : productInformations) {
+            ProductDetail productDetail = new ProductDetail(
+                    productInformation); // ProductInformation --> ProductDetail
+            productDetailList.add(productDetail);
+        }
+
+        System.out.println(productTitle);
+        System.out.println(productDetailList);
+
+        //2. html에 보내주기 -> mv.setViewName("product_fd/productModify")
         mv.setViewName("product_fd/productModify");
-        mv.addObject("productInformation",productInformations);
-    //3. html에서 타임리프이용 가져온 데이터를 띄우기 -> 수정가능 상태로 두기
+        mv.addObject("productTitle", productTitle);
+        mv.addObject("productDetailList", productDetailList);
+        //3. html에서 타임리프이용 가져온 데이터를 띄우기 -> 수정가능 상태로 두기
 
         return mv;
-}
+    }
 
     // localhost:8080/prod/search?where=productCode&query=CT001
     // localhost:8080/prod/search?where=date&query=2020-12-12

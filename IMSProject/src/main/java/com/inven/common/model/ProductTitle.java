@@ -1,7 +1,8 @@
 package com.inven.common.model;
 
+import com.inven.param.ProductInformation;
+
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -24,4 +25,12 @@ public class ProductTitle {
         this.product_status = product_status;
     }
 
+    public ProductTitle(ProductInformation productInformation) {
+        this.product_code = productInformation.getProduct_code();
+        this.make_factory = productInformation.getMake_factory();
+        this.unit_price = productInformation.getUnit_price();
+        this.final_update = productInformation.getFinal_update();
+        this.make_code = productInformation.getMake_code();
+        this.product_status = productInformation.getProduct_status();
+    }
 }

@@ -47,38 +47,38 @@
 
     <br>
 
-    <form name="titleForm" action="/prod/modify" method="post" id="modifyForm" >
+    <form name="titleForm" action="/prod/modify" method="post" id="modifyForm">
 
 
         <table>
             <tr>
                 <th>상품 코드</th>
                 <td>
-                    <input type="text" name="product_code">   <br>
+                    <input type="text" name="product_code" th:value="${productTitle.getProduct_code()}">   <br>
                 </td>
             </tr>
             <tr>
                 <th>단가</th>
                 <td>
-                    <input type="number" name="unit_price" value="0">원
+                    <input type="text" name="unit_price" th:value="${productTitle.getUnit_price()}">원
                 </td>
             </tr>
             <tr>
                 <th>공장 이름</th>
                 <td>
-                    <input type="text" name="make_factory" placeholder="제조사 명 입력">
+                    <input type="text" name="make_factory" placeholder="제조사 명 입력" th:value="${productTitle.getMake_factory()}">
                 </td>
             </tr>
             <tr>
                 <th>최종 수정일</th>
                 <td>
-                    <input type="date" name="final_update">
+                    <input type="date" name="final_update" th:value="${productTitle.getFinal_update()}">
                 </td>
             </tr>
             <tr>
                 <th>제조 코드</th>
                 <td>
-                    <input type="number" name="make_code">
+                    <input type="text" name="make_code" th:value="${productTitle.getMake_code()}">
                 </td>
             </tr>
             <tr>
@@ -112,20 +112,20 @@
             </thead>
             <tbody id="product_detail_tbody">
 
-            <tr>
-                <td><input type="text" name="color_name"></td>
+            <tr th:each="productDetail : ${productDetailList}">
+                <td><input type="text" name="color_name" th:value="${productDetail.getColor_name()}"></td>
                 <td><select name="gender">
-                    <option value="C">공용</option>
-                    <option value="W">여자</option>
-                    <option value="M">남자</option>
+                    <option value="C" th:selected="${productDetail.getGender() == 'C'}">공용</option>
+                    <option value="W" th:selected="${productDetail.getGender() == 'W'}">여자</option>
+                    <option value="M" th:selected="${productDetail.getGender() == 'M'}">남자</option>
                 </select></td>
-                <td><input type="number" name="s"></td>
-                <td><input type="number" name="m"></td>
-                <td><input type="number" name="l"></td>
-                <td><input type="number" name="xl"></td>
-                <td><input type="number" name="free"></td>
-                <td><input type="text" name="total" value="0" readonly></td>
-                <td><input type="date" name="manufacture_day"></td>
+                <td><input type="text" name="s" th:value="${productDetail.getS()}"></td>
+                <td><input type="text" name="m" th:value="${productDetail.getM()}"></td>
+                <td><input type="text" name="l" th:value="${productDetail.getL()}"></td>
+                <td><input type="text" name="xl" th:value="${productDetail.getXl()}"></td>
+                <td><input type="text" name="free" th:value="${productDetail.getF()}"></td>
+                <td><input type="text" name="total" value="0" readonly th:value="${productDetail.getTotal()}"></td>
+                <td><input type="date" name="manufacture_day" th:value="${productDetail.getManufacture_day()}"></td>
             </tr>
             </tbody>
         </table>
@@ -146,7 +146,7 @@
     }
 
     let product_detail_tbody = document.getElementById("product_detail_tbody");
-    let rowName = ['color_name', 's', 'm', 'l', 'xl', 'free', 'total'];
+    let rowName = ['s', 'm', 'l', 'xl', 'free', 'total'];
     let rowType = ['text', 'number', 'number', 'number', 'number', 'number', 'text'];
 
     function addDetail() {
