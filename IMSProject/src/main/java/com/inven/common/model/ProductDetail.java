@@ -1,6 +1,8 @@
 package com.inven.common.model;
 
 
+import com.inven.param.ProductInformation;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,5 +24,16 @@ public class ProductDetail {
     private int total;
     private String manufacture_day;
 
-
+    public ProductDetail(ProductInformation productInformation) {
+        this.product_code = productInformation.getProduct_code();
+        this.color_name = productInformation.getColor_name();
+        this.gender = productInformation.getGender();
+        this.s = productInformation.getS();
+        this.m = productInformation.getM();
+        this.l = productInformation.getL();
+        this.xl = productInformation.getXl();
+        this.f = productInformation.getF();
+        this.total = productInformation.getTotal();
+        this.manufacture_day = productInformation.getManufacture_day();
+    }
 }
