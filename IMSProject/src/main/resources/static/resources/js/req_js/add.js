@@ -1,21 +1,4 @@
-jQuery.fn.serializeObject = function() {
-    let obj = null;
-    try {
-        if (this[0].tagName) {
-            let arr = this.serializeArray();
-            if (arr) {
-                obj = {};
-                jQuery.each(arr, function() {
-                    obj[this.name] = this.value;
-                });
-            }
-        }
-    } catch (e) {
-        alert(e.message);
-    } finally {
-    }
-    return obj;
-};
+
 
 $('button[name=makeReqCode]').click(function() {
 	console.log("하는중");

@@ -22,42 +22,34 @@
 
 	<!-- 조회 전체 카운트 -->
 	<select id="searchCount" parameterType="hashMap" resultType="int">
-		select count(*)
-		from request_title
-		<choose>
-			<when test="confirm.equals('request_code') and !value.equals('')">
-				where request_code = #{value}
-			</when>
-			<when test="confirm.equals('product_code') and !value.equals('')">
-				where product_code = #{value}
-			</when>
-			<when test="confirm.equals('request_date') and !start_date.equals('') and !end_date.equals('')">
-				where Date(request_date) between #{start_date} and #{end_date}
-			</when>
-			<when test="confirm.equals('request_status') and !value.equals('')">
-				where request_status = #{value}
-			</when>
-		</choose>
+		SELECT count(*)
+		FROM request_title
+		WHERE DATE(request_date) BETWEEN DATE(#{start_date}) AND DATE(#{end_date})
+		<if test="!request_code.equals('')">
+			AND request_code LIKE concat('%', #{request_code}, '%');
+		</if>
+		<if test="!product_code.equals('')">
+			AND product_code LIKE concat('%', #{product_code}, '%');
+		</if>
+		<if test="!request_status.equals('')">
+			AND request_status = #{request_status}
+		</if>
 	</select>
 
 	<!-- 검색 및 페이징 -->
 	<select id="searchWhere" parameterType="hashMap" resultType="hashmap">
-		select <include refid="titleColumn"/>
-		from request_title
-		<choose>
-			<when test="confirm.equals('request_code') and !value.equals('')">
-				where request_code = #{value}
-			</when>
-			<when test="confirm.equals('product_code') and !value.equals('')">
-				where product_code = #{value}
-			</when>
-			<when test="confirm.equals('request_date') and !start_date.equals('') and !end_date.equals('')">
-				where Date(request_date) between #{start_date} and #{end_date}
-			</when>
-			<when test="confirm.equals('request_status') and !value.equals('')">
-				where request_status = #{value}
-			</when>
-		</choose>
+		SELECT <include refid="titleColumn"/>
+		FROM request_title
+		WHERE DATE(request_date) BETWEEN DATE(#{start_date}) AND DATE(#{end_date})
+		<if test="!request_code.equals('')">
+			AND request_code LIKE concat('%', #{request_code}, '%')
+		</if>
+		<if test="!product_code.equals('')">
+			AND product_code LIKE concat('%', #{product_code}, '%')
+		</if>
+		<if test="!request_status.equals('')">
+			AND request_status = #{request_status}
+		</if>
 		LIMIT #{start_idx}, #{end_idx}
 	</select>
 

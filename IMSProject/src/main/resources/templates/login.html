@@ -1,12 +1,13 @@
 <!doctype html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/cmnHead :: main-head">
+<head>
+    <th:block th:replace="fragments/cmnHead :: main-head"></th:block>
 </head>
 <body>
 <div class="container">
     <div class="row justify-content-md-center">
         <div class="col-lg-5">
-            <form class="form-signin" action="loginCheck" method="get" id="frm" onsubmit="return passCheck(this)">
+            <form class="form-signin" action="loginCheck" method="get" id="loginForm" onsubmit="return false;">
                 <h2 class="form-signin-heading">Press Password</h2>
                 <label for="inputPassword" class="sr-only">Password</label>
                 <input type="password" id="inputPassword" name="pwd" class="form-control" placeholder="Password" required>
@@ -16,54 +17,49 @@
     </div>
 </div>
 
-<!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-        crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
-        crossorigin="anonymous"></script>
-<script th:src="@{/resources/js/utils.js}"></script>
 <script>
     $('#submit_btn').css('display', 'none');
     document.onkeydown = keyCodeBlock;
 
     let keyDownEvent = function (e) {
-        if (e.ctrlKey && e.keyCode == 32)
+        if (e.ctrlKey && e.keyCode === 32)
             $('#submit_btn').css('display', '');
     }
+
     document.addEventListener('keydown', keyDownEvent);
 
-    function passCheck(frm) {
-        let xhr = new XMLHttpRequest();
-        /* 준비상태가 변하면 실행한다. */
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === xhr.DONE) {
-                /* 상태가 200, 201 이면 서버 통신 성공 */
-                if (xhr.status === 200 || xhr.status === 201) {
-                    let jobj = JSON.parse(xhr.responseText);
-                    if (jobj.code == 200) {
-                        location.href = "req/list";
+    document.getElementById('submit_btn').addEventListener('click',
+        function () {
+            let frm = document.getElementById('loginForm');
+            let xhr = new XMLHttpRequest();
+            /* 준비상태가 변하면 실행한다. */
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === xhr.DONE) {
+                    /* 상태가 200, 201 이면 서버 통신 성공 */
+                    if (xhr.status === 200 || xhr.status === 201) {
+                        let obj = JSON.parse(xhr.responseText);
+                        if (obj.code === 200) {
+                            location.href = "req/list";
+                        } else {
+                            alert('비밀번호 잘못입력');
+                            frm.pwd.value = '';/* 틀린 비밀번호 지워주기 */
+                        }
                     } else {
-                        alert('비밀번호 잘못입력');
-                        frm.pwd.value = '';/* 틀린 비밀번호 지워주기 */
+                        /* 서버통신 실패 */
+                        console.error(xhr.responseText);
                     }
-                } else {
-                    /* 서버통신 실패 */
-                    console.error(xhr.responseText);
                 }
+            };
+            /* 메소드에 따라 다른방식의 접근을 해줘야한다. */
+            if (frm.method === 'get') {
+                xhr.open(frm.method, frm.action + serialize(frm), false);
+                xhr.send();
+            } else {
+                xhr.open(frm.method, frm.action, false);
+                xhr.send(new FormData(frm));
             }
-        };
-        /* 메소드에 따라 다른방식의 접근을 해줘야한다. */
-        if (frm.method == 'get') {
-            xhr.open(frm.method, frm.action + toparamJson(serializeForm(frm)), false);
-            xhr.send();
-        } else {
-            xhr.open(frm.method, frm.action, false);
-            xhr.send(new FormData(frm));
         }
-        return false;
-    }
+    );
 
 </script>
 <!-- Option 2: jQuery, Popper.js, and Bootstrap JS

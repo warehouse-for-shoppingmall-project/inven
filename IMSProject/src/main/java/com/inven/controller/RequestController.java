@@ -1,8 +1,10 @@
 package com.inven.controller;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.inven.common.CommonUtils;
 import com.inven.common.Paging;
 import com.inven.service.inter.RequestService;
 import lombok.extern.slf4j.Slf4j;
@@ -41,42 +43,57 @@ public class RequestController {
      * */
     // mappingurl이랑method이름을통일하면method이름이겹칠일이없다
 
+    private void setFirstAccess(Map<String, Object> map){
+        Date date = new Date();
+        // sql 인자로 보낼 값
+        if (!map.containsKey("start_date")) map.put("start_date", (date.getYear() + 1900) + "-01-01");
+        if (!map.containsKey("end_date")) map.put("end_date", (date.getYear() + 1900) + "-12-31");
+        if (!map.containsKey("request_code")) map.put("request_code", "");
+        if (!map.containsKey("product_code")) map.put("product_code", "");
+        if (!map.containsKey("request_status")) map.put("request_status", "");
+
+        // paging 에서 쓸 값
+        if (!map.containsKey("pageSize")) map.put("pageSize", "10");
+        if (!map.containsKey("pageNo")) map.put("pageNo", "1");
+        /* request_code product_code request_status pageSize start_date end_Date */
+    }
+
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public ModelAndView list(@RequestParam Map<String, Object> map) {
         log.info("Request Parameter : " + map);
         ModelAndView mv = new ModelAndView("/request_fd/request_main");
+        List<Map<String, Object>> list = null;
+        Paging paging = null;
 
-        if (!map.containsKey("confirm")) map.put("confirm", "");
-        if (!map.containsKey("value")) map.put("value", "");
-
+        setFirstAccess(map);
 
         int count = reqService.searchCount(map);
-        if (count < 1) mv.addObject("size", 0);
-        else {
-            Paging paging = new Paging();
-            int pageNo = map.containsKey("pageNo") ? Integer.parseInt(map.get("pageNo").toString()) : 1;
-            int pageSize = map.containsKey("pageSize") ? Integer.parseInt(map.get("pageSize").toString()) : 10;
+        if (count > 0) {
+            paging = new Paging();
+            int pageNo = Integer.parseInt(map.get("pageNo").toString());
+            int pageSize = Integer.parseInt(map.get("pageSize").toString());
             paging.setPageNo(pageNo);
             paging.setTotalCount(count);
             paging.setPageSize(pageSize);
+
             map.put("start_idx", paging.getStartIndex());
             map.put("end_idx", paging.getPageSize());
 
-            List<Map<String, Object>> list = reqService.searchWhere(map);
-            mv.addObject("list", list);
-            mv.addObject("paging", paging);
+            list = reqService.searchWhere(map);
         }
+        mv.addObject("list", list);
+        mv.addObject("paging", paging);
         mv.addObject("map", map);
         return mv;
     }
 
-    @GetMapping(value="/add")
+    @GetMapping(value = "/add")
     public ModelAndView add(@RequestParam Map<String, Object> map) {
         log.info("Request Parameter : " + map);
         ModelAndView mv = new ModelAndView("request_fd/request_add");
         List<String> list = reqService.selectProductCode();
 
-        mv.addObject("list",list);
+        mv.addObject("list", list);
 
         return mv;
     }

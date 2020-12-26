@@ -8,18 +8,38 @@
 	form 요소들 jobj로 만들기 
 	jobj = { key : value}
 */
+// form data -> obj { key : value }
+jQuery.fn.serializeObject = function() {
+	let obj = null;
+	try {
+		if (this[0].tagName) {
+			let arr = this.serializeArray();
+			if (arr) {
+				obj = {};
+				jQuery.each(arr, function() {
+					obj[this.name] = this.value;
+				});
+			}
+		}
+	} catch (e) {
+		alert(e.message);
+	} finally {
+	}
+	return obj;
+};
+
+let returnNumber = function (txt){
+	return txt.replace(/[^0-9]/g,"");
+}
+
 /* 전화번호와 같이 숫자만 입력제한 */
-function onlyNumber(obj){
-	$(obj).keyup(function(){
-		$(this).val($(this).val().replace(/[^0-9]/g,""));
-	});
+let onlyNumber = function (){
+	$(this).val(returnNumber($(this).val()));
 }
 
 /* 입력되는 글 숫자만 입력제한 하여 int Type 으로 Return */
-function onlyInt() {
-	$(this).keyup(function(){
-		$(this).val(parseInt($(this).val().replace(/[^0-9]/g,"")));
-	});
+let onlyInt = function () {
+	$(this).val(parseInt(returnNumber($(this).val())));
 }
 
 let keyCodeBlock = function (e){
@@ -30,7 +50,20 @@ let keyCodeBlock = function (e){
 	}
 }
 
-let serializeForm = function(form) {
+// param 형식을 obj 형태로 변환
+let serialize = function(form) {
+	let param = '?', and = '';
+	let formData = new FormData(form);
+	let i = 0;
+	for (let key of formData.keys()) {
+		if(i > 0) and = '&';
+		param += and + key + '=' + formData.get(key);
+	}
+	return param;
+};
+
+// param 형식을 obj 형태로 변환
+let serializeObject = function(form) {
 	let obj = {};
 	let formData = new FormData(form);
 	for (let key of formData.keys()) {
@@ -40,15 +73,15 @@ let serializeForm = function(form) {
 };
 
 /*
-	jobj를 파라미터 형식으로 변환해준다.
+	obj 를 파라미터 형식으로 변환해준다.
 	method='GET' 방식에서만 사용한다.
 */
-let toparamJson = function(jobj){
+let serializeForm = function(obj){
 	let str = "?";
 	let idx = 0;
-	for (let key in jobj) {
+	for (let key in obj) {
 		if(idx > 0) str += "&";
-		str += key + "=" + jobj[key];
+		str += key + "=" + obj[key];
 		idx++;
 	}
 	return str;
