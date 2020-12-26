@@ -23,4 +23,5 @@ public class ProductTitle {
         this.product_code = product_code;
         this.product_status = product_status;
     }
+
 }

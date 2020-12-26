@@ -3,6 +3,7 @@ package com.inven.mapper;
 import com.inven.common.model.ProductDetail;
 import com.inven.common.model.ProductTitle;
 
+import com.inven.param.ProductInformation;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
@@ -29,8 +30,12 @@ public interface ProductMapper {
 
 	List<ProductTitle> searchByDate(String query);
 
+	List<ProductInformation> modify(String productCode);
+
 	//ajax
     void upStatus(ProductTitle productTitle);
+
+
 
 //	@Select("SELECT * FROM product_title where product_code = #{query}")
 //	ProductTitle getProductTitle(@Param("product_code") String query);

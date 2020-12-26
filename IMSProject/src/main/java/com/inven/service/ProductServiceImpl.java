@@ -4,6 +4,7 @@ import java.util.*;
 
 import com.inven.common.model.ProductDetail;
 import com.inven.common.model.ProductTitle;
+import com.inven.param.ProductInformation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,13 +21,11 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductTitle> printProduct() {
-        List<ProductTitle> productTitles = prodMapper.getProductList();
-        return productTitles;
+        return prodMapper.getProductList();
     }
 
     public List<ProductDetail> getDetail() {
-        List<ProductDetail> productDetails = prodMapper.getDetail();
-        return productDetails;
+        return prodMapper.getDetail();
     }
 
 
@@ -57,6 +56,11 @@ public class ProductServiceImpl implements ProductService {
 
     public void upStatus(ProductTitle productTitle) {
         prodMapper.upStatus(productTitle);
+    }
+
+    @Override
+    public List<ProductInformation> modify(String productCode) {
+        return prodMapper.modify(productCode);
     }
 
 //	@Override

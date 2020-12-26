@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.inven.common.model.ProductDetail;
+import com.inven.param.ProductModifiedInformation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,8 +69,6 @@ public class ProductController {
         return mv;
 
     }
-
-
     // html form submit
     // form: application/x-www-form-url-encoded
     // 1. @RequestBody MultiValueMap
@@ -113,6 +112,21 @@ public class ProductController {
 
         return mv;
     }
+    @GetMapping("/modify")
+    public ModelAndView modify(@RequestParam String productCode) {
+        //1. title , detail 가져오기 : productCode이용 -> mapper에서 select로 일단 가져오자
+        List<ProductInformation> productInformations =  productService.modify(productCode);
+        System.out.println(productInformations);
+
+
+    //2. html에 보내주기 -> mv.setViewName("product_fd/productModify")
+    ModelAndView mv = new ModelAndView();
+        mv.setViewName("product_fd/productModify");
+        mv.addObject("productInformation",productInformations);
+    //3. html에서 타임리프이용 가져온 데이터를 띄우기 -> 수정가능 상태로 두기
+
+        return mv;
+}
 
     // localhost:8080/prod/search?where=productCode&query=CT001
     // localhost:8080/prod/search?where=date&query=2020-12-12
@@ -137,6 +151,7 @@ public class ProductController {
         mv.addObject("productTitles", productTitles);
         return mv;
     }
+
 
 
 

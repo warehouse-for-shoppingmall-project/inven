@@ -112,6 +112,7 @@
 					<th scope="col">마지막수정일</th>
 					<th scope="col">제조코드</th>
 					<th scope="col">상품상태</th>
+					<th scope="col">수정</th>
 				</tr>
 				</thead>
 				<tbody>
@@ -128,6 +129,7 @@
 							<option value="판매중단" th:selected="${title.getProduct_status()} == '판매중단'">판매중단</option>
 						</select>
 					</td>
+					<td><a class="btn btn-primary" th:href="@{/prod/modify(productCode=${title.getProduct_code()})}" role="button">수정하기</a></td>
 				</tr>
 				</tbody>
 			</table>

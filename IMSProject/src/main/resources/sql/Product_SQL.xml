@@ -31,21 +31,14 @@
     where final_update = #{query}
   </select>
 
-  <!-- 검색 및 페이징 -->
-<!--    <select id="search" parameterType="hashMap" resultType="hashmap">-->
-<!--        select-->
-<!--        <include refid="columns"/>-->
-<!--        from product_title-->
-<!--        <choose>-->
-<!--            <when test="searchType.equals('product_code') and !searchText.equals('')">-->
-<!--                where product_code = #{value}-->
-<!--            </when>-->
-<!--            <when test="searchType.equals('final_update') and !start_date.equals('') and !end_date.equals('')">-->
-<!--                where final_update between date(#{start_date}) and date(#{end_date})-->
-<!--            </when>-->
+    <select id="modify" parameterType="string" resultType="com.inven.param.ProductInformation">
+        select *
+        from product_title
+        join product_detail
+        on product_title.product_code = #{productCode} and
+        product_detail.product_code = #{productCode}
+    </select>
 
-<!--        </choose>-->
-<!--    </select>-->
 
     <!-- ADD -->
     <insert id="productTitlesAdd" parameterType="com.inven.common.model.ProductTitle">
@@ -86,5 +79,6 @@
 		SET product_status = #{product_status}
 		WHERE product_code = #{product_code}
    </update>
+
 
 </mapper>

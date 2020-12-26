@@ -2,6 +2,7 @@ package com.inven.service.inter;
 
 import com.inven.common.model.ProductDetail;
 import com.inven.common.model.ProductTitle;
+import com.inven.param.ProductInformation;
 
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,8 @@ public interface ProductService {
 
 
     void upStatus(ProductTitle productTitle);
+
+    List<ProductInformation> modify(String productCode);
 
 //    List<ProductTitle> searchByProductCode(String query);
 //

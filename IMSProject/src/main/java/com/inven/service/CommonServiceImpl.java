@@ -18,8 +18,6 @@ import com.inven.service.inter.CommonService;
 @Slf4j
 @Service("commonService")
 public class CommonServiceImpl implements CommonService {
-    @Autowired
-    private CommonMapper cmnMapper;
 
     public boolean loginCheck(Map<String, Object> map) throws IOException {
         DefaultResourceLoader drl = new DefaultResourceLoader();

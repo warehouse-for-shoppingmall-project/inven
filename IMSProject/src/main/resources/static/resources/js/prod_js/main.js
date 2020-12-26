@@ -8,6 +8,9 @@ $('select[name=status]').change(function () {
         product_code: $(this).parents('tr').children().first().text()
     };
     console.log(data);
+    // data는 내가 보내려고 하는 데이터 안에 내용
+    // dataType은 내가 json으로 받겠다.
+    // contentType은 내가 json으로 보내겠다.
     $.ajax({
         type: "post",
         url: "/prod/async/upStatus",

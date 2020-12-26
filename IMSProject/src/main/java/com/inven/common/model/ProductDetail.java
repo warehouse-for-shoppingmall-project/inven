@@ -22,4 +22,5 @@ public class ProductDetail {
     private int total;
     private String manufacture_day;
 
+
 }
