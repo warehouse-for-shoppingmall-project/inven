@@ -24,6 +24,8 @@ public class RequestServiceImpl implements RequestService {
     public List<Map<String, Object>> searchWhere(Map<String, Object> map){ return reqMapper.searchWhere(map); }
     public List<String> selectProductCode(){ return reqMapper.selectProductCode(); }
     public String makeReqCode(){ return reqMapper.makeReqCode(); }
+    public Map<String, Object> reqModifyTitle(Map<String, Object> map){ return reqMapper.reqModifyTitle(map); }
+    public List<Map<String, Object>> reqModifyDetail(Map<String, Object> map){ return reqMapper.reqModifyDetail(map); }
 
     // insert
     public int addTitle(Map<String, Object> map){
@@ -35,7 +37,16 @@ public class RequestServiceImpl implements RequestService {
 
     // update
     public int upStatus(Map<String, Object> map) {return reqMapper.upStatus(map);}
+    public int modTitle(Map<String, Object> map) {
+        if(map.get("manufacturing_date").toString().equals(""))
+            map.put("manufacturing_date", null);
 
+        if(map.get("etc").toString().equals(""))
+            map.put("etc","");
+
+        return reqMapper.modTitle(map);
+    }
+    public int modDetail(List<Map<String, Object>> list) { return reqMapper.modDetail(list);}
     // delete
 
 

@@ -94,7 +94,7 @@ public class HomeController {
                 jobj.put("code", 200);
                 HttpSession s = req.getSession();
                 s.setAttribute("connect", true);
-                s.setMaxInactiveInterval(60 * 60);
+                s.setMaxInactiveInterval(60*60*12);
             }
         }
         return jobj;

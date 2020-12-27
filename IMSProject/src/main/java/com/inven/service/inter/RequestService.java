@@ -10,6 +10,8 @@ public interface RequestService {
     List<Map<String, Object>> searchWhere(Map<String, Object> map);
     List<String> selectProductCode();
     String makeReqCode();
+    Map<String, Object> reqModifyTitle(Map<String, Object> map);
+    List<Map<String, Object>> reqModifyDetail(Map<String, Object> map);
 
     // insert
     int addTitle(Map<String, Object> map);
@@ -17,6 +19,9 @@ public interface RequestService {
 
     // update
     int upStatus(Map<String, Object> map);
+    int modTitle(Map<String, Object> map);
+    int modDetail(List<Map<String, Object>> list);
+
 
     // delete
 }

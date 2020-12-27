@@ -97,4 +97,26 @@ public class RequestController {
 
         return mv;
     }
+
+
+    @GetMapping(value="/mod")
+    public ModelAndView mod(@RequestParam Map<String, Object> map) {
+        log.info("Request Parameter : " + map);
+        ModelAndView mv = new ModelAndView("request_fd/request_modify");
+
+        Map<String, Object> title = reqService.reqModifyTitle(map);
+        List<Map<String, Object>> details = reqService.reqModifyDetail(map);
+        List<String> list = reqService.selectProductCode();     //상품코드 select용
+
+        log.info("Response modSelectSQL title : " + title);
+        log.info("Response modSelectSQL details : " + details);
+
+        mv.addObject("title",title);
+        mv.addObject("details",details);
+        mv.addObject("list",list);
+
+
+        return mv;
+    }
+
 }

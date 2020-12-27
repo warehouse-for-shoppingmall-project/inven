@@ -42,12 +42,12 @@
                     <label for="rd2">신청</label>
                     <input type="radio" id="rd3" name="request_status" value="대기" th:checked="${map.request_status} == '대기'">
                     <label for="rd3">대기</label>
-                    <input type="radio" id="rd4" name="request_status" value="승인" th:checked="${map.request_status} == '승인'">
-                    <label for="rd4">승인</label>
+                    <input type="radio" id="rd4" name="request_status" value="확정" th:checked="${map.request_status} == '확정'">
+                    <label for="rd4">확정</label>
                     <input type="radio" id="rd5" name="request_status" value="취소" th:checked="${map.request_status} == '취소'">
                     <label for="rd5">취소</label>
-                    <input type="radio" id="rd6" name="request_status" value="수령" th:checked="${map.request_status} == '수령'">
-                    <label for="rd6">수령</label>
+                    <input type="radio" id="rd6" name="request_status" value="입고" th:checked="${map.request_status} == '입고'">
+                    <label for="rd6">입고</label>
                 </td>
                 <th>상품 코드</th>
                 <td><input type="text" name="product_code" th:value="${map.request_code}"></td>
@@ -82,10 +82,11 @@
                     <th scope="col">요청일</th>
                     <th scope="col">제조사</th>
                     <th scope="col">단가</th>
-                    <th scope="col">수령일</th>
+                    <th scope="col">입고일</th>
                     <th scope="col">제조일</th>
                     <th scope="col">주문량</th>
                     <th scope="col">상태</th>
+                    <th scope="col">수정하기</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -98,20 +99,19 @@
                     <td th:text="${row.request_date}"></td>
                     <td th:text="${row.factory_name}"></td>
                     <td th:text="${row.unit_price}"></td>
-                    <td th:unless="${row.containsKey('get_date')}">-</td>
-                    <td th:if="${row.containsKey('get_date')}" th:text="${row.get_date}"></td>
-                    <td th:unless="${row.containsKey('manufacturing_date')}">-</td>
-                    <td th:if="${row.containsKey('manufacturing_date')}" th:text="${row.manufacturing_date}"></td>
+                    <td th:text="${row.get_date}"></td>
+                    <td th:text="${row.manufacturing_date}"></td>
                     <td th:text="${row.total_order_quantity}"></td>
                     <td>
-                        <select class="custom-select" name="status" th:disabled="${row.request_status == '수령'}">
+                        <select class="custom-select" name="status" th:disabled="${row.request_status == '입고'}">
                             <option value="신청" th:selected="${row.request_status}=='신청'">신청</option>
                             <option value="대기" th:selected="${row.request_status}=='대기'">대기</option>
-                            <option value="승인" th:selected="${row.request_status}=='승인'">승인</option>
+                            <option value="확정" th:selected="${row.request_status}=='확정'">확정</option>
                             <option value="취소" th:selected="${row.request_status}=='취소'">취소</option>
-                            <option value="수령" th:selected="${row.request_status}=='수령'">수령</option>
+                            <option value="입고" th:selected="${row.request_status}=='입고'">입고</option>
                         </select>
                     </td>
+                    <td> <input type="button" value="이름이쁘노" name="reqModButton"> </td>
                 </tr>
                 </tbody>
             </table>
@@ -147,33 +147,6 @@
 </div>
 
 <!-- Optional JavaScript; choose one of the two! -->
-<script th:src="@{/resources/js/req_js/main.js}"></script>
-<script>
-    /*
-    $('.pagination li').click(function (){
-        // 1. jQuery 방식
-        let $pageNo = $(this).find('.sr-only').text();
-        console.log($pageNo);
-        let $obj = $('form[name=saveParamForm]');
-        $obj.children('input[name=pageNo]').val($pageNo);
-        console.log($obj.html());
-        $obj.submit();
-    });
-    */
-    let pagingFunc = function(){
-        let pageNo = this.querySelector('.sr-only').innerText;
-        // console.log(pageNo);
-        let obj = document.querySelector('form[name=saveParamForm]');
-        obj.pageNo.value = pageNo;
-        // console.log(obj);
-        obj.method = 'get';
-        obj.action = 'list';
-        obj.submit();
-    }
-
-    document.querySelectorAll('.pagination > .page-item').forEach(function(e, i){
-        e.addEventListener('click', pagingFunc);
-    });
-</script>
+<script th:src="@{/resources/js/request.js}"></script>
 </body>
 </html>

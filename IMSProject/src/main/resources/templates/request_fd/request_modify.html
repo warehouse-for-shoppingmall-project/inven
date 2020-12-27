@@ -3,36 +3,6 @@
 
 <head>
 	<th:block th:replace="fragments/cmnHead :: main-head"></th:block>
-	<!--
-<style>
-#request_title_table {
-	width: 240px;
-	display: inline-block;
-	float: left;
-}
-
-#request_title_table input {
-	width: 100px;
-}
-
-#request_title_table #file {
-	width: 200px;
-}
-
-#request_title_table #manufacturing_date {
-	width: 120px;
-}
-
-#request_detail_table {
-	display: inline-table;
-	width: 300px;
-	/* float: right; */
-}
-
-#request_detail_table input {
-	width: 30px;
-}
-</style>-->
 	<style>
 		#request_detail_tbody input {
 			width: 70px;
@@ -41,21 +11,20 @@
 			background-color: cornsilk;
 		}
 		.wrap{
-			padding : 0 50px 0 50px;
+			padding:0 50px 0 50px;
 		}
 	</style>
 </head>
 
 <body>
 <th:block th:replace="fragments/header :: nav-header"></th:block>
-
 <!-- Contents -->
 <div class="wrap">
 	<div class="row">
 		<!-- row 1 -->
 		<div class="col-lg-4 col-md-12">
 			<p class="text-muted">
-				발주 등록
+				발주 수정
 			</p>
 			<form name="titleForm">
 				<table>
@@ -63,48 +32,34 @@
 						<th>발주 코드</th>
 						<td>
 							<div class="input-group mb-3">
-								<input type="text" class="form-control" name="request_code" id="request_code" placeholder="Click to Button" aria-label="Recipient's username" aria-describedby="button-addon2" readonly>
-								<div class="input-group-append">
-									<button class="btn btn-outline-secondary" name="makeReqCode" type="button" id="button-addon2">코드 생성</button>
-								</div>
+								<input type="text" th:value="${title.get('request_code')}" class="form-control" name="request_code" aria-label="Recipient's username" aria-describedby="button-addon2" readonly>
 							</div>
 						</td>
 					</tr>
-					<tr>
+                    <tr>
 						<th>상품 코드</th>
 						<td>
 							<select class="custom-select" name="product_code">
-								<option th:each="code : ${list}" th:text="${code}" th:value="${code}"></option>
+								<option th:each="code:${list}" th:text="${code}" th:value="${code}" th:selected="${title.product_code} == ${code}"></option>
 							</select>
 						</td>
 					</tr>
 					<tr>
 						<th>상품 성별</th>
 						<td>
-							<input type="radio" id="gd_rd1" name="gender" value="C" checked>
+							<input type="radio" id="gd_rd1" name="gender" value="C" th:checked="${title.gender} == 'C'">
 							<label for="gd_rd1">공용</label>
-							<input type="radio" id="gd_rd2" name="gender" value="M">
+							<input type="radio" id="gd_rd2" name="gender" value="M" th:checked="${title.gender} == 'M'">
 							<label for="gd_rd2">남자</label>
-							<input type="radio" id="gd_rd3" name="gender" value="W">
+							<input type="radio" id="gd_rd3" name="gender" value="W" th:checked="${title.gender} == 'W'">
 							<label for="gd_rd3">여자</label>
-						</td>
-					</tr>
-					<tr>
-						<th>발주 상태</th>
-						<td>
-							<select class="custom-select" name="request_status">
-								<option value="신청">신청</option>
-								<option value="대기">대기</option>
-								<option value="승인">승인</option>
-								<option value="취소">취소</option>
-							</select>
 						</td>
 					</tr>
 					<tr>
 						<th>단가</th>
 						<td>
 							<div class="input-group mb-3">
-								<input type="number" name="unit_price" value="0" class="form-control" aria-label="Recipient's username" aria-describedby="basic-addon2">
+								<input type="number" name="unit_price" th:value="${title.get('unit_price')}" class="form-control" aria-label="Recipient's username" aria-describedby="basic-addon2">
 								<div class="input-group-append">
 									<span class="input-group-text" id="basic-addon2">원</span>
 								</div>
@@ -114,13 +69,13 @@
 					<tr>
 						<th>공장 이름</th>
 						<td>
-							<input class="form-control" type="text" name="factory_name" placeholder="제조사 명 입력">
+							<input class="form-control" type="text" th:value="${title.get('factory_name')}" name="factory_name" placeholder="제조사 명 입력">
 						</td>
 					</tr>
 					<tr>
 						<th>제조일</th>
 						<td>
-							<input class="form-control" type="date" name="manufacturing_date">
+							<input class="form-control" type="date" th:value="${title.get('manufacturing_date')}"  name="manufacturing_date">
 						</td>
 					</tr>
 					<tr>
@@ -140,8 +95,8 @@
 					<tr>
 						<th>비고</th>
 						<td>
-							<textarea class="form-control" name="etc" rows="3"></textarea>
-							<!--<input class="form-control" type="text" name="etc">-->
+							<textarea class="form-control" th:text="${title.etc}" name="etc" rows="3"></textarea>
+<!--							<input class="form-control" type="text" name="etc">-->
 						</td>
 					</tr>
 				</table>
@@ -149,7 +104,7 @@
 		</div>
 		<!-- ./ .col-lg-4 -->
 		<div class="col-lg-8 col-md-12">
-			<input type="button" id="reqAdd" value="발주 등록">
+			<input type="button" id="reqMod" value="발주 수정">
 			<br>
 			<table class="" id="request_detail_table">
 				<thead class="">
@@ -161,17 +116,18 @@
 					<th scope="col">xl</th>
 					<th scope="col">free</th>
 					<th scope="col">total</th>
-					<th><input type="button" value="(+)추가하기" id="addButton" onclick="addDetail()"></th>
 				</tr>
 				</thead>
 				<tbody id="request_detail_tbody">
-					<td><input class="form-control" type="text" name="color_name"></td>
-					<td><input class="form-control" type="number" name="s"></td>
-					<td><input class="form-control" type="number" name="m"></td>
-					<td><input class="form-control" type="number" name="l"></td>
-					<td><input class="form-control" type="number" name="xl"></td>
-					<td><input class="form-control" type="number" name="free"></td>
-					<td><input class="form-control" type="text" name="total" value="0" readonly></td>
+				<tr th:each="detail:${details}">
+					<td><input class="form-control" type="text" th:value="${detail.get('color_name')}" name="color_name">
+						<input class="form-control" type="hidden" th:value="${detail.get('color_name')}" name="old_color_name"></td>
+					<td><input class="form-control" type="number" th:value="${detail.get('s')}" name="s"></td>
+					<td><input class="form-control" type="number" th:value="${detail.get('m')}" name="m"></td>
+					<td><input class="form-control" type="number" th:value="${detail.get('l')}" name="l"></td>
+					<td><input class="form-control" type="number" th:value="${detail.get('xl')}" name="xl"></td>
+					<td><input class="form-control" type="number" th:value="${detail.get('free')}" name="free"></td>
+					<td><input class="form-control" type="text" th:value="${detail.get('total')}" name="total" readonly></td>
 				</tr>
 				</tbody>
 			</table>
@@ -182,5 +138,6 @@
 </div>
 <!-- ./container -->
 	<script th:src="@{/resources/js/request.js}"></script>
+
 </body>
 </html>
