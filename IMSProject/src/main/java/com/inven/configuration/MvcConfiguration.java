@@ -21,9 +21,10 @@ public class MvcConfiguration implements WebMvcConfigurer {
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
+		exclude.add("/favicon.ico");
+		exclude.add("/error");
 		registry.addInterceptor(new LoggerInterceptor()).addPathPatterns("/**").excludePathPatterns(exclude);
 		exclude.add("/");
-		exclude.add("/error");
 		exclude.add("/loginCheck");
 		exclude.add("/logout");
 //		registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/**").excludePathPatterns(exclude);

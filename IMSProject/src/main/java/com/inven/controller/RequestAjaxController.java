@@ -93,4 +93,30 @@ public class RequestAjaxController {
 
 		return jobj;
 	}
+
+
+	@PostMapping(value = "/reqMod")
+	public JSONObject reqMod(@RequestParam Map<String, Object> map) {
+		log.info("Request Parameter : " + map);
+		JSONObject jobj = new JSONObject();
+		jobj.put("code", 999);
+		if(map == null) return jobj;
+		Gson gson = new Gson();
+
+		Map<String, Object> title = gson.fromJson(map.get("title").toString(), Map.class);
+		CommonUtils.printMap(title);
+
+		List<Map<String, Object>> details = gson.fromJson(map.get("details").toString(), List.class);
+		CommonUtils.printList(details);
+
+		int modTitle = reqService.modTitle(title);
+		int modDetail = reqService.modDetail(details);
+
+		if(modTitle > 0) {
+			if(modDetail > 0) jobj.put("code", 200);
+			else jobj.put("code", 300);
+		} else jobj.put("code", 400);
+
+		return jobj;
+	}
 }
