@@ -1,5 +1,6 @@
 package com.inven.controller;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -70,26 +71,20 @@ public class RequestAjaxController {
 	}
 
 	@PostMapping(value = "/reqAdd")
-	public JSONObject reqAdd(@RequestParam Map<String, Object> map) {
+	public JSONObject reqAdd(@RequestParam Map<String, Object> map) throws SQLException {
 		log.info("Request Parameter : " + map);
 		JSONObject jobj = new JSONObject();
 		jobj.put("code", 999);
 		if(map == null) return jobj;
-		Gson gson = new Gson();
 
-		Map<String, Object> title = gson.fromJson(map.get("title").toString(), Map.class);
-		CommonUtils.printMap(title);
+		int addResult = reqService.addRequestData(map);
 
-		List<Map<String, Object>> details = gson.fromJson(map.get("details").toString(), List.class);
-		CommonUtils.printList(details);
-
-		int addTitle = reqService.addTitle(title);
-		int addDetail = reqService.addDetail(details);
-
-		if(addTitle > 0) {
-			if(addDetail > 0) jobj.put("code", 200);
-			else jobj.put("code", 300);
-		} else jobj.put("code", 400);
+		if(addResult > 0)
+			jobj.put("code", 200);
+		else if(addResult == 0)
+			jobj.put("code", 300);
+		else if(addResult == -1)
+			jobj.put("code", 400);
 
 		return jobj;
 	}

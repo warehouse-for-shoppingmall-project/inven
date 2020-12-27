@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="fragments/cmnHead :: main-head"></th:block>
+</head>
+<body>
+<th:block th:replace="fragments/header :: nav-header"></th:block>
+<div class="container">
+    <div class="row justify-content-md-center">
+        <div class="col-lg-5">
+            <form class="form-signin" action="changePass" method="get" id="loginForm" onsubmit="return false;">
+                <h2 class="form-signin-heading">Press Password</h2>
+                <label>기존 비밀번호</label>
+                <input type="password" name="old_pwd" class="form-control" placeholder="Password" required>
+                <label>새 비밀번호</label>
+                <input type="password" name="new_pwd" class="form-control" placeholder="Password" required>
+                <label>비밀번호 확인</label>
+                <input type="password" name="pwd_check" class="form-control" placeholder="Password" required>
+                <p name="pwd_chk_caption"></p>
+                <button class="btn btn-lg btn-primary btn-block" id="submit_btn" type="submit">Update</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('submit_btn').addEventListener('click',
+        function () {
+            let frm = document.getElementById('loginForm');
+            let xhr = new XMLHttpRequest();
+            /* 준비상태가 변하면 실행한다. */
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === xhr.DONE) {
+                    /* 상태가 200, 201 이면 서버 통신 성공 */
+                    if (xhr.status === 200 || xhr.status === 201) {
+                        let obj = JSON.parse(xhr.responseText);
+                        if (obj.code === 200) {
+                            location.href = "req/list";
+                        } else {
+                            alert('비밀번호 잘못입력');
+                            frm.pwd.value = '';/* 틀린 비밀번호 지워주기 */
+                        }
+                    } else {
+                        /* 서버통신 실패 */
+                        console.error(xhr.responseText);
+                    }
+                }
+            };
+            /* 메소드에 따라 다른방식의 접근을 해줘야한다. */
+            if (frm.method === 'get') {
+                xhr.open(frm.method, frm.action + serialize(frm), false);
+                xhr.send();
+            } else {
+                xhr.open(frm.method, frm.action, false);
+                xhr.send(new FormData(frm));
+            }
+        }
+    );
+
+</script>
+</body>
+</html>

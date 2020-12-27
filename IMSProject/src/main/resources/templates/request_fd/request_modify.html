@@ -76,8 +76,9 @@
 						<th>제조일</th>
 						<td>
 							<input class="form-control" type="date" th:value="${title.get('manufacturing_date')}"  name="manufacturing_date">
+							<input name="file" value="" type="hidden"> <!-- 파일 업로드 구현시 삭제 -->
 						</td>
-					</tr>
+					</tr><!--
 					<tr>
 						<th>파일</th>
 						<td>
@@ -91,7 +92,7 @@
 								</div>
 							</div>
 						</td>
-					</tr>
+					</tr>-->
 					<tr>
 						<th>비고</th>
 						<td>

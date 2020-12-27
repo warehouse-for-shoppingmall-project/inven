@@ -58,7 +58,7 @@
             };
             /* 메소드에 따라 다른방식의 접근을 해줘야한다. */
             if (frm.method == 'get') {
-                xhr.open(frm.method, frm.action + toparamJson(serializeForm(frm)), false);
+                xhr.open(frm.method, frm.action + toparamJson(serializeParam(frm)), false);
                 xhr.send();
             } else {
                 xhr.open(frm.method, frm.action, false);
