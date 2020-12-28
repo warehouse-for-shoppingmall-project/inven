@@ -12,8 +12,8 @@ public interface RequestMapper {
 
 	// select
 	int searchCount(Map<String, Object> map);
-	List<Map<String, Object>> searchDetail(Map<String, Object> map);
 	List<Map<String, Object>> searchWhere(Map<String, Object> map);
+	List<Map<String, Object>> selectDetail(String request_code);
 	List<String> selectProductCode();
 	String makeReqCode();
 	Map<String, Object> reqModifyTitle(Map<String, Object> map);

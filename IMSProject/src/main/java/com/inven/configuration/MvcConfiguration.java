@@ -27,6 +27,6 @@ public class MvcConfiguration implements WebMvcConfigurer {
 		exclude.add("/");
 		exclude.add("/loginCheck");
 		exclude.add("/logout");
-//		registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/**").excludePathPatterns(exclude);
+		registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/**").excludePathPatterns(exclude);
 	}
 }

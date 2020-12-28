@@ -1,11 +1,8 @@
 <!doctype html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:replace="fragments/cmnHead :: main-head"></th:block>
+    <th:block th:replace="fragments/cmnHead :: main-head"/>
     <style>
-        table.table-hover tbody tr td:hover {
-            background-color: #bfbfbf;
-        }
         .sh-tb{
             width: 100%;
             background-color: aliceblue;
@@ -14,7 +11,7 @@
     </style>
 </head>
 <body id="top">
-<th:block th:replace="fragments/header :: nav-header"></th:block>
+<th:block th:replace="fragments/header :: nav-header"/>
 
 <!-- Contents -->
 <div class="container">
@@ -26,48 +23,62 @@
         <table class="sh-tb">
             <tbody>
             <tr>
+                <th>발주 상태</th>
+                <td>
+                    <input type="radio" id="sr_rd1" name="request_status" value="" th:checked="${map.request_status} == ''">
+                    <label for="sr_rd1">전체</label>
+                    <input type="radio" id="sr_rd2" name="request_status" value="신청" th:checked="${map.request_status} == '신청'">
+                    <label for="sr_rd2">신청</label>
+                    <input type="radio" id="sr_rd3" name="request_status" value="대기" th:checked="${map.request_status} == '대기'">
+                    <label for="sr_rd3">대기</label>
+                    <input type="radio" id="sr_rd4" name="request_status" value="확정" th:checked="${map.request_status} == '확정'">
+                    <label for="sr_rd4">확정</label>
+                    <input type="radio" id="sr_rd5" name="request_status" value="취소" th:checked="${map.request_status} == '취소'">
+                    <label for="sr_rd5">취소</label>
+                    <input type="radio" id="sr_rd6" name="request_status" value="입고" th:checked="${map.request_status} == '입고'">
+                    <label for="sr_rd6">입고</label>
+                </td>
                 <th>검색 기간</th>
                 <td>
                     <input type="date" name="start_date" th:value="${map.start_date}">~
                     <input type="date" name="end_date" th:value="${map.end_date}">
                 </td>
+            </tr>
+            <tr>
+                <th>성별</th>
+                <td>
+                    <input type="radio" id="gn_rd0" name="gender" value="" th:checked="${map.gender} == ''">
+                    <label for="gn_rd0">전체</label>
+                    <input type="radio" id="gn_rd1" name="gender" value="C" th:checked="${map.gender} == 'C'">
+                    <label for="gn_rd1">공용(C)</label>
+                    <input type="radio" id="gn_rd2" name="gender" value="W" th:checked="${map.gender} == 'M'">
+                    <label for="gn_rd2">남성(M)</label>
+                    <input type="radio" id="gn_rd3" name="gender" value="M" th:checked="${map.gender} == 'W'">
+                    <label for="gn_rd3">여성(W)</label>
+                </td>
                 <th>발주 코드</th>
                 <td><input type="text" name="request_code" th:value="${map.request_code}"></td>
             </tr>
-                <th>발주 상태</th>
-                <td>
-                    <input type="radio" id="rd1" name="request_status" value="" th:checked="${map.request_status} == ''">
-                    <label for="rd1">전체</label>
-                    <input type="radio" id="rd2" name="request_status" value="신청" th:checked="${map.request_status} == '신청'">
-                    <label for="rd2">신청</label>
-                    <input type="radio" id="rd3" name="request_status" value="대기" th:checked="${map.request_status} == '대기'">
-                    <label for="rd3">대기</label>
-                    <input type="radio" id="rd4" name="request_status" value="확정" th:checked="${map.request_status} == '확정'">
-                    <label for="rd4">확정</label>
-                    <input type="radio" id="rd5" name="request_status" value="취소" th:checked="${map.request_status} == '취소'">
-                    <label for="rd5">취소</label>
-                    <input type="radio" id="rd6" name="request_status" value="입고" th:checked="${map.request_status} == '입고'">
-                    <label for="rd6">입고</label>
-                </td>
-                <th>상품 코드</th>
-                <td><input type="text" name="product_code" th:value="${map.request_code}"></td>
-            </tr>
+            <!--            <input type="text" name="product_code" th:value="${map.request_code}">-->
             <tr>
                 <th>조회 건수</th>
                 <td>
-                    <input type="radio" id="rd7" name="pageSize" value="10" th:checked="${map.pageSize} == '10'">
-                    <label for="rd7">10</label>
-                    <input type="radio" id="rd8" name="pageSize" value="20" th:checked="${map.pageSize} == '20'">
-                    <label for="rd8">20</label>
-                    <input type="radio" id="rd9" name="pageSize" value="30" th:checked="${map.pageSize} == '30'">
-                    <label for="rd9">30</label>
+                    <input type="radio" id="ps_rd1" name="pageSize" value="10" th:checked="${map.pageSize} == '10'">
+                    <label for="ps_rd1">10</label>
+                    <input type="radio" id="ps_rd2" name="pageSize" value="20" th:checked="${map.pageSize} == '20'">
+                    <label for="ps_rd2">20</label>
+                    <input type="radio" id="ps_rd3" name="pageSize" value="30" th:checked="${map.pageSize} == '30'">
+                    <label for="ps_rd3">30</label>
                 </td>
-                <td></td>
-                <td><button type="submit" style="float: right;" class="btn btn-success">Search</button></td>
+                <th>상품 코드</th>
+                <td>
+                    <input type="text" name="product_code" th:value="${map.product_code}">
+                    <button type="submit" style="float: right;" class="btn btn-success">Search</button>
+                </td>
             </tr>
             </tbody>
         </table>
-    <!-- ./ navbar -->
+        <!-- ./ navbar -->
     </form>
     <div class="row">
         <!-- End of Row 1 -->
@@ -79,6 +90,7 @@
                 <tr>
                     <th scope="col">발주 코드</th>
                     <th scope="col">상품 코드</th>
+                    <th scope="col">성별</th>
                     <th scope="col">요청일</th>
                     <th scope="col">제조사</th>
                     <th scope="col">단가</th>
@@ -90,12 +102,13 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr name="request_table" th:if="${list == null}">
+                <tr name="none_data_tbody" th:if="${list == null}">
                     <td colspan="9">검색된 내용이 없습니다.</td>
                 </tr>
-                <tr name="request_table" th:each="row : ${list}">
+                <tr name="each_data_tbody" th:each="row : ${list}" th:data="${row.request_code}" title="Click Me Then Show Detail">
                     <td th:text="${row.request_code}"></td>
                     <td th:text="${row.product_code}"></td>
+                    <td th:text="${row.gender}"></td>
                     <td th:text="${row.request_date}"></td>
                     <td th:text="${row.factory_name}"></td>
                     <td th:text="${row.unit_price}"></td>
@@ -103,7 +116,7 @@
                     <td th:text="${row.manufacturing_date}"></td>
                     <td th:text="${row.total_order_quantity}"></td>
                     <td>
-                        <select class="custom-select" name="status" th:disabled="${row.request_status == '입고'}">
+                        <select class="custom-select" name="status" th:disabled="${row.request_status == '입고' || row.request_status == '취소'}">
                             <option value="신청" th:selected="${row.request_status}=='신청'">신청</option>
                             <option value="대기" th:selected="${row.request_status}=='대기'">대기</option>
                             <option value="확정" th:selected="${row.request_status}=='확정'">확정</option>
@@ -119,7 +132,7 @@
             <!-- End of Table -->
             <!-- Paging -->
             <nav aria-label="Page navigation example ml-auto">
-                <ul class="pagination">
+                <ul class="pagination" th:if="${paging != null}">
                     <li class="page-item">
                         <a class="page-link" href="#" aria-label="Previous" th:disabled="${paging.getPageNo() == paging.getStartPageNo()}">
                             <span aria-hidden="true">&laquo;</span>
@@ -128,8 +141,8 @@
                     </li><!-- ${#numbers.sequence(paging.getStartPageNo(), paging.getEndPageNo())} -->
                     <li class="page-item" th:each="num : ${#numbers.sequence(1, 5)}" th:classappend="${num} == 1 ? 'active' : ''">
                         <a class="page-link" href="#">
-                            <span aria-hidden="true" th:text="${num}"></span>
-                            <span class="sr-only" th:text="${num}"></span>
+                            <span aria-hidden="true" th:text="${num}"/>
+                            <span class="sr-only" th:text="${num}"/>
                         </a>
                     </li>
                     <li class="page-item">

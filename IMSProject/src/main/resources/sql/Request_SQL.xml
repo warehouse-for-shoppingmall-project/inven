@@ -2,6 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.inven.mapper.RequestMapper">
 
+	<!-- SQL Section -->
+
 	<sql id="titleColumn">
 		request_code, product_code, gender, request_status, unit_price, factory_name, total_order_quantity, file_name,
 		IFNULL(DATE(request_date), '-') as request_date,
@@ -10,42 +12,15 @@
  		IFNULL(etc,'  ') as etc
    </sql>
 
-<!--	발주테이블 join 쿼리-->
-	<sql id="commonQuery">
-		select *
-		from request_title rt
-		join request_detail rd
-		on rt.request_code = rd.request_code
-   </sql>
+	<sql id="detailColumn">
+		request_code, product_code, color_name, gender, s, m, l, xl, free, total
+	</sql>
 
-
-	<!-- 디테일 테이블만 조회 -->
-	<select id="searchDetail" parameterType="hashMap" resultType="hashmap">
-		select *
-		from request_detail
-   </select>
-
-	<!-- 조회 전체 카운트 -->
-	<select id="searchCount" parameterType="hashMap" resultType="int">
-		SELECT count(*)
-		FROM request_title
+	<sql id="search">
 		WHERE DATE(request_date) BETWEEN DATE(#{start_date}) AND DATE(#{end_date})
-		<if test="!request_code.equals('')">
-			AND request_code LIKE concat('%', #{request_code}, '%');
+		<if test="!gender.equals('')">
+			AND gender = #{gender}
 		</if>
-		<if test="!product_code.equals('')">
-			AND product_code LIKE concat('%', #{product_code}, '%');
-		</if>
-		<if test="!request_status.equals('')">
-			AND request_status = #{request_status}
-		</if>
-	</select>
-
-	<!-- 검색 및 페이징 -->
-	<select id="searchWhere" parameterType="hashMap" resultType="hashmap">
-		SELECT <include refid="titleColumn"/>
-		FROM request_title
-		WHERE DATE(request_date) BETWEEN DATE(#{start_date}) AND DATE(#{end_date})
 		<if test="!request_code.equals('')">
 			AND request_code LIKE concat('%', #{request_code}, '%')
 		</if>
@@ -55,24 +30,81 @@
 		<if test="!request_status.equals('')">
 			AND request_status = #{request_status}
 		</if>
+	</sql>
+<!--	발주테이블 join 쿼리-->
+	<sql id="commonQuery">
+		SELECT *
+		FROM request_title rt
+		JOIN request_detail rd
+		ON rt.request_code = rd.request_code
+   </sql>
+
+	<!-- SELECT Section -->
+
+	<!-- 디테일 테이블만 조회 -->
+	<select id="searchDetail" parameterType="hashMap" resultType="hashMap">
+		SELECT *
+		FROM request_detail
+   </select>
+
+	<!-- 조회 전체 카운트 -->
+	<select id="searchCount" parameterType="hashMap" resultType="int">
+		SELECT count(*)
+		FROM request_title
+		<include refid="search"/>
+	</select>
+
+	<!-- 검색 및 페이징 -->
+	<select id="searchWhere" parameterType="hashMap" resultType="hashMap">
+		SELECT <include refid="titleColumn"/>
+		FROM request_title
+		<include refid="search"/>
 		LIMIT #{start_idx}, #{end_idx}
 	</select>
 
-<!--	발주 상태 update 반영 하는 쿼리 -->
-	<update id="upStatus" parameterType="hashMap">
-		UPDATE request_title
-		SET request_status = #{request_status}
-		WHERE request_code = #{request_code}
-   </update>
+	<select id="selectDetail" parameterType="String" resultType="hashMap">
+		SELECT color_name, s, m, l, xl, free, total
+		FROM request_detail WHERE request_code = #{request_code}
+	</select>
 
-<!--	발주등록 페이지에서 등록 요청 시 request_title 테이블에 insert-->
+	<!--	발주코드 자동 생성 함수 실행-->
+	<select id="makeReqCode" resultType="String">
+		SELECT FN_MAKE_REQ_CODE()
+	</select>
+
+	<!--	발주등록 시 상품코드 select해서 고를 수 있게 상품코드 조회 후 html로 전송-->
+	<select id="selectProductCode" resultType="String">
+		SELECT product_code FROM product_title
+	</select>
+
+	<!-- request_title 발주 수정 시 -->
+	<select id="reqModifyTitle" parameterType="hashmap" resultType="hashmap">
+		SELECT
+		<include refid="titleColumn"/>
+		FROM request_title
+		WHERE request_code = #{request_code}
+		<!--		LIMIT #{start_idx}, #{end_idx}-->
+	</select>
+
+	<!-- request_detail 발주 수정 시 -->
+	<select id="reqModifyDetail" parameterType="hashmap" resultType="hashmap">
+		SELECT color_name, IFNULL(s,0) AS s, IFNULL(m,0) AS m , IFNULL(l,0) AS l,
+			IFNULL(xl,0) AS xl, IFNULL(free,0) as free, total
+		FROM request_detail
+		WHERE request_code = #{request_code}
+		<!--		LIMIT #{start_idx}, #{end_idx}-->
+	</select>
+
+	<!-- Insert Section	-->
+
+	<!--발주등록 페이지에서 등록 요청 시 request_title 테이블에 insert-->
 	<insert id="addTitle" parameterType="hashMap" >
-		insert into request_title(
-			request_code, product_code, request_status, gender, unit_price,
+		INSERT INTO request_title(
+			request_code, product_code, request_status, unit_price, gender,
 			factory_name, total_order_quantity, manufacturing_date, etc
 		)
-		values(
-			#{request_code}, #{product_code}, #{request_status}, #{gender}, #{unit_price},
+		VALUES(
+			#{request_code}, #{product_code}, #{request_status}, #{unit_price},
 			#{factory_name}, #{total_order_quantity}, #{manufacturing_date}, #{etc}
 		)
    </insert>
@@ -80,10 +112,10 @@
 <!--	발주등록 페이지에서 등록 요청 시 request_detail 테이블에 insert-->
 <!--	여러 행 삽입을 위해 for each 문-->
 	<insert id="addDetail" parameterType="java.util.List">
-		insert into request_detail(
+		INSERT INTO request_detail(
 			request_code, product_code, color_name, s, m, l, xl, free, total
 		)
-		values
+		VALUES
 		<foreach collection="list" item="item" separator=",">
 		(
 			#{item.request_code}, #{item.product_code}, #{item.color_name},
@@ -91,35 +123,6 @@
 		)
 		</foreach>
    </insert>
-
-<!--	발주코드 자동 생성 함수 실행-->
-	<select id="makeReqCode" resultType="String">
-      SELECT FN_MAKE_REQ_CODE()
-   	</select>
-
-<!--	발주등록 시 상품코드 select해서 고를 수 있게 상품코드 조회 후 html로 전송-->
-	<select id="selectProductCode" resultType="String">
-      SELECT product_code from product_title
-   	</select>
-
-	<!-- request_title 발주 수정 시 -->
-	<select id="reqModifyTitle" parameterType="hashmap" resultType="hashmap">
-		select
-			<include refid="titleColumn"/>
-		from request_title
-		    where request_code = #{request_code}
-<!--		LIMIT #{start_idx}, #{end_idx}-->
-	</select>
-
-	<!-- request_detail 발주 수정 시 -->
-	<select id="reqModifyDetail" parameterType="hashmap" resultType="hashmap">
-		select
-            color_name, IFNULL(s,0) AS s, IFNULL(m,0) AS m , IFNULL(l,0) AS l,
-            IFNULL(xl,0) AS xl, IFNULL(free,0) as free, total
-		from request_detail
-			where request_code = #{request_code}
-<!--		LIMIT #{start_idx}, #{end_idx}-->
-	</select>
 
 	<update id="modTitle" parameterType="hashmap">
 		UPDATE request_title
@@ -139,4 +142,13 @@
 			WHERE request_code = #{item.request_code} AND color_name = #{item.old_color_name}
 		</foreach>
 	</update>
+
+	<!-- Update Section -->
+
+	<!--	발주 상태 update 반영 하는 쿼리 -->
+	<update id="upStatus" parameterType="hashMap">
+		UPDATE request_title
+		SET request_status = #{request_status}
+		WHERE request_code = #{request_code}
+   </update>
 </mapper>

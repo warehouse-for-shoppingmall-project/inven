@@ -30,7 +30,6 @@ public class RequestController {
         ModelAndView mv = new ModelAndView("/layout/write");
 
         List<Map<String, Object>> list = reqService.searchWhere(map);
-
         mv.addObject("list", list);
 
         return mv;
@@ -51,6 +50,7 @@ public class RequestController {
         if (!map.containsKey("request_code")) map.put("request_code", "");
         if (!map.containsKey("product_code")) map.put("product_code", "");
         if (!map.containsKey("request_status")) map.put("request_status", "");
+        if (!map.containsKey("gender")) map.put("gender", "");
 
         // paging 에서 쓸 값
         if (!map.containsKey("pageSize")) map.put("pageSize", "10");
@@ -68,6 +68,7 @@ public class RequestController {
         setFirstAccess(map);
 
         int count = reqService.searchCount(map);
+        log.debug("count : " + count);
         if (count > 0) {
             paging = new Paging();
             int pageNo = Integer.parseInt(map.get("pageNo").toString());
@@ -84,6 +85,17 @@ public class RequestController {
         mv.addObject("list", list);
         mv.addObject("paging", paging);
         mv.addObject("map", map);
+        return mv;
+    }
+
+    @GetMapping(value = "/detail")
+    public ModelAndView detail(@RequestParam Map<String, Object> map) {
+        log.info("Request Parameter : " + map);
+        ModelAndView mv = new ModelAndView("request_fd/request_detail");
+
+        List<Map<String, Object>> detail = reqService.selectDetail(map.get("request_code").toString());
+        mv.addObject("detail", detail);
+
         return mv;
     }
 

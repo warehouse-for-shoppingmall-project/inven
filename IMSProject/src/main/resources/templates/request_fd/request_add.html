@@ -2,37 +2,7 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<th:block th:replace="fragments/cmnHead :: main-head"></th:block>
-	<!--
-<style>
-#request_title_table {
-	width: 240px;
-	display: inline-block;
-	float: left;
-}
-
-#request_title_table input {
-	width: 100px;
-}
-
-#request_title_table #file {
-	width: 200px;
-}
-
-#request_title_table #manufacturing_date {
-	width: 120px;
-}
-
-#request_detail_table {
-	display: inline-table;
-	width: 300px;
-	/* float: right; */
-}
-
-#request_detail_table input {
-	width: 30px;
-}
-</style>-->
+	<th:block th:replace="fragments/cmnHead :: main-head"/>
 	<style>
 		#request_detail_tbody input {
 			width: 70px;
@@ -47,7 +17,7 @@
 </head>
 
 <body>
-<th:block th:replace="fragments/header :: nav-header"></th:block>
+<th:block th:replace="fragments/header :: nav-header"/>
 
 <!-- Contents -->
 <div class="wrap">
@@ -92,12 +62,12 @@
 					<tr>
 						<th>발주 상태</th>
 						<td>
-							<select class="custom-select" name="request_status">
-								<option value="신청">신청</option>
-								<option value="대기">대기</option>
-								<option value="승인">승인</option>
-								<option value="취소">취소</option>
-							</select>
+							<input type="radio" id="st_rd1" name="request_status" value="신청" checked>
+							<label for="st_rd1">신청</label>
+							<input type="radio" id="st_rd2" name="request_status" value="대기">
+							<label for="st_rd2">대기</label>
+							<input type="radio" id="st_rd3" name="request_status" value="확정">
+							<label for="st_rd3">확정</label>
 						</td>
 					</tr>
 					<tr>
@@ -121,9 +91,10 @@
 						<th>제조일</th>
 						<td>
 							<input class="form-control" type="date" name="manufacturing_date">
+							<input name="file" value="" type="hidden"> <!-- 파일 업로드 구현시 삭제 -->
 						</td>
 					</tr>
-					<tr>
+					<!--<tr>
 						<th>파일</th>
 						<td>
 							<div class="input-group mb-3">
@@ -136,12 +107,11 @@
 								</div>
 							</div>
 						</td>
-					</tr>
+					</tr>-->
 					<tr>
 						<th>비고</th>
 						<td>
 							<textarea class="form-control" name="etc" rows="3"></textarea>
-							<!--<input class="form-control" type="text" name="etc">-->
 						</td>
 					</tr>
 				</table>
@@ -165,12 +135,13 @@
 				</tr>
 				</thead>
 				<tbody id="request_detail_tbody">
-					<td><input class="form-control" type="text" name="color_name"></td>
-					<td><input class="form-control" type="number" name="s"></td>
-					<td><input class="form-control" type="number" name="m"></td>
-					<td><input class="form-control" type="number" name="l"></td>
-					<td><input class="form-control" type="number" name="xl"></td>
-					<td><input class="form-control" type="number" name="free"></td>
+				<tr>
+					<td><input class="form-control" type="text" name="color_name" required></td>
+					<td><input class="form-control" type="number" name="s" value="0"></td>
+					<td><input class="form-control" type="number" name="m" value="0"></td>
+					<td><input class="form-control" type="number" name="l" value="0"></td>
+					<td><input class="form-control" type="number" name="xl" value="0"></td>
+					<td><input class="form-control" type="number" name="free" value="0"></td>
 					<td><input class="form-control" type="text" name="total" value="0" readonly></td>
 				</tr>
 				</tbody>
