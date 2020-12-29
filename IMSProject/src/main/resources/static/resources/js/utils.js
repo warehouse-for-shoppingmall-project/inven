@@ -23,7 +23,7 @@ jQuery.fn.serializeObject = function() {
 	return obj;
 };
 
-// param 형식을 obj 형태로 변환
+// param 형식을 obj 형태로 변환 ?? wait
 let serialize = function(form) {
 	let param = '?', and = '';
 	let formData = new FormData(form);
