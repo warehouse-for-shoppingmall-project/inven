@@ -2,18 +2,14 @@ package com.inven.common.model;
 
 import com.inven.param.ProductInformation;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
-@ToString // String 보기좋게 변환
 public class ProductTitle {
     private String product_code;
+    private String gender;
     private String make_factory;
     private String unit_price;
     private String final_update;
@@ -27,10 +23,12 @@ public class ProductTitle {
 
     public ProductTitle(ProductInformation productInformation) {
         this.product_code = productInformation.getProduct_code();
+        this.gender = productInformation.getGender();
         this.make_factory = productInformation.getMake_factory();
         this.unit_price = productInformation.getUnit_price();
         this.final_update = productInformation.getFinal_update();
         this.make_code = productInformation.getMake_code();
         this.product_status = productInformation.getProduct_status();
     }
+
 }

@@ -36,6 +36,15 @@ $('select[name=status]').change(function () {
     });
 });
 
+// detail popup
+let popup = function(e){
+    if(e.target.tagName === 'INPUT') return;
+    let action = 'detail';
+    let data = { product_code : $(this).attr('data') };
+    window.open(action+serializeParam(data), '_blank', 'width=420, height=200, scrollbars=yes, resizable=no');
+} // detail?reauest_code=201216-01
+$('tr[name=each_data_tbody]').click(popup);
+
 /*
 console.log($("input[name=searchInput]").text());
 

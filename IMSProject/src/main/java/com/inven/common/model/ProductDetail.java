@@ -26,8 +26,8 @@ public class ProductDetail {
 
     public ProductDetail(ProductInformation productInformation) {
         this.product_code = productInformation.getProduct_code();
-        this.color_name = productInformation.getColor_name();
         this.gender = productInformation.getGender();
+        this.color_name = productInformation.getColor_name();
         this.s = productInformation.getS();
         this.m = productInformation.getM();
         this.l = productInformation.getL();

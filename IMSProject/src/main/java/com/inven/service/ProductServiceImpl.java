@@ -28,6 +28,10 @@ public class ProductServiceImpl implements ProductService {
         return prodMapper.getDetail();
     }
 
+    public List<ProductDetail> selectDetail(String product_code) {
+        return prodMapper.selectDetail(product_code);
+    }
+
 
 //    @Override
 //    public List<String> productAdd() {

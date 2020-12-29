@@ -6,6 +6,11 @@
 		*
 	</sql>
 
+    <select id="getProductList" resultType="com.inven.common.model.ProductTitle">
+        select *
+        from product_title
+    </select>
+
     <select id="selectAll" parameterType="hashMap" resultType="hashmap">
         select
         <include refid="columns"/>
@@ -19,6 +24,12 @@
 		from product_detail
 	</select>
 
+    <select id="selectDetail" parameterType="com.inven.common.model.ProductDetail" resultType="com.inven.common.model.ProductDetail">
+        select *
+        from product_detail
+        where product_code = #{product_code}
+    </select>
+
   <select id="searchByProductCode" parameterType="string" resultType="com.inven.common.model.ProductTitle">
     select *
     from product_title
@@ -30,6 +41,8 @@
     from product_title
     where final_update = #{query}
   </select>
+
+
 
     <select id="modify" parameterType="string" resultMap="modifyMap" >
         select *
@@ -61,11 +74,12 @@
   <!-- ADD -->
   <insert id="productTitlesAdd" parameterType="com.inven.common.model.ProductTitle">
     insert into product_title(product_code,
+                              gender,
                               make_factory,
                               unit_price,
                               final_update,
                               make_code)
-    values (#{product_code},
+    values (#{product_code}, #{gender},
             #{make_factory}, #{unit_price},
             #{final_update}, #{make_code})
   </insert>
@@ -90,6 +104,16 @@
     SET product_status = #{product_status}
 		WHERE product_code = #{product_code}
    </update>
+
+
+<!-- 수정 등록 -->
+<!--    <update id="modTitle" parameterType="hashMap">-->
+<!--    UPDATE product_title-->
+<!--    set  product_code = #{product_code}, gender = #{gender}, unit_price = #{unit_price},-->
+<!--			factory_name = #{factory_name}, = #{},-->
+<!--		    manufacturing_date = DATE(#{manufacturing_date}), etc = #{etc}-->
+<!--		WHERE request_code = #{request_code}-->
+<!--    </update>-->
 
 
 </mapper>

@@ -15,11 +15,13 @@ import java.util.Map;
 @Repository  // DB접근하는 애들은 Repository 붙여준다. 이러면 'Bean'생성
 public interface ProductMapper {
 
-	@Select("SELECT * FROM product_title")
+
 	List<ProductTitle> getProductList();
 
 	@Select("Select * from product_detail")
 	List<ProductDetail> getDetail();
+
+	List<ProductDetail> selectDetail(String product_code);
 
 
 	int productTitlesAdd(ProductTitle productTitle);

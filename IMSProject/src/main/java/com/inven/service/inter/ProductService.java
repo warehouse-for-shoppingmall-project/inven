@@ -13,6 +13,8 @@ public interface ProductService {
 
     List<ProductDetail> getDetail();
 
+    List<ProductDetail> selectDetail(String product_code);
+
     int productTitlesAdd(ProductTitle productTitle);
 
     void productDetailsAdd(ProductDetail productDetail);

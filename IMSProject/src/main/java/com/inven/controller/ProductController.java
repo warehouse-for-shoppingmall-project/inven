@@ -1,26 +1,21 @@
 package com.inven.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
-
 import com.inven.common.model.ProductDetail;
 import com.inven.common.model.ProductTitle;
 import com.inven.mapper.ProductMapper;
 import com.inven.param.ProductInformation;
 import com.inven.service.inter.ProductService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 
 @Controller
@@ -40,6 +35,7 @@ public class ProductController {
 
         ModelAndView mv = new ModelAndView("product_fd/product_main");
         List<ProductTitle> productTitles = productService.printProduct();
+
         List<ProductDetail> productDetails = productService.getDetail();
 
         if (!map.containsKey("searchType")) map.put("searchType", "");
@@ -47,11 +43,9 @@ public class ProductController {
 
 //        List<Map<String, Object>> search = productService.search(map);
 
-        System.out.println(productTitles);
-
         log.info(String.valueOf(productDetails));
         log.info(String.valueOf(productTitles));
-        mv.addObject("productDetail", productDetails);
+        mv.addObject("productDetails", productDetails);
         mv.addObject("productTitles", productTitles);
 //        mv.addObject("search", search);
 
@@ -62,13 +56,22 @@ public class ProductController {
     public ModelAndView add(@RequestParam Map<String, Object> map) {
         log.info("Request Parameter : " + map);
         ModelAndView mv = new ModelAndView("product_fd/product_add");
-//		List<String> productAdd = productService.productAdd();
-
-//		mv.addObject("list",list);
 
         return mv;
 
     }
+
+    @GetMapping(value = "/detail")
+    public ModelAndView detail(@RequestParam String product_code) {
+
+        ModelAndView mv = new ModelAndView("product_fd/productDetail");
+
+        List<ProductDetail> detail = productService.selectDetail(product_code);
+        mv.addObject("detail", detail);
+
+        return mv;
+    }
+
     // html form submit
     // form: application/x-www-form-url-encoded
     // 1. @RequestBody MultiValueMap
@@ -85,6 +88,7 @@ public class ProductController {
         // ProductInformation --> ProductTitle
 
         ProductTitle productTitle = new ProductTitle(productInformation.getProduct_code(),
+                productInformation.getGender(),
                 productInformation.getMake_factory(),
                 productInformation.getUnit_price(),
                 productInformation.getFinal_update(),
@@ -107,11 +111,11 @@ public class ProductController {
 
         productService.productDetailsAdd(productDetail);
 
-
         mv.setViewName("redirect:/prod/list");
 
         return mv;
     }
+
     @GetMapping("/modify")
     public ModelAndView modify(@RequestParam String productCode) {
         ModelAndView mv = new ModelAndView();
@@ -168,8 +172,6 @@ public class ProductController {
         mv.addObject("productTitles", productTitles);
         return mv;
     }
-
-
 
 
     // localhost:8080/search?where=code or date &query=박성수
