@@ -1,31 +1,69 @@
 package com.inven.service;
 
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
 import com.inven.common.CommonUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
-import com.inven.mapper.CommonMapper;
 import com.inven.service.inter.CommonService;
 
 @Slf4j
 @Service("commonService")
 public class CommonServiceImpl implements CommonService {
 
+    DefaultResourceLoader drl = new DefaultResourceLoader();
+    Resource resource = drl.getResource("classpath:static/resources/pass/pwd.txt");
+
+
+    //로그인 용 비밀번호 체크
     public boolean loginCheck(Map<String, Object> map) throws IOException {
-        DefaultResourceLoader drl = new DefaultResourceLoader();
-        Resource resource = drl.getResource("classpath:static/resources/pass/pwd.txt");
         log.error(String.valueOf(resource.getURI()));
         String txt = Files.readString(Path.of(resource.getURI()));
         String pwd = CommonUtils.getEncrypt(map.get("pwd").toString(), "cloth");
 
-    	return txt.equals(pwd);
+        return txt.equals(pwd);
+    }
+
+    //비밀번호 변경
+    public boolean loginChange(Map<String, Object> map) throws IOException {
+
+        String newPwd = map.get("newPwd").toString();
+        String encPwd = CommonUtils.getEncrypt(newPwd, "cloth");
+
+        File file = new File(resource.getURI());
+        FileWriter writer = null;
+        try {
+            // 기존 파일의 내용에 이어서 쓰려면 true를, 기존 내용을 없애고 새로 쓰려면 false를 지정한다.
+            writer = new FileWriter(file, false);
+            writer.write(encPwd);
+            writer.flush();
+
+//            /*********************** FILE READ ***********************/
+//            FileReader rw = new FileReader(file);
+//            BufferedReader br = new BufferedReader(rw);
+//
+//            //읽을 라인이 없을 경우 br은 null을 리턴한다.
+//            String readLine = null ;
+//            System.out.print("File Read : ");
+//            while( ( readLine =  br.readLine()) != null ){
+//                System.out.println(readLine);
+//            }
+            return true;
+        } catch(IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if(writer != null) writer.close();
+            } catch(IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
     }
 }

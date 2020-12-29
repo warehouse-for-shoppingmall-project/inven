@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:replace="fragments/cmnHead :: main-head"/>
+    <th:block th:replace="fragments/cmnHead :: main-head"></th:block>
     <style>
         .sh-tb{
             width: 100%;
@@ -11,7 +11,7 @@
     </style>
 </head>
 <body id="top">
-<th:block th:replace="fragments/header :: nav-header"/>
+<th:block th:replace="fragments/header :: nav-header"></th:block>
 
 <!-- Contents -->
 <div class="container">
@@ -141,8 +141,8 @@
                     </li><!-- ${#numbers.sequence(paging.getStartPageNo(), paging.getEndPageNo())} -->
                     <li class="page-item" th:each="num : ${#numbers.sequence(1, 5)}" th:classappend="${num} == 1 ? 'active' : ''">
                         <a class="page-link" href="#">
-                            <span aria-hidden="true" th:text="${num}"/>
-                            <span class="sr-only" th:text="${num}"/>
+                            <span aria-hidden="true" th:text="${num}"></span>
+                            <span class="sr-only" th:text="${num}"></span>
                         </a>
                     </li>
                     <li class="page-item">

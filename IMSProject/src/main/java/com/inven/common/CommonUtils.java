@@ -24,7 +24,7 @@ public class CommonUtils {
 	public static String getEncrypt(String input) {
         String ret = null;
 
-        try {
+        try{
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             md.update(input.getBytes());
             byte[] byteData = md.digest();

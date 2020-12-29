@@ -19,11 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.inven.common.CommandMap;
@@ -58,6 +54,15 @@ public class HomeController {
 
         return mv;
     }
+//    @PostMapping(value = {"loginChange"})
+//    public ModelAndView loginChange(@RequestParam Map<String,Object> map) {
+//        ModelAndView mv = new ModelAndView();
+//        mv.setViewName("loginChange");
+////        if(req.getSession().getAttribute("connect") != null)
+////            mv.setViewName("redirect:/req/list");
+//
+//        return mv;
+//    }
 
     @GetMapping(value = "logout")
     public ModelAndView logout(HttpServletRequest req) {
@@ -95,6 +100,32 @@ public class HomeController {
                 HttpSession s = req.getSession();
                 s.setAttribute("connect", true);
                 s.setMaxInactiveInterval(60*60*12);
+            }
+        }
+        return jobj;
+    }
+
+    @GetMapping(value="changePass")
+    public String changePass(){
+        return "change_pass";
+    }
+
+    @ResponseBody
+    @PutMapping(value="changePass")
+    public JSONObject changePass(@RequestParam Map<String, Object> map) throws IOException {
+        log.debug("Request Parameter : " + map);
+        JSONObject jobj = new JSONObject();
+
+        jobj.put("code", 400);
+        if (map.containsKey("pwd")) {
+            boolean rs = commonService.loginCheck(map);
+            log.info("loginCheck 는? : " + rs);
+            if (rs) {
+                boolean lc = commonService.loginChange(map);
+                log.info("loginChange 는? : "+ lc);
+                if(lc){
+                    jobj.put("code", 200);
+                }
             }
         }
         return jobj;
