@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.Date;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -15,7 +17,6 @@ import lombok.ToString;
 public class ProductDetail {
     private String product_code;
     private String color_name;
-    private String gender;
     private int s;
     private int m;
     private int l;
@@ -26,7 +27,6 @@ public class ProductDetail {
 
     public ProductDetail(ProductInformation productInformation) {
         this.product_code = productInformation.getProduct_code();
-        this.gender = productInformation.getGender();
         this.color_name = productInformation.getColor_name();
         this.s = productInformation.getS();
         this.m = productInformation.getM();
@@ -34,6 +34,5 @@ public class ProductDetail {
         this.xl = productInformation.getXl();
         this.f = productInformation.getF();
         this.total = productInformation.getTotal();
-        this.manufacture_day = productInformation.getManufacture_day();
     }
 }

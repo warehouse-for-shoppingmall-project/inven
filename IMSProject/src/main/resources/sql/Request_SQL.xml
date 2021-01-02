@@ -5,10 +5,10 @@
 	<!-- SQL Section -->
 
 	<sql id="titleColumn">
-		request_code, product_code, gender, request_status, unit_price, factory_name, total_order_quantity, file_name,
+		request_code, product_code, gender, request_status, unit_price, make_factory, total_order_quantity, file_name,
 		IFNULL(DATE(request_date), '-') as request_date,
 		IFNULL(DATE(get_Date), '-') as get_date,
-		IFNULL(DATE(manufacturing_date), '-') as manufacturing_date,
+		IFNULL(DATE(manufature_day), '-') as manufature_day,
  		IFNULL(etc,'  ') as etc
    </sql>
 
@@ -62,9 +62,16 @@
 		LIMIT #{start_idx}, #{end_idx}
 	</select>
 
-	<select id="selectDetail" parameterType="String" resultType="hashMap">
-		SELECT color_name, s, m, l, xl, free, total
+	<!-- 발주코드 상세내역을 가져옴 -->
+	<select id="selectReqDetail" parameterType="String" resultType="hashMap">
+		SELECT color_name, s, m, l, xl, f, total
 		FROM request_detail WHERE request_code = #{request_code}
+	</select>
+
+	<!-- 발주코드 상세내역을 가져옴 -->
+	<select id="selectProdDetail" parameterType="String" resultType="hashMap">
+		SELECT color_name, s, m, l, xl, f, total
+		FROM product_detail WHERE product_code = #{product_code}
 	</select>
 
 	<!--	발주코드 자동 생성 함수 실행-->
@@ -72,8 +79,8 @@
 		SELECT FN_MAKE_REQ_CODE()
 	</select>
 
-	<!--	발주등록 시 상품코드 select해서 고를 수 있게 상품코드 조회 후 html로 전송-->
-	<select id="selectProductCode" resultType="String">
+	<!--	발주등록 시 상품코드 select 해서 고를 수 있게 상품코드 조회 후 html 로 전송-->
+	<select id="getAllProdCd" resultType="String">
 		SELECT product_code FROM product_title
 	</select>
 
@@ -89,23 +96,23 @@
 	<!-- request_detail 발주 수정 시 -->
 	<select id="reqModifyDetail" parameterType="hashmap" resultType="hashmap">
 		SELECT color_name, IFNULL(s,0) AS s, IFNULL(m,0) AS m , IFNULL(l,0) AS l,
-			IFNULL(xl,0) AS xl, IFNULL(free,0) as free, total
+			IFNULL(xl,0) AS xl, IFNULL(f,0) as f, total
 		FROM request_detail
 		WHERE request_code = #{request_code}
-		<!--		LIMIT #{start_idx}, #{end_idx}-->
+		<!-- LIMIT #{start_idx}, #{end_idx} -->
 	</select>
 
 	<!-- Insert Section	-->
 
 	<!--발주등록 페이지에서 등록 요청 시 request_title 테이블에 insert-->
 	<insert id="addTitle" parameterType="hashMap" >
-		INSERT INTO request_title(
-			request_code, product_code, request_status, unit_price, gender,
-			factory_name, total_order_quantity, manufacturing_date, etc
+		INSERT INTO request_title (
+			request_code, product_code, request_status, unit_price,
+			make_factory, total_order_quantity, etc
 		)
-		VALUES(
+		VALUES (
 			#{request_code}, #{product_code}, #{request_status}, #{unit_price},
-			#{factory_name}, #{total_order_quantity}, #{manufacturing_date}, #{etc}
+			#{make_factory}, #{total_order_quantity}, #{etc}
 		)
    </insert>
 
@@ -113,35 +120,16 @@
 <!--	여러 행 삽입을 위해 for each 문-->
 	<insert id="addDetail" parameterType="java.util.List">
 		INSERT INTO request_detail(
-			request_code, product_code, color_name, s, m, l, xl, free, total
+			request_code, product_code, color_name, s, m, l, xl, f, total
 		)
 		VALUES
 		<foreach collection="list" item="item" separator=",">
 		(
 			#{item.request_code}, #{item.product_code}, #{item.color_name},
-			#{item.s}, #{item.m}, #{item.l}, #{item.xl}, #{item.free}, #{item.total}
+			#{item.s}, #{item.m}, #{item.l}, #{item.xl}, #{item.f}, #{item.total}
 		)
 		</foreach>
    </insert>
-
-	<update id="modTitle" parameterType="hashmap">
-		UPDATE request_title
-		SET
-			product_code = #{product_code}, gender = #{gender}, unit_price = #{unit_price},
-			factory_name = #{factory_name}, total_order_quantity = #{total_order_quantity},
-		    manufacturing_date = DATE(#{manufacturing_date}), etc = #{etc}
-		WHERE request_code = #{request_code}
-	</update>
-
-	<update id="modDetail" parameterType="java.util.List">
-		<foreach collection="list" item="item" separator=";">
-			UPDATE request_detail
-			SET product_code = #{item.product_code}, color_name = #{item.color_name},
-				s = #{item.s}, m = #{item.m}, l = #{item.l}, xl = #{item.xl},
-				free = #{item.free}, total = #{item.total}
-			WHERE request_code = #{item.request_code} AND color_name = #{item.old_color_name}
-		</foreach>
-	</update>
 
 	<!-- Update Section -->
 
@@ -151,4 +139,22 @@
 		SET request_status = #{request_status}
 		WHERE request_code = #{request_code}
    </update>
+
+	<update id="modTitle" parameterType="hashmap">
+		UPDATE request_title
+		SET product_code = #{product_code}, gender = #{gender}, unit_price = #{unit_price},
+			make_factory = #{make_factory}, total_order_quantity = #{total_order_quantity},
+		    manufature_day = DATE(#{manufature_day}), etc = #{etc}
+		WHERE request_code = #{request_code}
+	</update>
+
+	<update id="modDetail" parameterType="java.util.List">
+		<foreach collection="list" item="item" separator=";">
+			UPDATE request_detail
+			SET product_code = #{item.product_code}, color_name = #{item.color_name},
+				s = #{item.s}, m = #{item.m}, l = #{item.l}, xl = #{item.xl},
+				f = #{item.f}, total = #{item.total}
+			WHERE request_code = #{item.request_code} AND color_name = #{item.old_color_name}
+		</foreach>
+	</update>
 </mapper>

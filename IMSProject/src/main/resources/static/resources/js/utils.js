@@ -23,6 +23,16 @@ jQuery.fn.serializeObject = function() {
 	return obj;
 };
 
+// 배열내 중복된 값 검사
+// 중복된 값이 있으면 true, 없으면 false
+function isDuplicate(arr)  {
+	const isDup = arr.some(function(x) {
+		return arr.indexOf(x) !== arr.lastIndexOf(x);
+	});
+	return isDup;
+}
+
+
 // param 형식을 obj 형태로 변환 ?? wait
 let serialize = function(form) {
 	let param = '?', and = '';
@@ -66,7 +76,7 @@ let numberSet = function (){
 	let val = $(this).val();
 	if(val === '') $(this).val(0);
 	// 아니면 문자를 int 로 바꿔서 넣어줄거다. 문자 ->  숫자
-	else $(this).val(parseInt(val));
+	else $(this).val(Math.abs(parseInt(val)));
 }
 
 /* 전화번호와 같이 숫자만 입력제한 */

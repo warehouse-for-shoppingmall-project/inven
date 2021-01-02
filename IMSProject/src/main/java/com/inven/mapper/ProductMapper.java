@@ -15,18 +15,7 @@ import java.util.Map;
 @Repository  // DB접근하는 애들은 Repository 붙여준다. 이러면 'Bean'생성
 public interface ProductMapper {
 
-
-	List<ProductTitle> getProductList();
-
-	@Select("Select * from product_detail")
-	List<ProductDetail> getDetail();
-
 	List<ProductDetail> selectDetail(String product_code);
-
-
-	int productTitlesAdd(ProductTitle productTitle);
-
-    void productDetailsAdd(ProductDetail productDetail);
 
 	List<ProductTitle> searchByProductCode(String query);
 
@@ -34,10 +23,27 @@ public interface ProductMapper {
 
 	List<ProductInformation> modify(String productCode);
 
-	//ajax
+	//	Select
+	@Select("Select * from product_title")
+	List<ProductTitle> getTitleAll();
+
+	@Select("Select * from product_detail")
+	List<ProductDetail> getDetailAll();
+
+    int overlapCheck(Map<String, Object> map);
+
+	// Insert
+	int productTitlesAdd(ProductTitle productTitle);
+	void productDetailsAdd(ProductDetail productDetail);
+
+	int addTitle(Map<String, Object> title);
+	int addDetails(List<String> details);
+
+	// Update
     void upStatus(ProductTitle productTitle);
 
 
+	// Delete
 
 //	@Select("SELECT * FROM product_title where product_code = #{query}")
 //	ProductTitle getProductTitle(@Param("product_code") String query);

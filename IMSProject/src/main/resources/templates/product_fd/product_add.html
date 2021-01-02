@@ -2,193 +2,216 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>상품 등록</title>
+    <th:block th:replace="fragments/cmnHead :: main-head"></th:block>
     <style>
-        #product_title_table {
-            width: 240px;
-            display: inline-block;
-            float: left;
-        }
-
-        #product_title_table input {
-            width: 100px;
-        }
-
-        #product_title_table #file {
-            width: 200px;
-        }
-
-        #product_title_table #manufacturing_date {
-            width: 120px;
-        }
-
-        #product_detail_table {
-            display: inline-table;
-            width: 300px;
-            /* float: right; */
-        }
-
-        #product_detail_table input {
-            width: 70px;
-        }
-
-        #titleForm {
-            font-weight: bold;
+        table[name=detail_table] thead {
+            background-color: cornsilk;
         }
     </style>
 </head>
-
 <body>
-<h1>상품 등록하기</h1>
-<div id="wrap">
-    <!-- enctype : 파일 첨부 기능이 있다면 꼭 추가해라했음.. -->
+<!-- Contents -->
+<div class="container">
+    <div class="row">
+        <!-- row 1 -->
+        <div class="alert alert-warning alert-dismissible fade w-100" id="alert" role="alert">
+            <p id="alt-c"><small>asfasf</small></p>
+            <button type="button" class="close" onclick="javascript:$('#alert').removeClass('show');">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="col-lg-12">
+            <p class="text-muted">
+                상품 등록
+                <button class="btn btn-primary float-right" type="button" id="prodAdd" >등록하기</button>
+            </p>
+            <form name="titleForm">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">코드</span>
+                    </div>
+                    <input type="hidden" name="product_code" value="">
+                    <input type="text" class="form-control" id="ip_prod_cd" maxlength="10" placeholder="SHY001" aria-describedby="overlapCheck" required>
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" id="overlapCheck" type="button">중복검사</button>
+                    </div>
+                    <div class="valid-feedback">중복검사 완료</div>
+                    <div class="invalid-feedback"></div>
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">성별</span>
+                    </div>
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                        <label class="btn btn-outline-primary btn-toggle active">
+                            <input type="radio" name="gender" value="C" checked> 공용
+                        </label>
+                        <label class="btn btn-outline-primary btn-toggle">
+                            <input type="radio" name="gender" value="M"> 남자
+                        </label>
+                        <label class="btn btn-outline-primary btn-toggle">
+                            <input type="radio" name="gender" value="W"> 여자
+                        </label>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- ./ .col-lg-4 -->
+        <div class="col-lg-12">
+            <table name="detail_table">
+                <thead>
+                <tr>
+                    <th scope="col">
+                        컬러
+                        <div class="text-danger" name="color_valid"></div>
+                    </th>
+                    <th><input class="btn btn-success" type="button" value="(+)추가" id="addButton" onclick="addDetail()"></th>
+                </tr>
+                </thead>
+                <tbody id="detail_tbody">
+                <tr><td><input class="form-control" name="color_name" type="text"></td></tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- ./ col-lg-8 -->
+    </div>
+    <!-- ./ .row -->
 
-    <br>
-
-    <form name="titleForm" action="/prod/add" method="post" id="titleForm">
-        <table>
-            <tr>
-                <th>상품 코드</th>
-                <td>
-                    <input type="text" name="product_code" placeholder="ex: CT001"><br>
-                </td>
-            </tr>
-            <tr>
-                <th>단가</th>
-                <td>
-                    <input type="number" name="unit_price" value="0">원
-                </td>
-            </tr>
-            <tr>
-                <th>공장 이름</th>
-                <td>
-                    <input type="text" name="make_factory" placeholder="제조사 명 입력">
-                </td>
-            </tr>
-            <tr>
-                <th>최종 수정일</th>
-                <td>
-                    <input type="date" name="final_update">
-                </td>
-            </tr>
-            <tr>
-                <th>제조 코드</th>
-                <td>
-                    <input type="number" name="make_code">
-                </td>
-            </tr>
-            <tr>
-                <th>파일</th>
-                <td>
-                    <input type="file" name="file" id="file">
-                </td>
-            </tr>
-            <tr>
-                <th>비고</th>
-                <td>
-                    <input type="text" name="etc">
-                </td>
-            </tr>
-        </table>
-
-        <table id="product_detail_table">
-            <thead>
-            <tr>
-                <th>색상</th>
-                <th>성별</th>
-                <th>s</th>
-                <th>m</th>
-                <th>l</th>
-                <th>xl</th>
-                <th>free</th>
-                <th>total</th>
-                <th>제조날짜</th>
-                <th><input type="button" value="+" id="addButton" onclick="addDetail()"></th>
-            </tr>
-            </thead>
-            <tbody id="product_detail_tbody">
-
-            <tr>
-                <td><input type="text" name="color_name"></td>
-                <td><select name="gender">
-                    <option value="C">공용</option>
-                    <option value="W">여자</option>
-                    <option value="M">남자</option>
-                </select></td>
-                <td><input type="number" name="s"></td>
-                <td><input type="number" name="m"></td>
-                <td><input type="number" name="l"></td>
-                <td><input type="number" name="xl"></td>
-                <td><input type="number" name="free"></td>
-                <td><input type="text" name="total" value="0" readonly></td>
-                <td><input type="date" name="manufacture_day"></td>
-            </tr>
-            </tbody>
-        </table>
-        <br>
-
-
-        <input type="submit" id="prodAdd" value="상품 등록">
-    </form>
-
-    <!-- end of outer form -->
 </div>
-<!-- end of wrap-->
-
 <!-- 버튼 클릭 시 detail 테이블 열 추가 -->
 <script>
-    window.onload = function () {
-        $('input[type=number]').val(0);
-    }
-
-    let product_detail_tbody = document.getElementById("product_detail_tbody");
-    let rowName = ['s', 'm', 'l', 'xl', 'free', 'total'];
-    let rowType = ['number', 'number', 'number', 'number', 'number', 'text'];
-
+    let detail_tbody = document.querySelector("tbody[name=detail_tbody]");
+    let overlapCheckTN = true;
+    let confirm = true;
     function addDetail() {
-        let row = product_detail_tbody.insertRow();
-
-        //색상
-        row.insertCell(0).innerHTML += '<input type="text" name="color_name">';
-        //성별
-        row.insertCell(1).innerHTML += '<select name="gender">'
-            + '<option value="C">공용</option>'
-            + '<option value="W">여자</option>'
-            + '<option value="M">남자</option>' + '</select>';
-
-        //사이즈(s~free), 총 수량
-        for (let i = 0; i < rowName.length; i++) {
-            row.insertCell(i + 2).innerHTML += '<input type="number" name="' + rowName[i] + '" value="0">';
-        }
-        row.insertCell().innerHTML += '<input type="text" name="manufacture_day">';
-        row.insertCell().innerHTML += '<input type="button" value="-" id="delButton" onclick="delDetail(this)">';
-        // $(row).find('input[name=total]').attr('readonly', 'readonly').val(0);
-        // $(row).find('input[type=number]').val(0);
+        let row = detail_tbody.insertRow();
+        row.insertCell().innerHTML += '<input class="form-control" type="text" name="color_name">';
+        row.insertCell().innerHTML += '<input type="button" class="btn btn-secondary" value="-" onclick="delDetail(this)">';
     }
-
 
     // 해당 행 삭제 버튼
     function delDetail(row) {
         let tr = row.parentNode.parentNode;
         tr.parentNode.removeChild(tr);
     }
-</script>
 
-<!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
-<script src="https://code.jquery.com/jquery-3.5.1.js"
-        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
-        crossorigin="anonymous"></script>
-<script
-        src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
-        crossorigin="anonymous"></script>
-<!--<script th:src="@{/resources/js/req_js/add.js}"></script>-->
+    // 중복검사 결과 보여주는 함수
+    function validCheck(bool, text=''){
+        // true : 통과, false : 실패
+        if(bool){
+            $('.invalid-feedback').css('display', 'none');
+            $('.valid-feedback').css('display', 'block');
+        } else {
+            $('.invalid-feedback').css('display', 'block').text(text);
+            $('.valid-feedback').css('display', 'none');
+        }
+    }
+
+    // 상품코드 중복검사
+    $('#overlapCheck').click(function() {
+        // return;
+        let value = $('#ip_prod_cd').val();
+        if(value === ''){
+            validCheck(false, '중복검사를 해주세요.')
+            $('#ip_prod_cd').focus();
+            return;
+        }
+
+        $.ajax({
+            type: "GET",
+            url: "/prod/async/overlapCheck",
+            data: { product_code : value },
+            dataType: "json",
+            success: function(xml) {
+                if (xml.code === 200) {
+                    validCheck(true);
+                    $('input[name=product_code]').val(value);
+                    $('#ip_prod_cd').attr('readonly', 'readonly');
+                    overlapCheckTN = false;
+                } else {
+                    console.log(xml.code + ':: error');
+                    validCheck(false, '이미 존재하는 코드입니다.');
+                }
+            },
+            error: function(request, status, error) {
+                console.log("code:" + status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+                alert('콘솔보셈');
+            }
+        });
+    });
+
+    // 상품등록
+    $('#prodAdd').click(function() {
+        // js 에서는 ' 홑 따옴표를 쓴다'
+        if(overlapCheckTN) {
+            $('#ip_prod_cd').focus();
+            validCheck(false, '중복검사를 해주세요.');
+            return;
+        }
+
+        let title = $('form[name=titleForm]').serializeObject();
+        let details = [];
+        // 중복검사용 변수
+        let names = [];
+        let inputYN = false;
+        let clrValid = $('div[name=color_valid]');
+
+        $('tbody[name=detail_tbody] tr').each(function (i, e){
+            let input = $(e).find('input[name=color_name]');
+            if(input.val() === '') {
+                clrValid.text('컬러 이름을 적으세요');
+                input.focus();
+                inputYN = true;
+                return;
+            }
+            let data = { product_code : title.product_code, color_name : input.val()};
+            details.push(data);
+            names.push(input.val());
+        });
+
+        if(inputYN)return;
+
+        if(isDuplicate(names)){
+            clrValid.text('컬러 이름이 겹칩니다.');
+            return;
+        }
+
+        let data = {
+            title : JSON.stringify(title),
+            details : JSON.stringify(details)
+        }
+
+        console.log(data);
+        // return;
+        $.ajax({
+            type: "post",
+            url: "/prod/async/prodAdd",
+            data: data,
+            dataType: "json",
+            success: function(xml) {
+                if (xml.code === 200) {
+                    $('#alt-c').text('등록완료');
+                    $('#alert').addClass('show');
+                    setTimeout(function (){
+                        window.open('','_self').close();
+                    }, 1000);
+                } else {
+                    console.log(xml.code + ':: error');
+                    $('#alt-c').html('<small>등록실패 :: 잠시후 다시 시도해주세요.</small>');
+                    if($('#alert').attr('class').indexOf('show') === -1){
+                        $('#alert').addClass('show');
+                    }
+                }
+            },
+            error: function(request, status, error) {
+                console.log("code:" + status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+                alert('콘솔보셈');
+            }
+        });
+    });
+</script>
 </body>
 </html>
-
-
 <!--
     지금 해야할 것.
     1. 발주코드 함수 불러와서 사용하기 => ajax를 통해서 발주등록 페이지 활성화 시 input안에 value 삽입

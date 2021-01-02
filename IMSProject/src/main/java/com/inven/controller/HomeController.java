@@ -51,7 +51,6 @@ public class HomeController {
         mv.setViewName("login");
         if(req.getSession().getAttribute("connect") != null)
             mv.setViewName("redirect:/req/list");
-
         return mv;
     }
 //    @PostMapping(value = {"loginChange"})

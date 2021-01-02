@@ -1,51 +1,40 @@
 package com.inven.controller;
 
-import com.inven.common.model.ProductDetail;
-import com.inven.common.model.ProductTitle;
-import com.inven.mapper.ProductMapper;
-import com.inven.param.ProductInformation;
-import com.inven.service.inter.ProductService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.inven.common.CommonUtils;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
+import com.inven.common.model.ProductDetail;
+import com.inven.common.model.ProductTitle;
+import com.inven.param.ProductInformation;
+import com.inven.service.inter.ProductService;
+
+
+@Slf4j
 @Controller
 @RequestMapping(value = "/prod/*")
 public class ProductController {
 
-    private final Logger log = LoggerFactory.getLogger(this.getClass());
-
-    @Autowired   // 굳이 ProductServiceImpl 하지말고 ProductService만 생성해주면된다.
-    ProductService productService;
-
     @Autowired
-    ProductMapper productMapper;
+    ProductService productService;
 
     @GetMapping("/list")
     public ModelAndView list(@RequestParam Map<String, Object> map) {
-
         ModelAndView mv = new ModelAndView("product_fd/product_main");
-        List<ProductTitle> productTitles = productService.printProduct();
+        List<ProductTitle> productTitles = productService.getTitleAll();
 
-        List<ProductDetail> productDetails = productService.getDetail();
-
-        if (!map.containsKey("searchType")) map.put("searchType", "");
-        if (!map.containsKey("searchText")) map.put("searchText", "");
-
-//        List<Map<String, Object>> search = productService.search(map);
-
-        log.info(String.valueOf(productDetails));
         log.info(String.valueOf(productTitles));
-        mv.addObject("productDetails", productDetails);
         mv.addObject("productTitles", productTitles);
 //        mv.addObject("search", search);
 
@@ -60,18 +49,6 @@ public class ProductController {
         return mv;
 
     }
-
-    @GetMapping(value = "/detail")
-    public ModelAndView detail(@RequestParam String product_code) {
-
-        ModelAndView mv = new ModelAndView("product_fd/productDetail");
-
-        List<ProductDetail> detail = productService.selectDetail(product_code);
-        mv.addObject("detail", detail);
-
-        return mv;
-    }
-
     // html form submit
     // form: application/x-www-form-url-encoded
     // 1. @RequestBody MultiValueMap
@@ -83,39 +60,22 @@ public class ProductController {
     // @RequestBody ProductInformationParam
 
     @PostMapping(value = "/add", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)// Post는 RequestParam 못받는다
-    public ModelAndView addProduct(@ModelAttribute ProductInformation productInformation) {
+    public ModelAndView addProduct(@RequestParam Map<String, Object> map) {
+        log.info("Request Parameter : " + map);
         ModelAndView mv = new ModelAndView();
         // ProductInformation --> ProductTitle
+        log.debug("param : " + map);
 
-        ProductTitle productTitle = new ProductTitle(productInformation.getProduct_code(),
-                productInformation.getGender(),
-                productInformation.getMake_factory(),
-                productInformation.getUnit_price(),
-                productInformation.getFinal_update(),
-                productInformation.getMake_code(),
-                productInformation.getProduct_status());
+        CommonUtils.printMap(map);
 
-        productService.productTitlesAdd(productTitle);
+//        productService.productTitlesAdd(productTitle);
 
-        // ProductInformation --> ProductDetail
-        ProductDetail productDetail = new ProductDetail(productInformation.getProduct_code(),
-                productInformation.getColor_name(),
-                productInformation.getGender(),
-                productInformation.getS(),
-                productInformation.getM(),
-                productInformation.getL(),
-                productInformation.getXl(),
-                productInformation.getF(),
-                productInformation.getTotal(),
-                productInformation.getManufacture_day());
-
-        productService.productDetailsAdd(productDetail);
+//        productService.productDetailsAdd(productDetail);
 
         mv.setViewName("redirect:/prod/list");
 
         return mv;
     }
-
     @GetMapping("/modify")
     public ModelAndView modify(@RequestParam String productCode) {
         ModelAndView mv = new ModelAndView();

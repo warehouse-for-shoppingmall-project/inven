@@ -2,6 +2,7 @@ package com.inven.service;
 
 import java.util.*;
 
+import com.google.gson.Gson;
 import com.inven.common.model.ProductDetail;
 import com.inven.common.model.ProductTitle;
 import com.inven.param.ProductInformation;
@@ -13,24 +14,22 @@ import com.inven.mapper.ProductMapper;
 import com.inven.service.inter.ProductService;
 
 @Slf4j
-@Service("productService")
+@Service(value = "productService")
 public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductMapper prodMapper;
 
     @Override
-    public List<ProductTitle> printProduct() {
-        return prodMapper.getProductList();
+    public List<ProductTitle> getTitleAll() {
+        return prodMapper.getTitleAll();
     }
 
-    public List<ProductDetail> getDetail() {
-        return prodMapper.getDetail();
+    public List<ProductDetail> getDetailAll() {
+        return prodMapper.getDetailAll();
     }
 
-    public List<ProductDetail> selectDetail(String product_code) {
-        return prodMapper.selectDetail(product_code);
-    }
+    public List<ProductDetail> selectDetail(String product_code) { return prodMapper.selectDetail(product_code); }
 
 
 //    @Override
@@ -65,6 +64,28 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductInformation> modify(String productCode) {
         return prodMapper.modify(productCode);
+    }
+
+    public int overlapCheck(Map<String, Object> map) {
+        return prodMapper.overlapCheck(map);
+    }
+
+    public int addProductData(Map<String, Object> map) {
+        Gson gson = new Gson();
+
+        Map<String, Object> title = gson.fromJson(map.get("title").toString(), Map.class);
+        List<String> details = gson.fromJson(map.get("details").toString(), List.class);
+
+        int detailRs = -1;
+        try {
+            int titleRs = prodMapper.addTitle(title);
+            if(titleRs > 0) detailRs = prodMapper.addDetails(details);
+        }catch (Exception e){
+            detailRs = -2;
+            e.printStackTrace();
+        }
+
+        return detailRs;
     }
 
 //	@Override

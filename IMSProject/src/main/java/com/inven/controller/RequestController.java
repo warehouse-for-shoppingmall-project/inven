@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import com.inven.common.CommonUtils;
 import com.inven.common.Paging;
 import com.inven.service.inter.RequestService;
 import lombok.extern.slf4j.Slf4j;
@@ -85,16 +84,17 @@ public class RequestController {
         mv.addObject("list", list);
         mv.addObject("paging", paging);
         mv.addObject("map", map);
+
         return mv;
     }
 
     @GetMapping(value = "/detail")
     public ModelAndView detail(@RequestParam Map<String, Object> map) {
         log.info("Request Parameter : " + map);
-        ModelAndView mv = new ModelAndView("request_fd/request_detail");
+        ModelAndView mv = new ModelAndView("detail_view");
 
-        List<Map<String, Object>> detail = reqService.selectDetail(map.get("request_code").toString());
-        mv.addObject("detail", detail);
+        List<Map<String, Object>> details = reqService.selectReqDetail(map.get("request_code").toString());
+        mv.addObject("details", details);
 
         return mv;
     }
@@ -103,7 +103,7 @@ public class RequestController {
     public ModelAndView add(@RequestParam Map<String, Object> map) {
         log.info("Request Parameter : " + map);
         ModelAndView mv = new ModelAndView("request_fd/request_add");
-        List<String> list = reqService.selectProductCode();
+        List<String> list = reqService.getAllProdCd();
 
         mv.addObject("list", list);
 
@@ -118,7 +118,7 @@ public class RequestController {
 
         Map<String, Object> title = reqService.reqModifyTitle(map);
         List<Map<String, Object>> details = reqService.reqModifyDetail(map);
-        List<String> list = reqService.selectProductCode();     //상품코드 select용
+        List<String> list = reqService.getAllProdCd();     //상품코드 select용
 
         log.info("Response modSelectSQL title : " + title);
         log.info("Response modSelectSQL details : " + details);

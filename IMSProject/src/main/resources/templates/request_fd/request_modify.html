@@ -119,7 +119,7 @@
 					<th scope="col">total</th>
 				</tr>
 				</thead>
-				<tbody id="request_detail_tbody">
+				<tbody id="detail_tbody">
 				<tr th:each="detail:${details}">
 					<td><input class="form-control" type="text" th:value="${detail.get('color_name')}" name="color_name">
 						<input class="form-control" type="hidden" th:value="${detail.get('color_name')}" name="old_color_name"></td>

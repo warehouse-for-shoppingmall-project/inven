@@ -1,19 +1,14 @@
 package com.inven.service;
 
-import java.sql.SQLException;
 import java.util.*;
 
 import com.google.gson.Gson;
-import com.inven.common.CommonUtils;
 import com.inven.mapper.RequestMapper;
 import com.inven.service.inter.RequestService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
-
 
 @Service("requestService")
 public class RequestServiceImpl implements RequestService {
@@ -24,9 +19,10 @@ public class RequestServiceImpl implements RequestService {
 
     // select
     public int searchCount(Map<String, Object> map){ return reqMapper.searchCount(map); }
-    public List<Map<String, Object>> selectDetail(String request_code){ return reqMapper.selectDetail(request_code); }
+    public List<Map<String, Object>> selectReqDetail(String request_code){ return reqMapper.selectReqDetail(request_code); }
+    public List<Map<String, Object>> selectProdDetail(String product_code){ return reqMapper.selectProdDetail(product_code); }
     public List<Map<String, Object>> searchWhere(Map<String, Object> map){ return reqMapper.searchWhere(map); }
-    public List<String> selectProductCode(){ return reqMapper.selectProductCode(); }
+    public List<String> getAllProdCd(){ return reqMapper.getAllProdCd(); }
     public String makeReqCode(){ return reqMapper.makeReqCode(); }
     public Map<String, Object> reqModifyTitle(Map<String, Object> map){ return reqMapper.reqModifyTitle(map); }
     public List<Map<String, Object>> reqModifyDetail(Map<String, Object> map){ return reqMapper.reqModifyDetail(map); }
@@ -39,36 +35,29 @@ public class RequestServiceImpl implements RequestService {
     }
     public int addDetail(List<Map<String, Object>> list){ return reqMapper.addDetail(list); }
 
-    @Transactional
     @Override
-    public int addRequestData(Map<String, Object> map) throws SQLException {
+    public int addRequestData(Map<String, Object> map) {
         Gson gson = new Gson();
 
         Map<String, Object> title = gson.fromJson(map.get("title").toString(), Map.class);
-        CommonUtils.printMap(title);
-
         List<Map<String, Object>> details = gson.fromJson(map.get("details").toString(), List.class);
-        CommonUtils.printList(details);
 
-        if(map.get("manufacturing_date").toString().equals(""))
-            map.put("manufacturing_date", null);
-
-        int titleRs = reqMapper.addTitle(title);
         int detailRs = -1;
-        if(titleRs > 0) detailRs = reqMapper.addDetail(details);
-        else detailRs = -2;
+        try {
+            int titleRs = reqMapper.addTitle(title);
+            if(titleRs > 0) detailRs = reqMapper.addDetail(details);
+        }catch (Exception e){
+            detailRs = -2;
+            e.printStackTrace();
+        }
 
         return detailRs;
     }
     // update
-    public int upStatus(Map<String, Object> map) {return reqMapper.upStatus(map);}
+    public int upStatus(Map<String, Object> map) { return reqMapper.upStatus(map); }
     public int modTitle(Map<String, Object> map) {
         if(map.get("manufacturing_date").toString().equals(""))
             map.put("manufacturing_date", null);
-
-        if(map.get("etc").toString().equals(""))
-            map.put("etc","");
-
         return reqMapper.modTitle(map);
     }
     public int modDetail(List<Map<String, Object>> list) { return reqMapper.modDetail(list);}

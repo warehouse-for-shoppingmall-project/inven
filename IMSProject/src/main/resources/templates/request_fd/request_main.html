@@ -15,72 +15,77 @@
 
 <!-- Contents -->
 <div class="container">
-    <div><h1>발주 조회</h1></div>
+    <div>
+        <h1 class="d-inline">발주 조회</h1>
+        <button class="float-right btn btn-outline-primary" type="button" onclick="prevAdd()">등록</button>
+    </div>
     <form name="saveParamForm">
         <input type="hidden" th:each="entry : ${map}" th:name="${entry.key}" th:value="${entry.value}">
     </form>
-    <form name="searchForm" action="list" method="get">
-        <table class="sh-tb">
-            <tbody>
-            <tr>
-                <th>발주 상태</th>
-                <td>
-                    <input type="radio" id="sr_rd1" name="request_status" value="" th:checked="${map.request_status} == ''">
-                    <label for="sr_rd1">전체</label>
-                    <input type="radio" id="sr_rd2" name="request_status" value="신청" th:checked="${map.request_status} == '신청'">
-                    <label for="sr_rd2">신청</label>
-                    <input type="radio" id="sr_rd3" name="request_status" value="대기" th:checked="${map.request_status} == '대기'">
-                    <label for="sr_rd3">대기</label>
-                    <input type="radio" id="sr_rd4" name="request_status" value="확정" th:checked="${map.request_status} == '확정'">
-                    <label for="sr_rd4">확정</label>
-                    <input type="radio" id="sr_rd5" name="request_status" value="취소" th:checked="${map.request_status} == '취소'">
-                    <label for="sr_rd5">취소</label>
-                    <input type="radio" id="sr_rd6" name="request_status" value="입고" th:checked="${map.request_status} == '입고'">
-                    <label for="sr_rd6">입고</label>
-                </td>
-                <th>검색 기간</th>
-                <td>
-                    <input type="date" name="start_date" th:value="${map.start_date}">~
-                    <input type="date" name="end_date" th:value="${map.end_date}">
-                </td>
-            </tr>
-            <tr>
-                <th>성별</th>
-                <td>
-                    <input type="radio" id="gn_rd0" name="gender" value="" th:checked="${map.gender} == ''">
-                    <label for="gn_rd0">전체</label>
-                    <input type="radio" id="gn_rd1" name="gender" value="C" th:checked="${map.gender} == 'C'">
-                    <label for="gn_rd1">공용(C)</label>
-                    <input type="radio" id="gn_rd2" name="gender" value="W" th:checked="${map.gender} == 'M'">
-                    <label for="gn_rd2">남성(M)</label>
-                    <input type="radio" id="gn_rd3" name="gender" value="M" th:checked="${map.gender} == 'W'">
-                    <label for="gn_rd3">여성(W)</label>
-                </td>
-                <th>발주 코드</th>
-                <td><input type="text" name="request_code" th:value="${map.request_code}"></td>
-            </tr>
-            <!--            <input type="text" name="product_code" th:value="${map.request_code}">-->
-            <tr>
-                <th>조회 건수</th>
-                <td>
-                    <input type="radio" id="ps_rd1" name="pageSize" value="10" th:checked="${map.pageSize} == '10'">
-                    <label for="ps_rd1">10</label>
-                    <input type="radio" id="ps_rd2" name="pageSize" value="20" th:checked="${map.pageSize} == '20'">
-                    <label for="ps_rd2">20</label>
-                    <input type="radio" id="ps_rd3" name="pageSize" value="30" th:checked="${map.pageSize} == '30'">
-                    <label for="ps_rd3">30</label>
-                </td>
-                <th>상품 코드</th>
-                <td>
-                    <input type="text" name="product_code" th:value="${map.product_code}">
-                    <button type="submit" style="float: right;" class="btn btn-success">Search</button>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <!-- ./ navbar -->
-    </form>
     <div class="row">
+        <div class="col-lg-12">
+            <form name="searchForm" action="list" method="get">
+                <table class="sh-tb">
+                    <tbody>
+                    <tr>
+                        <th>발주 상태</th>
+                        <td>
+                            <input type="radio" id="sr_rd1" name="request_status" value="" th:checked="${map.request_status} == ''">
+                            <label for="sr_rd1">전체</label>
+                            <input type="radio" id="sr_rd2" name="request_status" value="신청" th:checked="${map.request_status} == '신청'">
+                            <label for="sr_rd2">신청</label>
+                            <input type="radio" id="sr_rd3" name="request_status" value="대기" th:checked="${map.request_status} == '대기'">
+                            <label for="sr_rd3">대기</label>
+                            <input type="radio" id="sr_rd4" name="request_status" value="확정" th:checked="${map.request_status} == '확정'">
+                            <label for="sr_rd4">확정</label>
+                            <input type="radio" id="sr_rd5" name="request_status" value="취소" th:checked="${map.request_status} == '취소'">
+                            <label for="sr_rd5">취소</label>
+                            <input type="radio" id="sr_rd6" name="request_status" value="입고" th:checked="${map.request_status} == '입고'">
+                            <label for="sr_rd6">입고</label>
+                        </td>
+                        <th>검색 기간</th>
+                        <td>
+                            <input type="date" name="start_date" th:value="${map.start_date}">~
+                            <input type="date" name="end_date" th:value="${map.end_date}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>성별</th>
+                        <td>
+                            <input type="radio" id="gn_rd0" name="gender" value="" th:checked="${map.gender} == ''">
+                            <label for="gn_rd0">전체</label>
+                            <input type="radio" id="gn_rd1" name="gender" value="C" th:checked="${map.gender} == 'C'">
+                            <label for="gn_rd1">공용(C)</label>
+                            <input type="radio" id="gn_rd2" name="gender" value="W" th:checked="${map.gender} == 'M'">
+                            <label for="gn_rd2">남성(M)</label>
+                            <input type="radio" id="gn_rd3" name="gender" value="M" th:checked="${map.gender} == 'W'">
+                            <label for="gn_rd3">여성(W)</label>
+                        </td>
+                        <th>발주 코드</th>
+                        <td><input type="text" name="request_code" th:value="${map.request_code}"></td>
+                    </tr>
+                    <!--            <input type="text" name="product_code" th:value="${map.request_code}">-->
+                    <tr>
+                        <th>조회 건수</th>
+                        <td>
+                            <input type="radio" id="ps_rd1" name="pageSize" value="10" th:checked="${map.pageSize} == '10'">
+                            <label for="ps_rd1">10</label>
+                            <input type="radio" id="ps_rd2" name="pageSize" value="20" th:checked="${map.pageSize} == '20'">
+                            <label for="ps_rd2">20</label>
+                            <input type="radio" id="ps_rd3" name="pageSize" value="30" th:checked="${map.pageSize} == '30'">
+                            <label for="ps_rd3">30</label>
+                        </td>
+                        <th>상품 코드</th>
+                        <td>
+                            <input type="text" name="product_code" th:value="${map.product_code}">
+                            <button type="submit" style="float: right;" class="btn btn-success">Search</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <!-- ./ navbar -->
+            </form>
+        </div>
         <!-- End of Row 1 -->
         <!-- Row 2 -->
         <div class="col-lg-12">

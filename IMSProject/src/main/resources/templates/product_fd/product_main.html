@@ -28,8 +28,7 @@
 							<option value="productCode">상품코드</option>
 							<option value="date">날짜검색</option>
 						</select>
-						<input id="productCodeInput" class="form-control mr-sm-2" type="search" name="query" placeholder="Search"
-									 aria-label="Search">
+						<input id="productCodeInput" class="form-control mr-sm-2" type="search" name="query" placeholder="Search" aria-label="Search">
 						<input id="dateInput" type="date" name="query">
 						<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
 					</form>
@@ -93,7 +92,7 @@
 					</div>
 				</div>
 			</div>
-			<a class="btn btn-primary" href="/prod/add" role="button">상품 등록</a>
+			<button class="btn btn-primary" id="enrollment" type="button">상품 등록</button>
 			<table class="table table-hover">
 				<thead class="thead-dark">
 				<tr>
@@ -150,16 +149,8 @@
 	</div>
 </div>
 
-<!-- Optional JavaScript; choose one of the two! -->
-
-<!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
-<script src="https://code.jquery.com/jquery-3.5.1.js"
-		integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
-		crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
-		integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
-		crossorigin="anonymous"></script>
-
+<!--ajax파일 참조하는 문장-->
+<script th:src="@{/resources/js/prod_js/main.js}"></script>
 <script>
 	$('#dateInput').hide()
 	$('#dateInput').prop('disabled', true);
@@ -180,9 +171,19 @@
 			$("#productCodeInput").prop('disabled', false);
 		}
 	});
+
+	let add_popup = function (e){
+		if(e.target.tagName === 'INPUT') return;
+		let action = 'add';
+		let popupWidth = 300;
+		let popupHeight = 400;
+		let popupX = (window.screen.width / 2) - (popupWidth / 2);
+		let popupY= (window.screen.height / 2) - (popupHeight / 2);
+		window.open(action, 'add', 'width=' + popupWidth + ', height=' + popupHeight + ', left=' + popupX  + ', , top='+ popupY + 'scrollbars=yes, resizable=no');
+	}
+
+	$('#enrollment').click(add_popup);
 </script>
-<!--ajax파일 참조하는 문장-->
-	<script th:src="@{/resources/js/prod_js/main.js}"></script>
 
 
 <!-- Option 2: jQuery, Popper.js, and Bootstrap JS-->

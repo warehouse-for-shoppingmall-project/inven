@@ -8,8 +8,9 @@ public interface RequestService {
     // select
     int searchCount(Map<String, Object> map);
     List<Map<String, Object>> searchWhere(Map<String, Object> map);
-    List<Map<String, Object>> selectDetail(String request_code);
-    List<String> selectProductCode();
+    List<Map<String, Object>> selectReqDetail(String request_code);
+    List<Map<String, Object>> selectProdDetail(String product_code);
+    List<String> getAllProdCd();
     String makeReqCode();
     Map<String, Object> reqModifyTitle(Map<String, Object> map);
     List<Map<String, Object>> reqModifyDetail(Map<String, Object> map);

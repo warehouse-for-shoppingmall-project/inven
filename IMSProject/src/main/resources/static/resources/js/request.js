@@ -13,7 +13,7 @@ $('select[name=status]').change(function () {
         request_code: $(this).parents('tr').children().first().text()
     };
     $.ajax({
-        type: "post",
+        type: "put",
         url: "/req/async/upStatus",
         data: data,
         dataType: "json",
@@ -36,13 +36,13 @@ $('select[name=status]').change(function () {
     });
 });
 // detail popup
-let popup = function(e){
+let detail_popup = function(e){
     if(e.target.tagName === 'INPUT') return;
     let action = 'detail';
     let data = { request_code : $(this).attr('data') };
     window.open(action+serializeParam(data), 'detail', 'width=420, height=200, top=100, right=300 scrollbars=yes, resizable=no');
 }
-$('tr[name=each_data_tbody]').click(popup);
+$('tr[name=each_data_tbody]').click(detail_popup);
 
 //수정하기 버튼 누르면 request_code form 생성 후 controller에 전송
 $('input[name=reqModButton]').click(function (){
@@ -90,38 +90,56 @@ document.querySelectorAll('.pagination > .page-item').forEach(function(e, i){
 // add + modify
 
 // 발주등록,수정 시 2가지 form 전송
+
 let reqData;
 
 function reqObj(){
     let title = $('form[name=titleForm]').serializeObject();
-    let tr = $('#request_detail_tbody').find('tr');
+    let tr = $('#detail_tbody').find('tr');
     let details = [];
     let total_order_quantity = 0; // int
+    let names = [];
     // tr 수 만큼
     tr.each(function(i, e){
         let row_data = {};
         row_data['request_code'] = title.request_code;
         row_data['product_code'] = title.product_code;
 
-        // td 수 만큼
-        $(e).children().each(function(i, e){
-            // 태그 수 만큼
-            $(e).children().each(function (i, e){
-                row_data[$(e).attr('name')] = $(e).val();
-                if($(e).attr('name') === 'total')
-                    total_order_quantity += parseInt($(e).val());
-            });
+        // () => {} 람다식 문법
+        // tr (row) 안에 input 개수 만큼 반복
+        $(e).find('input').each((i, e) => {
+            // console.log(i, e);
+            row_data[$(e).attr('name')] = $(e).val();
+            if($(e).attr('name').toUpperCase() === 'TOTAL')
+                total_order_quantity += parseInt($(e).val());
+            if($(e).attr('name').toUpperCase() === 'COLOR_NAME')
+                names.push = $(e).val();
         });
-        details.push(row_data);
+        // console.log(i, row_data);
+        details.push(row_data)
     });
     title["total_order_quantity"] = total_order_quantity;
+
     // console.log(title);
     // console.log(details);
 
+    if(isDuplicate(names)){
+        alert('색상명이 겹칩니다.\n색상명을 다르게 지정하세요.');
+        return;
+    }
+/*
     reqData = {
         title : JSON.stringify(title),
         details : JSON.stringify(details)
     };
+*/
+
+    let reqData2 = {
+        title : JSON.stringify(title),
+        details : JSON.stringify(details)
+    };
+
+    return reqData2;
 }
 
 // 이 페이지를 읽고나면 key event 에 numberSet 함수를 적용.
@@ -144,7 +162,7 @@ let func_total_sum = function (){
 }
 
 // #request_detail_tbody 하위에 input[type=number]인 요소에 key event 모두 적용.
-$('#request_detail_tbody input[type=number]').keyup(func_total_sum).keypress(func_total_sum).keydown(func_total_sum);
+$('.detail_tbody input[type=number]').keyup(func_total_sum).keypress(func_total_sum).keydown(func_total_sum);
 
 // modify
 // 발주수정 버튼
@@ -159,7 +177,7 @@ $('#reqMod').click(function() {
 
     // return;
     $.ajax({
-        type: "post",
+        type: "put",
         url: "/req/async/reqMod",
         data: reqData,
         dataType: "json",
@@ -180,16 +198,17 @@ $('#reqMod').click(function() {
 });
 
 // add.js
-let request_detail_tbody = document.getElementById("request_detail_tbody");
-let rowName = ['color_name', 's', 'm', 'l', 'xl', 'free', 'total'];
-let rowType = ['text', 'number', 'number', 'number', 'number', 'number', 'text'];
+let detail_tbody = document.getElementById("detail_tbody");
+
+let rowName = ['s', 'm', 'l', 'xl', 'f', 'total'];
+let rowType = ['number', 'number', 'number', 'number', 'number', 'text'];
 
 //발주 코드 생성
 let makeCodeAjax = function(){
     console.log("하는중");
     $.ajax({
         type: "get",
-        url: "/req/async/makeReqCode2",
+        url: "/req/async/makeReqCode",
         dataType: "json",
         success: function(xml) {
             if (xml.code == 200) {
@@ -208,9 +227,9 @@ let makeCodeAjax = function(){
 }
 
 $('button[name=makeReqCode]').click(makeCodeAjax);
-
+/* 이제 안씀
 function addDetail() {
-    let row = request_detail_tbody.insertRow();
+    let row = detail_tbody.insertRow();
     //색상
     //사이즈(s~free), 총 수량
     for (let i = 0; i < rowName.length; i++) {
@@ -227,35 +246,6 @@ function delDetail(row) {
     let tr = row.parentNode.parentNode;
     tr.parentNode.removeChild(tr);
 }
+*/
 
-
-// 발주등록 버튼
-$('#reqAdd').click(function() {
-    // js 에서는 ' 홑 따옴표를 쓴다'
-    let con = confirm('해당 발주를 등록 하시겠습니까?');
-    if (!con) return;
-
-    reqObj();
-
-    // return;
-    $.ajax({
-        type: "post",
-        url: "/req/async/reqAdd",
-        data: reqData,
-        dataType: "json",
-        success: function(xml) {
-            if (xml.code == 200) {
-                console.log('success');
-                alert('등록 완료');
-            } else {
-                console.log(xml.code + ':: error');
-                alert('등록 실패. 잠시 후 다시시도하셈');
-            }
-        },
-        error: function(request, status, error) {
-            console.log("code:" + status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
-            alert('콘솔보셈');
-        }
-    });
-});
 // ./ add.js

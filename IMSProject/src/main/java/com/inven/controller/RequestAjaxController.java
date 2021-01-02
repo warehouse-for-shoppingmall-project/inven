@@ -5,17 +5,14 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.transaction.Transactional;
 
 import com.google.gson.Gson;
 import com.inven.common.CommonUtils;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.inven.service.RequestServiceImpl;
 
@@ -33,15 +30,25 @@ public class RequestAjaxController {
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@Resource(name="requestService")
-	RequestServiceImpl reqService = new RequestServiceImpl();
+	RequestServiceImpl reqService;
 
 	/* JSONObject Key => code
 	 * value 의미
 	 * 200 : Success
 	 * 400 : Error */
+	@GetMapping(value = "selectProdDetail")
+	public JSONObject selectDetail(@RequestParam Map<String, Object> map){
+		JSONObject jobj = new JSONObject();
+		jobj.put("code", 400);
+		List<Map<String, Object>> details = reqService.selectProdDetail(map.get("product_code").toString());
+		if(details != null || details.size() > 0){
+			jobj.put("code", 200);
+			jobj.put("details", details);
+		}
+		return jobj;
+	}
 
-
-	@PostMapping("/upStatus")
+	@PutMapping("/upStatus")
 	public JSONObject upStatus(@RequestParam Map<String, Object> map) {
 		log.info("Request Parameter : " + map);
 		JSONObject jobj = new JSONObject();
@@ -54,7 +61,7 @@ public class RequestAjaxController {
 		return jobj;
 	}
 
-	@GetMapping(value = "/makeReqCode2")
+	@GetMapping(value = "/makeReqCode")
 	public JSONObject makeReqCode() {
 		log.info("Request Parameter : 발주코드 생성 버튼 클릭");
 
@@ -70,6 +77,7 @@ public class RequestAjaxController {
 		return jobj;
 	}
 
+	@Transactional()
 	@PostMapping(value = "/reqAdd")
 	public JSONObject reqAdd(@RequestParam Map<String, Object> map) throws SQLException {
 		log.info("Request Parameter : " + map);
@@ -89,8 +97,8 @@ public class RequestAjaxController {
 		return jobj;
 	}
 
-
-	@PostMapping(value = "/reqMod")
+	@Transactional()
+	@PutMapping(value = "/reqMod")
 	public JSONObject reqMod(@RequestParam Map<String, Object> map) {
 		log.info("Request Parameter : " + map);
 		JSONObject jobj = new JSONObject();

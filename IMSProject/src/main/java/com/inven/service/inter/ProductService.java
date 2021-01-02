@@ -9,9 +9,9 @@ import java.util.Map;
 
 public interface ProductService {
 
-    List<ProductTitle> printProduct();
+    List<ProductTitle> getTitleAll();
 
-    List<ProductDetail> getDetail();
+    List<ProductDetail> getDetailAll();
 
     List<ProductDetail> selectDetail(String product_code);
 

@@ -2,9 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.inven.mapper.ProductMapper">
 
+    <!-- SQL -->
     <sql id="columns">
-		*
-	</sql>
+        *
+    </sql>
+
+    <!-- Select -->
+
+    <select id="overlapCheck" parameterType="hashMap" resultType="int">
+        select count(*)
+        from product_title
+        where product_code = #{product_code}
+    </select>
+
 
     <select id="getProductList" resultType="com.inven.common.model.ProductTitle">
         select *
@@ -19,101 +29,112 @@
         on pt.product_code = pd.product_code
     </select>
 
-    <select id="detail" parameterType="com.inven.common.model.ProductDetail" resultType="com.inven.common.model.ProductDetail">
-		select *
-		from product_detail
-	</select>
-
-    <select id="selectDetail" parameterType="com.inven.common.model.ProductDetail" resultType="com.inven.common.model.ProductDetail">
+    <select id="selectDetail" parameterType="com.inven.common.model.ProductDetail"
+            resultType="com.inven.common.model.ProductDetail">
         select *
         from product_detail
         where product_code = #{product_code}
     </select>
 
-  <select id="searchByProductCode" parameterType="string" resultType="com.inven.common.model.ProductTitle">
-    select *
-    from product_title
-    where product_code = #{query}
-  </select>
-
-  <select id="searchByDate" parameterType="string" resultType="com.inven.common.model.ProductTitle">
-    select *
-    from product_title
-    where final_update = #{query}
-  </select>
-
-
-
-    <select id="modify" parameterType="string" resultMap="modifyMap" >
+    <select id="searchByProductCode" parameterType="string" resultType="com.inven.common.model.ProductTitle">
         select *
         from product_title
-        join product_detail
-        on product_title.product_code = #{productCode} and
-        product_detail.product_code = #{productCode}
+        where product_code = #{query}
     </select>
 
-  <resultMap id="modifyMap" type="com.inven.param.ProductInformation">
-    <result property="product_code" column="product_code" />
-    <result property="make_factory" column="make_factory" />
-    <result property="unit_price" column="unit_price" />
-    <result property="final_update" column="final_update" />
-    <result property="make_code" column="make_code" />
-    <result property="product_status" column="product_status" />
-    <result property="color_name" column="color_name" />
-    <result property="gender" column="gender" />
-    <result property="s" column="s" />
-    <result property="m" column="m" />
-    <result property="l" column="l" />
-    <result property="xl" column="xl" />
-    <result property="f" column="f" />
-    <result property="total" column="total" />
-    <result property="manufacture_day" column="manufacture_day" />
-  </resultMap>
+    <select id="searchByDate" parameterType="string" resultType="com.inven.common.model.ProductTitle">
+        select *
+        from product_title
+        where final_update = #{query}
+    </select>
 
 
-  <!-- ADD -->
-  <insert id="productTitlesAdd" parameterType="com.inven.common.model.ProductTitle">
-    insert into product_title(product_code,
-                              gender,
-                              make_factory,
-                              unit_price,
-                              final_update,
-                              make_code)
-    values (#{product_code}, #{gender},
-            #{make_factory}, #{unit_price},
-            #{final_update}, #{make_code})
-  </insert>
+    <select id="modify" parameterType="string" resultMap="modifyMap">
+        select *
+        from product_title
+                 join product_detail
+                      on product_title.product_code = #{productCode} and
+                         product_detail.product_code = #{productCode}
+    </select>
 
-  <insert id="productDetailsAdd" parameterType="com.inven.common.model.ProductDetail">
-    insert into product_detail(product_code,
-                               color_name,
-                               gender,
-                               s,
-                               m,
-                               l,
-                               xl,
-                               f,
-                               total,
-                               manufacture_day)
-    values (#{product_code}, #{color_name}, #{gender}, #{s}, #{m}, #{l}, #{xl}, #{f}, #{total},
-            #{manufacture_day})
-  </insert>
+    <resultMap id="modifyMap" type="com.inven.param.ProductInformation">
+        <result property="product_code" column="product_code"/>
+        <result property="make_factory" column="make_factory"/>
+        <result property="unit_price" column="unit_price"/>
+        <result property="final_update" column="final_update"/>
+        <result property="make_code" column="make_code"/>
+        <result property="product_status" column="product_status"/>
+        <result property="color_name" column="color_name"/>
+        <result property="gender" column="gender"/>
+        <result property="s" column="s"/>
+        <result property="m" column="m"/>
+        <result property="l" column="l"/>
+        <result property="xl" column="xl"/>
+        <result property="f" column="f"/>
+        <result property="total" column="total"/>
+        <result property="manufacture_day" column="manufacture_day"/>
+    </resultMap>
 
-  <update id="upStatus" parameterType="com.inven.common.model.ProductTitle">
-    UPDATE product_title
-    SET product_status = #{product_status}
-		WHERE product_code = #{product_code}
-   </update>
+    <!-- Insert -->
 
+    <!-- ADD -->
+    <insert id="addTitle" parameterType="hashMap">
+        INSERT INTO product_title(product_code, gender)
+        values(#{product_code}, #{gender})
+    </insert>
 
-<!-- 수정 등록 -->
-<!--    <update id="modTitle" parameterType="hashMap">-->
-<!--    UPDATE product_title-->
-<!--    set  product_code = #{product_code}, gender = #{gender}, unit_price = #{unit_price},-->
-<!--			factory_name = #{factory_name}, = #{},-->
-<!--		    manufacturing_date = DATE(#{manufacturing_date}), etc = #{etc}-->
-<!--		WHERE request_code = #{request_code}-->
-<!--    </update>-->
+    <insert id="addDetails" parameterType="java.util.List">
+        INSERT INTO product_detail(product_code, color_name)
+        values
+            <foreach collection="details" item="item" separator=",">
+                (#{item.product_code}, #{item.color_name})
+            </foreach>
+    </insert>
 
+    <insert id="productTitlesAdd" parameterType="com.inven.common.model.ProductTitle">
+        insert into product_title(product_code,
+                                  gender,
+                                  make_factory,
+                                  unit_price,
+                                  final_update,
+                                  make_code)
+        values (#{product_code}, #{gender},
+                #{make_factory}, #{unit_price},
+                #{final_update}, #{make_code})
+
+    </insert>
+
+    <insert id="productDetailsAdd" parameterType="com.inven.common.model.ProductDetail">
+        insert into product_detail(product_code,
+                                   color_name,
+                                   gender,
+                                   s,
+                                   m,
+                                   l,
+                                   xl,
+                                   f,
+                                   total,
+                                   manufacture_day)
+        values (#{product_code}, #{color_name}, #{gender}, #{s}, #{m}, #{l}, #{xl}, #{f}, #{total},
+                #{manufacture_day})
+    </insert>
+
+    <!-- Update -->
+    <update id="upStatus" parameterType="com.inven.common.model.ProductTitle">
+        UPDATE product_title
+        SET product_status = #{product_status}
+        WHERE product_code = #{product_code}
+    </update>
+
+    <!-- Delete -->
+
+    <!-- 수정 등록 -->
+    <!--    <update id="modTitle" parameterType="hashMap">-->
+    <!--    UPDATE product_title-->
+    <!--    set  product_code = #{product_code}, gender = #{gender}, unit_price = #{unit_price},-->
+    <!--			factory_name = #{factory_name}, = #{},-->
+    <!--		    manufacturing_date = DATE(#{manufacturing_date}), etc = #{etc}-->
+    <!--		WHERE request_code = #{request_code}-->
+    <!--    </update>-->
 
 </mapper>

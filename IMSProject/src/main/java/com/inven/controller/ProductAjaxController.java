@@ -3,13 +3,13 @@ package com.inven.controller;
 import com.inven.common.model.ProductTitle;
 import com.inven.param.ProductInformation;
 import com.inven.service.ProductServiceImpl;
-import org.apache.coyote.Response;
+import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
+import javax.transaction.Transactional;
+import java.util.Map;
 
 
 /*
@@ -19,18 +19,18 @@ import javax.annotation.Resource;
  */
 
 @SuppressWarnings("unchecked")
+@Slf4j
 @RequestMapping(value = "/prod/async/*")
 @RestController // <- Json형태로 반환     // Controller <- html을 반환
 public class ProductAjaxController {
 
-	@Resource(name="productService")
-	ProductServiceImpl prodService = new ProductServiceImpl();
-
+	@Autowired
+	ProductServiceImpl prodService;
 
 	//	json -> @RequestBody 로 받아야함
 	//	x-www-urlencoded -> @RequestParam 로 받아야함
 	//	RestController
-	@PostMapping("/upStatus")
+	@PutMapping("/upStatus")
 	public boolean upStatus(@RequestBody ProductInformation productInformation) {
 
 		ProductTitle productTitle = new ProductTitle(productInformation.getProduct_code(),
@@ -39,6 +39,38 @@ public class ProductAjaxController {
 		prodService.upStatus(productTitle);
 
 		return true;
+	}
+
+	// 상품코드 중복검사
+	@GetMapping("/overlapCheck")
+	public JSONObject overlapCheck(@RequestParam Map<String, Object> map) {
+		log.debug("Request Param : " + map);
+		JSONObject jobj = new JSONObject();
+		jobj.put("code", 400);
+		int rs = prodService.overlapCheck(map);
+		if(rs == 0) jobj.put("code", 200);
+		return jobj;
+	}
+
+	@Transactional()
+	@PostMapping(value = "/prodAdd")
+	public JSONObject prodAdd(@RequestParam Map<String, Object> map) {
+
+		log.info("Request Parameter : " + map);
+		JSONObject jobj = new JSONObject();
+		jobj.put("code", 999);
+		if(map == null) return jobj;
+
+		int addResult = prodService.addProductData(map);
+
+		if(addResult > 0)
+			jobj.put("code", 200);
+		else if(addResult == 0)
+			jobj.put("code", 300);
+		else if(addResult == -1)
+			jobj.put("code", 400);
+
+		return jobj;
 	}
 
 	/* JSONObject Key => code

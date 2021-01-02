@@ -22,14 +22,14 @@
 					<th scope="col">total</th>
 				</tr>
 				</thead>
-				<tbody id="request_detail_tbody">
+				<tbody>
 				<tr th:each="column : ${detail}">
 					<td th:text="${column.color_name}"></td>
 					<td th:text="${column.s}"></td>
 					<td th:text="${column.m}"></td>
 					<td th:text="${column.l}"></td>
 					<td th:text="${column.xl}"></td>
-					<td th:text="${column.free}"></td>
+					<td th:text="${column.f}"></td>
 					<td th:text="${column.total}"></td>
 				</tr>
 				</tbody>

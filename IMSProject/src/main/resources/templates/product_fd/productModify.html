@@ -110,7 +110,7 @@
                 <th><input type="button" value="+" id="addButton" onclick="addDetail()"></th>
             </tr>
             </thead>
-            <tbody id="product_detail_tbody">
+            <tbody id="detail_tbody">
 
             <tr th:each="productDetail : ${productDetailList}">
                 <td><input type="text" name="color_name" th:value="${productDetail.getColor_name()}"></td>
