@@ -14,7 +14,6 @@
                 <thead class="thead-dark">
                 <tr>
                     <th scope="col">컬러</th>
-                    <th scope="col">성별</th>
                     <th scope="col">s</th>
                     <th scope="col">m</th>
                     <th scope="col">l</th>
@@ -26,7 +25,6 @@
                 <tbody id="detail_tbody">
                 <tr th:each="column : ${detail}">
                     <td th:text="${column.color_name}"></td>
-                    <td th:text="${column.gender}"></td>
                     <td th:text="${column.s}"></td>
                     <td th:text="${column.m}"></td>
                     <td th:text="${column.l}"></td>

@@ -23,7 +23,7 @@ public class ProductDetail {
     private int xl;
     private int f;
     private int total;
-    private String manufacture_day;
+    private Date manufacture_day;
 
     public ProductDetail(ProductInformation productInformation) {
         this.product_code = productInformation.getProduct_code();

@@ -38,12 +38,30 @@ $('select[name=status]').change(function () {
 
 // detail popup
 let popup = function(e){
-    if(e.target.tagName === 'INPUT') return;
+    // tagName이 a 태그인경우 실행 x
+    if(e.target.tagName === 'A') return;
+    if(e.target.tagName === 'SELECT') return;
     let action = 'detail';
     let data = { product_code : $(this).attr('data') };
     window.open(action+serializeParam(data), '_blank', 'width=420, height=200, scrollbars=yes, resizable=no');
 } // detail?reauest_code=201216-01
 $('tr[name=each_data_tbody]').click(popup);
+
+//paging javascript
+// let pagingFunc = function(){
+//     let pageNo = this.querySelector('.sr-only').innerText;
+//     // console.log(pageNo);
+//     let obj = document.querySelector('form[name=saveParamForm]');
+//     obj.pageNo.value = pageNo;
+//     // console.log(obj);
+//     obj.method = 'get';
+//     obj.action = 'list';
+//     obj.submit();
+// }
+
+document.querySelectorAll('.pagination > .page-item').forEach(function(e, i){
+    e.addEventListener('click', pagingFunc);
+});
 
 /*
 console.log($("input[name=searchInput]").text());

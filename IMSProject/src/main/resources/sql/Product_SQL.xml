@@ -36,20 +36,34 @@
         where product_code = #{product_code}
     </select>
 
-    <select id="searchByProductCode" parameterType="string" resultType="com.inven.common.model.ProductTitle">
+    <select id="search2" parameterType="com.inven.common.model.SearchParam" resultType="com.inven.common.model.ProductTitle">
         select *
         from product_title
-        where product_code = #{query}
-    </select>
-
-    <select id="searchByDate" parameterType="string" resultType="com.inven.common.model.ProductTitle">
-        select *
-        from product_title
-        where final_update = #{query}
+        <include refid="searchCondition"/>
+        LIMIT #{start_idx}, #{end_idx}
     </select>
 
 
-    <select id="modify" parameterType="string" resultMap="modifyMap">
+    <select id="searchCount" resultType="int" parameterType="com.inven.common.model.SearchParam">
+        SELECT count(*)
+        FROM product_title
+        <include refid="searchCondition"/>
+    </select>
+
+    <sql id="searchCondition">
+        WHERE product_code LIKE concat('%', #{productCode}, '%')
+        <if test="!gender.equals('')">
+            AND gender = #{gender}
+        </if>
+        <if test="!startDate.equals('') and !endDate.equals('')">
+            AND DATE(final_update) BETWEEN DATE(#{startDate}) AND DATE(#{endDate})
+        </if>
+        <if test="!productStatus.equals('')">
+            AND product_status = #{productStatus}
+        </if>
+    </sql>
+
+    <select id="modify" parameterType="string" resultMap="modifyMap" >
         select *
         from product_title
                  join product_detail

@@ -4,6 +4,8 @@ import com.inven.param.ProductInformation;
 
 import lombok.*;
 
+import java.sql.Date;
+
 
 @Data
 @AllArgsConstructor
@@ -12,7 +14,7 @@ public class ProductTitle {
     private String gender;
     private String make_factory;
     private String unit_price;
-    private String final_update;
+    private Date final_update;
     private String make_code;
     private String product_status;
 

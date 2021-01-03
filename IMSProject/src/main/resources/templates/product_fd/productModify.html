@@ -99,7 +99,6 @@
             <thead>
             <tr>
                 <th>색상</th>
-                <th>성별</th>
                 <th>s</th>
                 <th>m</th>
                 <th>l</th>
@@ -114,11 +113,6 @@
 
             <tr th:each="productDetail : ${productDetailList}">
                 <td><input type="text" name="color_name" th:value="${productDetail.getColor_name()}"></td>
-                <td><select name="gender">
-                    <option value="C" th:selected="${productDetail.getGender() == 'C'}">공용</option>
-                    <option value="W" th:selected="${productDetail.getGender() == 'W'}">여자</option>
-                    <option value="M" th:selected="${productDetail.getGender() == 'M'}">남자</option>
-                </select></td>
                 <td><input type="text" name="s" th:value="${productDetail.getS()}"></td>
                 <td><input type="text" name="m" th:value="${productDetail.getM()}"></td>
                 <td><input type="text" name="l" th:value="${productDetail.getL()}"></td>

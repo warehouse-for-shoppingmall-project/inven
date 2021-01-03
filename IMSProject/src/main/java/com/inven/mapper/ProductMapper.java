@@ -3,6 +3,7 @@ package com.inven.mapper;
 import com.inven.common.model.ProductDetail;
 import com.inven.common.model.ProductTitle;
 
+import com.inven.common.model.SearchParam;
 import com.inven.param.ProductInformation;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -15,53 +16,40 @@ import java.util.Map;
 @Repository  // DB접근하는 애들은 Repository 붙여준다. 이러면 'Bean'생성
 public interface ProductMapper {
 
-	List<ProductDetail> selectDetail(String product_code);
+	//    Select
+	int addTitle(Map<String, Object> title);
 
-	List<ProductTitle> searchByProductCode(String query);
+	int addDetails(List<String> details);
 
-	List<ProductTitle> searchByDate(String query);
-
-	List<ProductInformation> modify(String productCode);
-
-	//	Select
 	@Select("Select * from product_title")
 	List<ProductTitle> getTitleAll();
 
 	@Select("Select * from product_detail")
 	List<ProductDetail> getDetailAll();
 
-    int overlapCheck(Map<String, Object> map);
+	int searchCount(SearchParam searchParam);
 
-	// Insert
+
+	List<ProductDetail> selectDetail(String product_code);
+
+
+	List<ProductInformation> modify(String productCode);
+
+
+	int overlapCheck(Map<String, Object> map);
+
+
+	List<ProductTitle> search2(SearchParam searchParam);
+
+
+	//    Insert
+
 	int productTitlesAdd(ProductTitle productTitle);
+
+
 	void productDetailsAdd(ProductDetail productDetail);
 
-	int addTitle(Map<String, Object> title);
-	int addDetails(List<String> details);
+	//    Update
 
-	// Update
-    void upStatus(ProductTitle productTitle);
-
-
-	// Delete
-
-//	@Select("SELECT * FROM product_title where product_code = #{query}")
-//	ProductTitle getProductTitle(@Param("product_code") String query);
-
-//	@Select("SELECT * FROM product_title where product_code = #{query} ")
-//	List<ProductTitle> searchByProductCode(@Param("query") String query);
-//
-
-//	@Select("SELECT * FROM product_title where final_update = #{query}")
-
-//	List<ProductTitle> searchByDate(String query);
-
-//	List<String> productAdd();
-//	List<Map<String, Object>> selectAll(Map<String, Object> map);
-
-
-
-
-//	@Select("Select * from product_title where product")
-//	List<ProductTitle> search(String where, String query);
+	void upStatus(ProductTitle productTitle);
 }

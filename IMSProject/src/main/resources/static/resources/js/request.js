@@ -40,8 +40,8 @@ let detail_popup = function(e){
     if(e.target.tagName === 'INPUT') return;
     let action = 'detail';
     let data = { request_code : $(this).attr('data') };
-    window.open(action+serializeParam(data), 'detail', 'width=420, height=200, top=100, right=300 scrollbars=yes, resizable=no');
-}
+    window.open(action+serializeParam(data), '_blank', 'width=420, height=200, scrollbars=yes, resizable=no');
+} // detail?reauest_code=201216-01
 $('tr[name=each_data_tbody]').click(detail_popup);
 
 //수정하기 버튼 누르면 request_code form 생성 후 controller에 전송

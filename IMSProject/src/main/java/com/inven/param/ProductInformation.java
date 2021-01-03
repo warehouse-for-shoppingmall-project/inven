@@ -2,6 +2,8 @@ package com.inven.param;
 
 import lombok.Data;
 
+import java.sql.Date;
+
 @Data
 public class ProductInformation {
 
@@ -10,7 +12,7 @@ public class ProductInformation {
     private String gender;
     private String unit_price;
     private String make_factory;
-    private String final_update;
+    private Date final_update;
     private String make_code;
     private String product_status;
 
@@ -24,5 +26,5 @@ public class ProductInformation {
     private int xl;
     private int f;
     private int total;
-    private String manufacture_day;
+    private Date manufacture_day;
 }

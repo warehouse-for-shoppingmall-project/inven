@@ -1,24 +1,23 @@
 package com.inven.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import com.inven.common.CommonUtils;
+import com.inven.common.Paging;
+import com.inven.common.model.ProductDetail;
+import com.inven.common.model.ProductTitle;
+import com.inven.common.model.SearchParam;
+import com.inven.param.ProductInformation;
+import com.inven.service.inter.ProductService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.builder.ToStringBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.inven.common.model.ProductDetail;
-import com.inven.common.model.ProductTitle;
-import com.inven.param.ProductInformation;
-import com.inven.service.inter.ProductService;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 
 @Slf4j
@@ -29,14 +28,42 @@ public class ProductController {
     @Autowired
     ProductService productService;
 
-    @GetMapping("/list")
-    public ModelAndView list(@RequestParam Map<String, Object> map) {
-        ModelAndView mv = new ModelAndView("product_fd/product_main");
-        List<ProductTitle> productTitles = productService.getTitleAll();
+//    private void setFirstAccess(Map<String, Object> map){
+//        Date date = new Date();
+//        // sql 인자로 보낼 값
+//        if (!map.containsKey("startDate")) map.put("startDate", (date.getYear() + 1900) + "-01-01");
+//        if (!map.containsKey("endDate")) map.put("endDate", (date.getYear() + 1900) + "-12-31");
+//        if (!map.containsKey("product_code")) map.put("product_code", "");
+//        if (!map.containsKey("product_status")) map.put("product_status", "");
+//        if (!map.containsKey("gender")) map.put("gender", "");
+//
+//        // paging 에서 쓸 값
+//        if (!map.containsKey("pageSize")) map.put("pageSize", "10");
+//        if (!map.containsKey("pageNo")) map.put("pageNo", "1");
+//    }
 
-        log.info(String.valueOf(productTitles));
+    @GetMapping("/list")
+    public ModelAndView list(@ModelAttribute("searchParams") SearchParam searchParam) {
+        ModelAndView mv = new ModelAndView("product_fd/product_main");
+        log.debug(ToStringBuilder.reflectionToString(searchParam));
+        List<ProductTitle> productTitles = null;
+        Paging paging = null;
+        int count = productService.searchCount(searchParam);
+        log.debug("count : " + count);
+        if(count > 0){
+            paging = new Paging();
+            paging.setPageNo(searchParam.getPageNo());
+            paging.setPageSize(searchParam.getPageSize());
+            paging.setTotalCount(count);
+
+            searchParam.setStart_idx(paging.getStartIndex());
+            searchParam.setEnd_idx(paging.getPageSize());
+
+            productTitles = productService.search2(searchParam);
+        }
+
+        mv.addObject("paging", paging);
         mv.addObject("productTitles", productTitles);
-//        mv.addObject("search", search);
 
         return mv; //-> product_main 이라는 html으로 리턴해라
     }
@@ -49,6 +76,18 @@ public class ProductController {
         return mv;
 
     }
+
+    @GetMapping(value = "/detail")
+    public ModelAndView detail(@RequestParam String product_code) {
+
+        ModelAndView mv = new ModelAndView("product_fd/productDetail");
+
+        List<ProductDetail> detail = productService.selectDetail(product_code);
+        mv.addObject("detail", detail);
+
+        return mv;
+    }
+
     // html form submit
     // form: application/x-www-form-url-encoded
     // 1. @RequestBody MultiValueMap
@@ -76,6 +115,7 @@ public class ProductController {
 
         return mv;
     }
+
     @GetMapping("/modify")
     public ModelAndView modify(@RequestParam String productCode) {
         ModelAndView mv = new ModelAndView();
@@ -109,29 +149,39 @@ public class ProductController {
         return mv;
     }
 
-    // localhost:8080/prod/search?where=productCode&query=CT001
-    // localhost:8080/prod/search?where=date&query=2020-12-12
-    @GetMapping("/search")
-    public ModelAndView search(@RequestParam String where, @RequestParam String query) {
-        if (query == null || query.equals("")) {
-            final ModelAndView modelAndView = new ModelAndView();
-            modelAndView.setViewName("redirect:/prod/list");
-            return modelAndView;
-        }
-
-        log.info("where: {}, query: {}", where, query);
-        final List<ProductTitle> productTitles = productService.search(where, query);
-        log.info("productTitle: {}", productTitles);
-
-        // where --> code
-        // query --> 박성수
-        // where --> code / date
-
-        final ModelAndView mv = new ModelAndView();
-        mv.setViewName("product_fd/product_main");
-        mv.addObject("productTitles", productTitles);
+    @GetMapping("/search2")
+    public ModelAndView search(@ModelAttribute("searchParams") SearchParam searchParam) {
+        ModelAndView mv = new ModelAndView("product_fd/product_main");
+        log.info(String.valueOf(searchParam));
+        log.debug(ToStringBuilder.reflectionToString(searchParam));
+        List<ProductTitle> productTitles = productService.search2(searchParam);
+        mv.addObject("productTitles",productTitles);
         return mv;
     }
+
+    // localhost:8080/prod/search?where=productCode&query=CT001
+    // localhost:8080/prod/search?where=date&query=2020-12-12
+//    @GetMapping("/search")
+//    public ModelAndView search(@RequestParam String where, @RequestParam String query ,@RequestParam(required = false) String query1){
+//        if (query == null || query.equals("")) {
+//            final ModelAndView modelAndView = new ModelAndView();
+//            modelAndView.setViewName("redirect:/prod/list");
+//            return modelAndView;
+//        }
+//
+//        log.info("where: {}, query: {}", where, query);
+//        final List<ProductTitle> productTitles = productService.search(where, query, query1);
+//        log.info("productTitle: {}", productTitles);
+//
+//        // where --> code
+//        // query --> 박성수
+//        // where --> code / date
+//
+//        final ModelAndView mv = new ModelAndView();
+//        mv.setViewName("product_fd/product_main");
+//        mv.addObject("productTitles", productTitles);
+//        return mv;
+//    }
 
 
     // localhost:8080/search?where=code or date &query=박성수

@@ -115,10 +115,10 @@
                     <td th:text="${row.product_code}"></td>
                     <td th:text="${row.gender}"></td>
                     <td th:text="${row.request_date}"></td>
-                    <td th:text="${row.factory_name}"></td>
+                    <td th:text="${row.make_factory}"></td>
                     <td th:text="${row.unit_price}"></td>
                     <td th:text="${row.get_date}"></td>
-                    <td th:text="${row.manufacturing_date}"></td>
+                    <td th:text="${row.manufature_day}"></td>
                     <td th:text="${row.total_order_quantity}"></td>
                     <td>
                         <select class="custom-select" name="status" th:disabled="${row.request_status == '입고' || row.request_status == '취소'}">
@@ -135,6 +135,7 @@
             </table>
             <!--<p th:text="${paging}"></p>-->
             <!-- End of Table -->
+
             <!-- Paging -->
             <nav aria-label="Page navigation example ml-auto">
                 <ul class="pagination" th:if="${paging != null}">
