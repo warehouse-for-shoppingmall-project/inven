@@ -8,6 +8,7 @@ import com.inven.mapper.ProductMapper;
 import com.inven.param.ProductInformation;
 import com.inven.service.inter.ProductService;
 import lombok.extern.slf4j.Slf4j;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,13 +40,15 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDetail> selectDetail(String product_code) { return prodMapper.selectDetail(product_code); }
-
+    public List<ProductDetail> selectDetail(String product_code) {
+        return prodMapper.selectDetail(product_code);
+    }
 
     @Override
-    public List<ProductInformation> modify(String productCode) {
-        return prodMapper.modify(productCode);
+    public List<ProductDetail> modReadDetail(String product_code) {
+        return prodMapper.modReadDetail(product_code);
     }
+
 
     @Override
     public int overlapCheck(Map<String, Object> map) {
@@ -60,14 +63,14 @@ public class ProductServiceImpl implements ProductService {
 
 //    Insert
 
-	@Override
-	public int productTitlesAdd(ProductTitle productTitle){
-		return prodMapper.productTitlesAdd(productTitle);
-	}
+    @Override
+    public int productTitlesAdd(ProductTitle productTitle) {
+        return prodMapper.productTitlesAdd(productTitle);
+    }
 
     @Override
     public void productDetailsAdd(ProductDetail productDetail) {
-		prodMapper.productDetailsAdd(productDetail);
+        prodMapper.productDetailsAdd(productDetail);
     }
 
     @Override
@@ -80,8 +83,8 @@ public class ProductServiceImpl implements ProductService {
         int detailRs = -1;
         try {
             int titleRs = prodMapper.addTitle(title);
-            if(titleRs > 0) detailRs = prodMapper.addDetails(details);
-        }catch (Exception e){
+            if (titleRs > 0) detailRs = prodMapper.addDetails(details);
+        } catch (Exception e) {
             detailRs = -2;
             e.printStackTrace();
         }
@@ -89,11 +92,53 @@ public class ProductServiceImpl implements ProductService {
         return detailRs;
     }
 
+    @Override
+    public int addColor(List<Map<String, Object>> list) {
+        return prodMapper.addColor(list);
+    }
 
-//    Update
+    public int updateColumn(Map<String, Object> map) {
+        Gson gson = new Gson();
+        List<Map<String, Object>> list;
+
+        /*
+         * 1. 성공 : 1
+         * 2. 실패 : -1
+         * */
+        int rs = 1;
+        if (map.containsKey("update_data")) {
+            list = gson.fromJson(map.get("update_data").toString(), List.class);
+            try {
+                rs = prodMapper.modColor(list);
+            } catch (Exception e) {
+                e.printStackTrace();
+                rs = -1;
+            }
+        }
+
+        if (map.containsKey("insert_data")) {
+            list = gson.fromJson(map.get("insert_data").toString(), List.class);
+            try {
+                rs = prodMapper.addColor(list);
+            } catch (Exception e) {
+                e.printStackTrace();
+                rs = -1;
+            }
+        }
+
+        return rs;
+
+    }
+
+    //    Update
     @Override
     public void upStatus(ProductTitle productTitle) {
         prodMapper.upStatus(productTitle);
+    }
+
+    @Override
+    public int modColor(List<Map<String, Object>> list) {
+        return prodMapper.modColor(list);
     }
 
 

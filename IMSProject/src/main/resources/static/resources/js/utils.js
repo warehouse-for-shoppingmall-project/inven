@@ -7,7 +7,7 @@
 jQuery.fn.serializeObject = function() {
 	let obj = null;
 	try {
-		if (this[0].tagName) {
+		if(this[0].tagName && this[0].tagName.toUpperCase() === "FORM" ) {
 			let arr = this.serializeArray();
 			if (arr) {
 				obj = {};
@@ -32,6 +32,10 @@ function isDuplicate(arr)  {
 	return isDup;
 }
 
+// 빈 객체 체크
+function isEmpty(param) {
+	return Object.keys(param).length === 0;
+}
 
 // param 형식을 obj 형태로 변환 ?? wait
 let serialize = function(form) {

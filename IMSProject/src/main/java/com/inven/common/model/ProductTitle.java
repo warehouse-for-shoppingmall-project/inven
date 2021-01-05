@@ -8,6 +8,9 @@ import java.sql.Date;
 
 
 @Data
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
 public class ProductTitle {
     private String product_code;
@@ -22,6 +25,7 @@ public class ProductTitle {
         this.product_code = product_code;
         this.product_status = product_status;
     }
+
 
     public ProductTitle(ProductInformation productInformation) {
         this.product_code = productInformation.getProduct_code();

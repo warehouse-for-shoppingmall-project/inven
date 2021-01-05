@@ -118,32 +118,40 @@ public class ProductController {
 
     @GetMapping("/modify")
     public ModelAndView modify(@RequestParam String productCode) {
-        ModelAndView mv = new ModelAndView();
+        ModelAndView mv = new ModelAndView("product_fd/productModify");
 
         //1. title , detail 가져오기 : productCode이용 -> mapper에서 select로 일단 가져오자
-        List<ProductInformation> productInformations = productService.modify(productCode);
-        if (productInformations.isEmpty()) {
-            mv.setViewName("redirect:/prod/list");
-        }
+//        List<List<ProductInformation>> productModRead = null;
+        List<ProductDetail> detail = productService.modReadDetail(productCode);
 
-        ProductTitle productTitle = new ProductTitle(productInformations.get(0));
+        log.info("상품수정 detail 조회결과 : " + detail);
+
+//        if (productModRead.isEmpty()) {
+//            mv.setViewName("redirect:/prod/list");
+//        }
+
+        mv.addObject("detail",detail);
+        mv.addObject("product_code", productCode);
+
+//        ProductTitle productTitle = new ProductTitle(productModRead.get(0));
+//        log.info("상품 infomations의 첫번째 값 : " + productModRead.get(0));
 
         // List<ProductInformation> --> List<ProductDetail>
         // ProductInformation --> ProductDetail
-        List<ProductDetail> productDetailList = new ArrayList<>();
-        for (ProductInformation productInformation : productInformations) {
-            ProductDetail productDetail = new ProductDetail(
-                    productInformation); // ProductInformation --> ProductDetail
-            productDetailList.add(productDetail);
-        }
-
-        System.out.println(productTitle);
-        System.out.println(productDetailList);
-
-        //2. html에 보내주기 -> mv.setViewName("product_fd/productModify")
-        mv.setViewName("product_fd/productModify");
-        mv.addObject("productTitle", productTitle);
-        mv.addObject("productDetailList", productDetailList);
+//        List<ProductDetail> productDetailList = new ArrayList<>();
+//        for (ProductInformation productInformation : productModRead) {
+//            // ProductInformation --> ProductDetail
+//            ProductDetail productDetail = new ProductDetail(productInformation);
+//            productDetailList.add(productDetail);
+//        }
+//
+//        System.out.println(productTitle);
+//        System.out.println(productDetailList);
+//
+//        //2. html에 보내주기 -> mv.setViewName("product_fd/productModify")
+//        mv.setViewName("product_fd/productModify");
+//        mv.addObject("productTitle", productTitle);
+//        mv.addObject("productDetailList", productDetailList);
         //3. html에서 타임리프이용 가져온 데이터를 띄우기 -> 수정가능 상태로 두기
 
         return mv;

@@ -150,7 +150,7 @@
                         <option value="준비" th:selected="${title.getProduct_status() == '준비'}">준비</option>
                     </select>
                 </td>
-                <td><a class="btn btn-primary" th:href="@{/prod/modify(prodcutCodegg=${title.getProduct_code()})}"
+                <td><a class="btn btn-primary" th:onclick="modPop([[${title.getProduct_code()}]])"
                        role="button">수정하기</a></td>
                 <td><a class="btn btn-primary" th:href="@{/req/add(productCode=${title.getProduct_code()})}"
                        role="button">발주넣기</a></td>
@@ -218,6 +218,16 @@
     document.querySelectorAll('.pagination > .page-item').forEach(
         (e) => e.addEventListener('click', pagingFunc)
     );
+	$('#enrollment').click(add_popup);
+
+	// 판매상태가 품절이거나 판매중단이면 수정하기 버튼 안나오게 하고싶었는데....
+	// $('.each_data_body').each(function (item,elements){
+	// 	if($(elements).find('select [name=status]').val()==='품절' || $(elements).find('select [name=status]').val('판매중단')){
+	// 		$(elements).$('#modify').hide();
+	// 	}
+	// });
+
+
 </script>
 
 </body>

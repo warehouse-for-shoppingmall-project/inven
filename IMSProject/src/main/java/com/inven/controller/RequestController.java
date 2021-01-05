@@ -59,12 +59,13 @@ public class RequestController {
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public ModelAndView list(@RequestParam Map<String, Object> map) {
-        log.info("Request Parameter : " + map);
         ModelAndView mv = new ModelAndView("/request_fd/request_main");
         List<Map<String, Object>> list = null;
         Paging paging = null;
 
         setFirstAccess(map);
+
+        log.info("Request Parameter : " + map);
 
         int count = reqService.searchCount(map);
         log.debug("count : " + count);

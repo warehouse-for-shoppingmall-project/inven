@@ -30,10 +30,14 @@ public interface ProductMapper {
 	int searchCount(SearchParam searchParam);
 
 
+
+	List<ProductTitle> getProductList();
+
+	@Select("Select * from product_detail")
+	List<ProductDetail> getDetail();
+
 	List<ProductDetail> selectDetail(String product_code);
-
-
-	List<ProductInformation> modify(String productCode);
+	List<ProductDetail> modReadDetail(String product_code);
 
 
 	int overlapCheck(Map<String, Object> map);
@@ -46,10 +50,13 @@ public interface ProductMapper {
 
 	int productTitlesAdd(ProductTitle productTitle);
 
-
 	void productDetailsAdd(ProductDetail productDetail);
+
+	int addColor(List<Map<String, Object>> list);
 
 	//    Update
 
 	void upStatus(ProductTitle productTitle);
+
+	int modColor(List<Map<String, Object>> list);
 }

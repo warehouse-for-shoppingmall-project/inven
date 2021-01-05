@@ -56,8 +56,8 @@ public class RequestServiceImpl implements RequestService {
     // update
     public int upStatus(Map<String, Object> map) { return reqMapper.upStatus(map); }
     public int modTitle(Map<String, Object> map) {
-        if(map.get("manufacturing_date").toString().equals(""))
-            map.put("manufacturing_date", null);
+//        if(map.get("manufacturing_date").toString().equals(""))
+//            map.put("manufacturing_date", null);
         return reqMapper.modTitle(map);
     }
     public int modDetail(List<Map<String, Object>> list) { return reqMapper.modDetail(list);}

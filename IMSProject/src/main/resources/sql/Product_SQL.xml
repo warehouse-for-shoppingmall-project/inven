@@ -43,7 +43,6 @@
         LIMIT #{start_idx}, #{end_idx}
     </select>
 
-
     <select id="searchCount" resultType="int" parameterType="com.inven.common.model.SearchParam">
         SELECT count(*)
         FROM product_title
@@ -63,33 +62,36 @@
         </if>
     </sql>
 
-    <select id="modify" parameterType="string" resultMap="modifyMap" >
-        select *
-        from product_title
-                 join product_detail
-                      on product_title.product_code = #{productCode} and
-                         product_detail.product_code = #{productCode}
+    <!--    상품수정 시 detail 조회    -->
+    <select id="modReadDetail" parameterType="string" resultType="com.inven.common.model.ProductDetail" >
+        select  *
+        from product_detail
+        where product_code = #{product_code}
     </select>
 
-    <resultMap id="modifyMap" type="com.inven.param.ProductInformation">
-        <result property="product_code" column="product_code"/>
-        <result property="make_factory" column="make_factory"/>
-        <result property="unit_price" column="unit_price"/>
-        <result property="final_update" column="final_update"/>
-        <result property="make_code" column="make_code"/>
-        <result property="product_status" column="product_status"/>
-        <result property="color_name" column="color_name"/>
-        <result property="gender" column="gender"/>
-        <result property="s" column="s"/>
-        <result property="m" column="m"/>
-        <result property="l" column="l"/>
-        <result property="xl" column="xl"/>
-        <result property="f" column="f"/>
-        <result property="total" column="total"/>
-        <result property="manufacture_day" column="manufacture_day"/>
+    <!--    resultMap   -->
+    <resultMap id="modTitleMap" type="com.inven.common.model.ProductTitle">
+        <result property="product_code" column="product_code" />
+        <result property="gender" column="gender" />
+        <result property="make_factory" column="make_factory" />
+        <result property="unit_price" column="unit_price" />
+        <result property="final_update" column="final_update" />
+        <result property="make_code" column="make_code" />
+        <result property="product_status" column="product_status" />
+    </resultMap>
+<!--  이 Map은 니가 바꾼거가 ㅇㅇ 왜 바꿨어? 이렇게 안하니까 detail아닌 놈들ㅇ ㅏㅈ어이나이나이아니 이거랑 -->
+    <resultMap id="modDetailMap" type="com.inven.common.model.ProductDetail">
+        <result property="product_code" column="product_code" />
+        <result property="color_name" column="color_name" />
+        <result property="s" column="s" />
+        <result property="m" column="m" />
+        <result property="l" column="l" />
+        <result property="xl" column="xl" />
+        <result property="f" column="f" />
+        <result property="total" column="total" />
+        <result property="manufacture_day" column="manufacture_day" />
     </resultMap>
 
-    <!-- Insert -->
 
     <!-- ADD -->
     <insert id="addTitle" parameterType="hashMap">
@@ -100,9 +102,9 @@
     <insert id="addDetails" parameterType="java.util.List">
         INSERT INTO product_detail(product_code, color_name)
         values
-            <foreach collection="details" item="item" separator=",">
-                (#{item.product_code}, #{item.color_name})
-            </foreach>
+        <foreach collection="details" item="item" separator=",">
+            (#{item.product_code}, #{item.color_name})
+        </foreach>
     </insert>
 
     <insert id="productTitlesAdd" parameterType="com.inven.common.model.ProductTitle">
@@ -121,7 +123,6 @@
     <insert id="productDetailsAdd" parameterType="com.inven.common.model.ProductDetail">
         insert into product_detail(product_code,
                                    color_name,
-                                   gender,
                                    s,
                                    m,
                                    l,
@@ -129,15 +130,34 @@
                                    f,
                                    total,
                                    manufacture_day)
-        values (#{product_code}, #{color_name}, #{gender}, #{s}, #{m}, #{l}, #{xl}, #{f}, #{total},
-                #{manufacture_day})
+        values (
+                   #{product_code}, #{color_name}, #{s}, #{m}, #{l}, #{xl}, #{f}, #{total},DATE(#{manufacture_day})
+               )
     </insert>
 
-    <!-- Update -->
+<!--    새로운 색상 추가 시     -->
+    <insert id="addColor" parameterType="java.util.List">
+        INSERT INTO product_detail(product_code, color_name)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.product_code}, #{item.new_color_name})
+        </foreach>
+    </insert>
+
+
+    <!--    update    -->
     <update id="upStatus" parameterType="com.inven.common.model.ProductTitle">
         UPDATE product_title
         SET product_status = #{product_status}
         WHERE product_code = #{product_code}
+    </update>
+
+    <update id="modColor" parameterType="java.util.List">
+        <foreach collection="list" item="item" separator=";">
+            UPDATE product_detail
+            SET color_name = #{item.update_color_name}
+            WHERE product_code = #{item.product_code} AND color_name = #{item.old_color_name}
+        </foreach>
     </update>
 
     <!-- Delete -->

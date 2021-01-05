@@ -17,7 +17,7 @@
 <div class="container">
     <div>
         <h1 class="d-inline">발주 조회</h1>
-        <button class="float-right btn btn-outline-primary" type="button" onclick="prevAdd()">등록</button>
+        <button class="float-right btn btn-outline-primary" type="button" onclick = "location.href = '/req/add' ">등록</button>
     </div>
     <form name="saveParamForm">
         <input type="hidden" th:each="entry : ${map}" th:name="${entry.key}" th:value="${entry.value}">

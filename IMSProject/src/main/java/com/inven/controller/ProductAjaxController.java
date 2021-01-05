@@ -1,5 +1,7 @@
 package com.inven.controller;
 
+import com.google.gson.Gson;
+import com.inven.common.CommonUtils;
 import com.inven.common.model.ProductTitle;
 import com.inven.param.ProductInformation;
 import com.inven.service.ProductServiceImpl;
@@ -11,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
 import java.util.Map;
+import javax.annotation.Resource;
+import java.util.List;
 
 
 /*
@@ -25,59 +29,74 @@ import java.util.Map;
 @RestController // <- Json형태로 반환     // Controller <- html을 반환
 public class ProductAjaxController {
 
-	@Autowired
-	ProductServiceImpl prodService;
+    @Resource(name = "productService")
+    ProductServiceImpl prodService;
 
-	//	json -> @RequestBody 로 받아야함
-	//	x-www-urlencoded -> @RequestParam 로 받아야함
-	//	RestController
-	@PutMapping("/upStatus")
-	public boolean upStatus(@RequestBody ProductInformation productInformation) {
+    //	json -> @RequestBody 로 받아야함
+    //	x-www-urlencoded -> @RequestParam 로 받아야함
+    @PutMapping("/upStatus")
+    public boolean upStatus(@RequestBody ProductInformation productInformation) {
 
-		ProductTitle productTitle = new ProductTitle(productInformation.getProduct_code(),
-				productInformation.getProduct_status());
+        ProductTitle productTitle = new ProductTitle(productInformation.getProduct_code(),
+                productInformation.getProduct_status());
 
-		prodService.upStatus(productTitle);
+        prodService.upStatus(productTitle);
 
-		return true;
-	}
+        return true;
+    }
 
-	// 상품코드 중복검사
-	@GetMapping("/overlapCheck")
-	public JSONObject overlapCheck(@RequestParam Map<String, Object> map) {
-		log.debug("Request Param : " + map);
-		JSONObject jobj = new JSONObject();
-		jobj.put("code", 400);
-		int rs = prodService.overlapCheck(map);
-		if(rs == 0) jobj.put("code", 200);
-		return jobj;
-	}
+    // 상품코드 중복검사
+    @GetMapping("/overlapCheck")
+    public JSONObject overlapCheck(@RequestParam Map<String, Object> map) {
+        log.debug("Request Param : " + map);
+        JSONObject jobj = new JSONObject();
+        jobj.put("code", 400);
+        int rs = prodService.overlapCheck(map);
+        if (rs == 0) jobj.put("code", 200);
+        return jobj;
+    }
 
-	@Transactional()
-	@PostMapping(value = "/prodAdd")
-	public JSONObject prodAdd(@RequestParam Map<String, Object> map) {
+    @Transactional()
+    @PostMapping(value = "/prodAdd")
+    public JSONObject prodAdd(@RequestParam Map<String, Object> map) {
 
-		log.info("Request Parameter : " + map);
-		JSONObject jobj = new JSONObject();
-		jobj.put("code", 999);
-		if(map == null) return jobj;
+        log.info("Request Parameter : " + map);
+        JSONObject jobj = new JSONObject();
+        jobj.put("code", 999);
+        if (map == null) return jobj;
 
-		int addResult = prodService.addProductData(map);
+        int addResult = prodService.addProductData(map);
 
-		if(addResult > 0)
-			jobj.put("code", 200);
-		else if(addResult == 0)
-			jobj.put("code", 300);
-		else if(addResult == -1)
-			jobj.put("code", 400);
+        if (addResult > 0)
+            jobj.put("code", 200);
+        else if (addResult == 0)
+            jobj.put("code", 300);
+        else if (addResult == -1)
+            jobj.put("code", 400);
 
-		return jobj;
-	}
+        return jobj;
+    }
 
-	/* JSONObject Key => code
-	 * value 의미
-	 * 200 : Success
-	 * 400 : Error */
+    @PostMapping(value = "/prodMod")
+    public JSONObject prodMod(@RequestParam Map<String, Object> map) {
+        log.info("Request Parameter : " + map);
+        JSONObject jobj = new JSONObject();
+        jobj.put("code", 999);
+        if (map == null) return jobj;
+
+        int rs = prodService.updateColumn(map);
+
+        if(rs == 1) jobj.put("code", 200);
+        else jobj.put("code", 400);
+
+        return jobj;
+    }
+
+
+    /* JSONObject Key => code
+     * value 의미
+     * 200 : Success
+     * 400 : Error */
 
 //	@GetMapping("/prodTest.do")
 ////	@RequestMapping(value = "/index.do", method = RequestMethod.GET)

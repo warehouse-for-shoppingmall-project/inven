@@ -185,6 +185,7 @@ $('#reqMod').click(function() {
             if (xml.code == 200) {
                 console.log('success');
                 alert('수정 완료');
+                location.href = "list";
             } else {
                 console.log(xml.code + ':: error');
                 alert('수정 실패. 잠시 후 다시시도하셈');
@@ -248,4 +249,34 @@ function delDetail(row) {
 }
 */
 
+// 발주등록 버튼
+$('#reqAdd').click(function() {
+    // js 에서는 ' 홑 따옴표를 쓴다'
+    let con = confirm('해당 발주를 등록 하시겠습니까?');
+    if (!con) return;
+
+    reqObj();
+
+    // return;
+    $.ajax({
+        type: "post",
+        url: "/req/async/reqAdd",
+        data: reqData,
+        dataType: "json",
+        success: function(xml) {
+            if (xml.code == 200) {
+                console.log('success');
+                alert('등록 완료');
+                location.href="list";
+            } else {
+                console.log(xml.code + ':: error');
+                alert('등록 실패. 잠시 후 다시시도하셈');
+            }
+        },
+        error: function(request, status, error) {
+            console.log("code:" + status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+            alert('콘솔보셈');
+        }
+    });
+});
 // ./ add.js
