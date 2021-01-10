@@ -27,99 +27,96 @@ import com.inven.service.RequestServiceImpl;
 @RequestMapping(value = "/req/async/*")
 @RestController
 public class RequestAjaxController {
-	private final Logger log = LoggerFactory.getLogger(this.getClass());
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-	@Resource(name="requestService")
-	RequestServiceImpl reqService;
+    @Resource(name = "requestService")
+    RequestServiceImpl reqService;
 
-	/* JSONObject Key => code
-	 * value 의미
-	 * 200 : Success
-	 * 400 : Error */
-	@GetMapping(value = "selectProdDetail")
-	public JSONObject selectDetail(@RequestParam Map<String, Object> map){
-		JSONObject jobj = new JSONObject();
-		jobj.put("code", 400);
-		List<Map<String, Object>> details = reqService.selectProdDetail(map.get("product_code").toString());
-		if(details != null || details.size() > 0){
-			jobj.put("code", 200);
-			jobj.put("details", details);
-		}
-		return jobj;
-	}
+    /* JSONObject Key => code
+     * value 의미
+     * 200 : Success
+     * 400 : Error */
+    @GetMapping(value = "selectProdDetail")
+    public JSONObject selectDetail(@RequestParam Map<String, Object> map) {
+        JSONObject jobj = new JSONObject();
+        jobj.put("code", 400);
+        List<Map<String, Object>> details = reqService.selectProdDetail(map.get("product_code").toString());
+        if (details != null || details.size() > 0) {
+            jobj.put("code", 200);
+            jobj.put("details", details);
+        }
+        return jobj;
+    }
 
-	@PutMapping("/upStatus")
-	public JSONObject upStatus(@RequestParam Map<String, Object> map) {
-		log.info("Request Parameter : " + map);
-		JSONObject jobj = new JSONObject();
-		jobj.put("code", 400);
+    @PutMapping("/upStatus")
+    public JSONObject upStatus(@RequestParam Map<String, Object> map) {
+        log.info("Request Parameter : " + map);
+        JSONObject jobj = new JSONObject();
+        jobj.put("code", 400);
 
-		int rs = reqService.upStatus(map);
-		if(rs > 0)
-			jobj.put("code", 200);
+        int rs = 0;
+        try {
+            rs = reqService.upStatus(map);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (rs > 0)
+            jobj.put("code", 200);
 
-		return jobj;
-	}
+        return jobj;
+    }
 
-	@GetMapping(value = "/makeReqCode")
-	public JSONObject makeReqCode() {
-		log.info("Request Parameter : 발주코드 생성 버튼 클릭");
+    @GetMapping(value = "/makeReqCode")
+    public JSONObject makeReqCode() {
+        log.info("Request Parameter : 발주코드 생성 버튼 클릭");
 
-		JSONObject jobj = new JSONObject();
-		jobj.put("code", 400);
+        JSONObject jobj = new JSONObject();
+        jobj.put("code", 400);
 
-		String request_code = reqService.makeReqCode();
-		if(request_code != null) {
-			jobj.put("code", 200);
-			jobj.put("request_code", request_code);
-		}
+        String request_code = reqService.makeReqCode();
+        if (request_code != null) {
+            jobj.put("code", 200);
+            jobj.put("request_code", request_code);
+        }
 
-		return jobj;
-	}
+        return jobj;
+    }
 
-	@Transactional()
-	@PostMapping(value = "/reqAdd")
-	public JSONObject reqAdd(@RequestParam Map<String, Object> map) throws SQLException {
-		log.info("Request Parameter : " + map);
-		JSONObject jobj = new JSONObject();
-		jobj.put("code", 999);
-		if(map == null) return jobj;
+    @PostMapping(value = "/reqAdd")
+    public JSONObject reqAdd(@RequestParam Map<String, Object> map) throws SQLException {
+        log.info("Request Parameter : " + map);
+        JSONObject jobj = new JSONObject();
+        jobj.put("code", 999);
+        if (map == null) return jobj;
 
-		int addResult = reqService.addRequestData(map);
+        int addResult = reqService.addRequestData(map);
 
-		if(addResult > 0)
-			jobj.put("code", 200);
-		else if(addResult == 0)
-			jobj.put("code", 300);
-		else if(addResult == -1)
-			jobj.put("code", 400);
+        if (addResult > 0)
+            jobj.put("code", 200);
+        else if (addResult == 0)
+            jobj.put("code", 300);
+        else if (addResult == -1)
+            jobj.put("code", 400);
 
-		return jobj;
-	}
+        return jobj;
+    }
 
-	@Transactional()
-	@PutMapping(value = "/reqMod")
-	public JSONObject reqMod(@RequestParam Map<String, Object> map) {
-		log.info("Request Parameter : " + map);
-		JSONObject jobj = new JSONObject();
-		jobj.put("code", 999);
-		if(map == null) return jobj;
-		Gson gson = new Gson();
+    @PutMapping(value = "/reqMod")
+    public JSONObject reqMod(@RequestParam Map<String, Object> map) {
+        log.info("Request Parameter : " + map);
+        JSONObject jobj = new JSONObject();
+        jobj.put("code", 999);
+        if (map == null) return jobj;
 
-		Map<String, Object> title = gson.fromJson(map.get("title").toString(), Map.class);
-		CommonUtils.printMap(title);
+        int modResult = reqService.modRequestData(map);
 
-		List<Map<String, Object>> details = gson.fromJson(map.get("details").toString(), List.class);
-		CommonUtils.printList(details);
+        if (modResult > 0)
+            jobj.put("code", 200);
+        else if (modResult == 0)
+            jobj.put("code", 300);
+        else if (modResult == -1)
+            jobj.put("code", 400);
 
-		int modTitle = reqService.modTitle(title);
-		int modDetail = reqService.modDetail(details);
-
-		if(modTitle > 0) {
-			if(modDetail > 0) jobj.put("code", 200);
-			else jobj.put("code", 300);
-		} else jobj.put("code", 400);
-
-		return jobj;
-	}
+        return jobj;
+    }
 }

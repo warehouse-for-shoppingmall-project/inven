@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.inven.common.Paging;
+import com.inven.service.RequestServiceImpl;
 import com.inven.service.inter.RequestService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class RequestController {
 
     @Autowired
-    RequestService reqService;
+    RequestServiceImpl reqService;
 
     @RequestMapping(value = "/test", method = RequestMethod.GET)
     public ModelAndView test(@RequestParam Map<String, Object> map) {
@@ -90,11 +91,11 @@ public class RequestController {
     }
 
     @GetMapping(value = "/detail")
-    public ModelAndView detail(@RequestParam Map<String, Object> map) {
-        log.info("Request Parameter : " + map);
+    public ModelAndView detail(@RequestParam String code) {
+        log.info("Request Parameter : " + code);
         ModelAndView mv = new ModelAndView("detail_view");
 
-        List<Map<String, Object>> details = reqService.selectReqDetail(map.get("request_code").toString());
+        List<Map<String, Object>> details = reqService.selectReqDetail(code);
         mv.addObject("details", details);
 
         return mv;
@@ -104,8 +105,10 @@ public class RequestController {
     public ModelAndView add(@RequestParam Map<String, Object> map) {
         log.info("Request Parameter : " + map);
         ModelAndView mv = new ModelAndView("request_fd/request_add");
-        List<String> list = reqService.getAllProdCd();
+        List<Map<String, Object>> list = reqService.getAllProdCd();
+        Map<String, Object> prod = map.containsKey("product_code") ? reqService.selectProdTitle(map.get("product_code").toString()) : null;
 
+        mv.addObject("prod", prod);
         mv.addObject("list", list);
 
         return mv;
@@ -119,7 +122,7 @@ public class RequestController {
 
         Map<String, Object> title = reqService.reqModifyTitle(map);
         List<Map<String, Object>> details = reqService.reqModifyDetail(map);
-        List<String> list = reqService.getAllProdCd();     //상품코드 select용
+        List<Map<String, Object>> list = reqService.getAllProdCd();     //상품코드 select용
 
         log.info("Response modSelectSQL title : " + title);
         log.info("Response modSelectSQL details : " + details);

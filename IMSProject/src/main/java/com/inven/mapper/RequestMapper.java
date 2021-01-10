@@ -15,8 +15,9 @@ public interface RequestMapper {
 	List<Map<String, Object>> searchWhere(Map<String, Object> map);
 	List<Map<String, Object>> selectProdDetail(String product_code);
 	List<Map<String, Object>> selectReqDetail(String request_code);
-	List<String> getAllProdCd();
+	List<Map<String, Object>> getAllProdCd();
 	String makeReqCode();
+	Map<String, Object> selectProdTitle(String product_code);
 	Map<String, Object> reqModifyTitle(Map<String, Object> map);
 	List<Map<String, Object>> reqModifyDetail(Map<String, Object> map);
 
@@ -30,13 +31,6 @@ public interface RequestMapper {
 	int upStatus(Map<String, Object> map);
 
 
-	// delete
 
-
-//	List<Map<String, Object>> selectAll(Map<String, Object> map);
-//	List<Map<String, Object>> searchProductCode(Map<String, Object> map);
-//	List<Map<String, Object>> searchRequestDate(Map<String, Object> map);
-//	List<Map<String, Object>> searchRequestDates(Map<String, Object> map);
-//	List<Map<String, Object>> searchRequestStatus(Map<String, Object> map);
-
+    // delete
 }

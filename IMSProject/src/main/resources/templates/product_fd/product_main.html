@@ -2,32 +2,7 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:replace="fragments/cmnHead :: main-head"></th:block>
-    <style>
-        .sh-tb {
-            width: 100%;
-            background-color: aliceblue;
-        }
-
-        .sh-tb tfoot {
-            text-align: right
-        }
-
-        #inputGroupSelect01 {
-            width: auto;
-        }
-
-        .form-control mr-sm-2 {
-            width: auto;
-        }
-
-        .col-lg-12 {
-            padding: 0;
-        }
-
-        .btn btn-primary {
-            float: right;
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/resources/css/prod_main.css}">
 </head>
 
 <body id="top">
@@ -44,6 +19,7 @@
         <input type="hidden" name="startDate" th:value="${searchParams.getStartDate()}">
         <input type="hidden" name="endDate" th:value="${searchParams.getEndDate()}">
         <input type="hidden" name="productStatus" th:value="${searchParams.getProductStatus()}">
+        <input type="hidden" name="pageNo" th:value="${searchParams.getPageNo()}">
     </form>
     <form name="searchForm" action="/prod/list" method="get" th:object="${searchParams}">
         <table class="sh-tb">
@@ -68,7 +44,7 @@
                     <label for="sr_rd3">중단</label>
                 </td>
                 <td colspan="2">
-                    <a class="btn btn-primary" id="enrollment" role="button">상품 등록</a>
+                    <button class="btn btn-primary" id="enrollment" role="button">상품 등록</button>
                 </td>
             </tr>
             <tr>
@@ -141,7 +117,6 @@
                 <td th:text="${title.getUnit_price()}">price</td>
                 <td th:text="${title.getFinal_update()}">update</td>
                 <td th:text="${title.getMake_code()}">make_code</td>
-
                 <td>
                     <select class="custom-select" name="status">
                         <option value="판매" th:selected="${title.getProduct_status() == '판매'}">판매</option>
@@ -150,10 +125,8 @@
                         <option value="준비" th:selected="${title.getProduct_status() == '준비'}">준비</option>
                     </select>
                 </td>
-                <td><a class="btn btn-primary" th:onclick="modPop([[${title.getProduct_code()}]])"
-                       role="button">수정하기</a></td>
-                <td><a class="btn btn-primary" th:href="@{/req/add(productCode=${title.getProduct_code()})}"
-                       role="button">발주넣기</a></td>
+                <td><button class="btn btn-primary" name="mod_popup">수정</button></td>
+                <td><button class="btn btn-primary" name="reqAddBtn">발주</button></td>
             </tr>
             </tbody>
         </table>
@@ -167,7 +140,7 @@
                         <span class="sr-only" th:text="${paging.getPrevPageNo()}"></span>
                     </a>
                 </li><!-- ${#numbers.sequence(paging.getStartPageNo(), paging.getEndPageNo())} -->
-                <li class="page-item" th:each="num : ${#numbers.sequence(1, 5)}" th:classappend="${num == paging.getPageNo()} ? 'active' : ''">
+                <li class="page-item" th:each="num : ${#numbers.sequence(paging.getStartPageNo(), paging.getEndPageNo())}" th:classappend="${num == paging.getPageNo()} ? 'active' : ''">
                     <a class="page-link" href="#">
                         <span aria-hidden="true" th:text="${num}"></span>
                         <span class="sr-only" th:text="${num}"></span>
@@ -186,49 +159,8 @@
 </div>
 </div>
 
-<!--ajax파일 참조하는 문장-->
-<script th:src="@{/resources/js/prod_js/main.js}"></script>
-<script>
-
-    let add_popup = function (e) {
-        if (e.target.tagName === 'INPUT') return;
-        let action = 'add';
-        let popupWidth = 300;
-        let popupHeight = 400;
-        let popupX = (window.screen.width / 2) - (popupWidth / 2);
-        let popupY = (window.screen.height / 2) - (popupHeight / 2);
-        window.open(action, 'add', 'width=' + popupWidth + ', height=' + popupHeight + ', left=' + popupX + ', , top=' + popupY + 'scrollbars=yes, resizable=no');
-    }
-
-    $('#enrollment').click(add_popup);
-
-
-    // 1. Paging javascript 방식
-    let pagingFunc = function(){
-        let pageNo = this.querySelector('.sr-only').innerText;
-        // console.log(pageNo);
-        let obj = document.querySelector('form[name=saveParamForm]');
-        obj.pageNo.value = pageNo;
-        // console.log(obj);
-        obj.method = 'get';
-        obj.action = 'list';
-        obj.submit();
-    }
-
-    document.querySelectorAll('.pagination > .page-item').forEach(
-        (e) => e.addEventListener('click', pagingFunc)
-    );
-	$('#enrollment').click(add_popup);
-
-	// 판매상태가 품절이거나 판매중단이면 수정하기 버튼 안나오게 하고싶었는데....
-	// $('.each_data_body').each(function (item,elements){
-	// 	if($(elements).find('select [name=status]').val()==='품절' || $(elements).find('select [name=status]').val('판매중단')){
-	// 		$(elements).$('#modify').hide();
-	// 	}
-	// });
-
-
-</script>
+<script th:src="@{/resources/js/cmn_main.js}"></script>
+<script th:src="@{/resources/js/prod/prod_main.js}"></script>
 
 </body>
 </html>

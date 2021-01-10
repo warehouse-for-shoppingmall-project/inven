@@ -1,0 +1,20 @@
+.sh-tb {
+    width: 100%;
+    background-color: aliceblue;
+}
+
+.sh-tb tfoot {
+    text-align: right
+}
+
+.form-control mr-sm-2 {
+    width: auto;
+}
+
+.col-lg-12 {
+    padding: 0;
+}
+
+.btn btn-primary {
+    float: right;
+}

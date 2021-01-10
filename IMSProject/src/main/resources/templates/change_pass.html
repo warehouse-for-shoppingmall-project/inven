@@ -26,9 +26,6 @@
 <script>
 
     $('#submit_btn').click(function() {
-        // 새 비밀번호와 비밀번호 확인이 적은게 같은가 check
-        // 같으면 비밀번호가 같다고 <p> 안에 넣기, 틀리면 틀리다고 넣기
-        // 위 조건이 만족될 시 ajax 실행되게끔
         let data = $(this).closest('form').serializeObject();
         console.log(data);
         $.ajax({
@@ -51,40 +48,6 @@
             }
         });
     });
-
-    // document.getElementById('submit_btn').addEventListener('click',
-    //     function () {
-    //         let frm = document.getElementById('loginForm');
-    //         let xhr = new XMLHttpRequest();
-    //         /* 준비상태가 변하면 실행한다. */
-    //         xhr.onreadystatechange = function () {
-    //             if (xhr.readyState === xhr.DONE) {
-    //                 /* 상태가 200, 201 이면 서버 통신 성공 */
-    //                 if (xhr.status === 200 || xhr.status === 201) {
-    //                     let obj = JSON.parse(xhr.responseText);
-    //                     if (obj.code === 200) {
-    //                         location.href = "req/list";
-    //                     } else {
-    //                         alert('비밀번호 잘못입력');
-    //                         frm.pwd.value = '';/* 틀린 비밀번호 지워주기 */
-    //                     }
-    //                 } else {
-    //                     /* 서버통신 실패 */
-    //                     console.error(xhr.responseText);
-    //                 }
-    //             }
-    //         };
-    //         /* 메소드에 따라 다른방식의 접근을 해줘야한다. */
-    //         if (frm.method === 'get') {
-    //             xhr.open(frm.method, frm.action + serialize(frm), false);
-    //             xhr.send();
-    //         } else {
-    //             xhr.open(frm.method, frm.action, false);
-    //             xhr.send(new FormData(frm));
-    //         }
-    //     }
-    // );
-
 </script>
 </body>
 </html>

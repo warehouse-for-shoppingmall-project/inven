@@ -1,10 +1,10 @@
 $('#submit_btn').css('display', 'none');
 document.onkeydown = keyCodeBlock;
-
 let keyDownEvent = function (e) {
     if (e.ctrlKey && e.keyCode === 32)
         $('#submit_btn').css('display', '');
 }
+
 document.addEventListener('keydown', keyDownEvent);
 
 document.getElementById('submit_btn').addEventListener('click',

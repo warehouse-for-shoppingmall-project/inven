@@ -8,7 +8,7 @@
 		request_code, product_code, gender, request_status, unit_price, make_factory, total_order_quantity, file_name,
 		IFNULL(DATE(request_date), '-') as request_date,
 		IFNULL(DATE(get_Date), '-') as get_date,
-		IFNULL(DATE(manufature_day), '-') as manufature_day,
+		IFNULL(DATE(manufacture_day), '-') as manufacture_day,
  		IFNULL(etc,'  ') as etc
    </sql>
 
@@ -59,6 +59,7 @@
 		SELECT <include refid="titleColumn"/>
 		FROM request_title
 		<include refid="search"/>
+		ORDER BY in_date DESC
 		LIMIT #{start_idx}, #{end_idx}
 	</select>
 
@@ -68,7 +69,11 @@
 		FROM request_detail WHERE request_code = #{request_code}
 	</select>
 
-	<!-- 발주코드 상세내역을 가져옴 -->
+	<select id="selectProdTitle" parameterType="String" resultType="hashMap">
+		SELECT product_code, gender, make_factory, unit_price, make_code
+		FROM product_title WHERE product_code = #{product_code}
+	</select>
+
 	<select id="selectProdDetail" parameterType="String" resultType="hashMap">
 		SELECT color_name, s, m, l, xl, f, total
 		FROM product_detail WHERE product_code = #{product_code}
@@ -80,8 +85,8 @@
 	</select>
 
 	<!--	발주등록 시 상품코드 select 해서 고를 수 있게 상품코드 조회 후 html 로 전송-->
-	<select id="getAllProdCd" resultType="String">
-		SELECT product_code FROM product_title
+	<select id="getAllProdCd" resultType="hashMap">
+		SELECT product_code, gender FROM product_title
 	</select>
 
 	<!-- request_title 발주 수정 시 -->
@@ -136,25 +141,31 @@
 	<!--	발주 상태 update 반영 하는 쿼리 -->
 	<update id="upStatus" parameterType="hashMap">
 		UPDATE request_title
-		SET request_status = #{request_status}
+		SET
+		    <if test="request_status.equals('입고')">
+				get_date = now(),
+			</if>
+		    request_status = #{request_status}
 		WHERE request_code = #{request_code}
    </update>
 
 	<update id="modTitle" parameterType="hashmap">
 		UPDATE request_title
-		SET product_code = #{product_code}, gender = #{gender}, unit_price = #{unit_price},
+		SET
+		    <if test="!manufacture_day.equals('')">
+				manufacture_day = #{manufacture_day},
+			</if>
+		    product_code = #{product_code}, gender = #{gender}, unit_price = #{unit_price},
 			make_factory = #{make_factory}, total_order_quantity = #{total_order_quantity},
-		    manufature_day = DATE(#{manufature_day}), etc = #{etc}
+		    etc = #{etc}
 		WHERE request_code = #{request_code}
 	</update>
 
 	<update id="modDetail" parameterType="java.util.List">
 		<foreach collection="list" item="item" separator=";">
 			UPDATE request_detail
-			SET product_code = #{item.product_code}, color_name = #{item.color_name},
-				s = #{item.s}, m = #{item.m}, l = #{item.l}, xl = #{item.xl},
-				f = #{item.f}, total = #{item.total}
-			WHERE request_code = #{item.request_code} AND color_name = #{item.old_color_name}
+			SET product_code = #{item.product_code}, s = #{item.s}, m = #{item.m}, l = #{item.l}, xl = #{item.xl}, f = #{item.f}, total = #{item.total}
+			WHERE request_code = #{item.request_code} AND color_name = #{item.color_name}
 		</foreach>
 	</update>
 </mapper>

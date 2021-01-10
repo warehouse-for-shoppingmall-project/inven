@@ -4,11 +4,14 @@
 <head>
 	<th:block th:replace="fragments/cmnHead :: main-head"></th:block>
 	<style>
-		.detail_tbody input {
+		#detail_tbody input {
 			width: 70px;
 		}
-		.detail_table thead {
+		#detail_table thead {
 			background-color: cornsilk;
+		}
+		.wrap{
+			padding:0 50px 0 50px;
 		}
 	</style>
 </head>
@@ -17,7 +20,7 @@
 <th:block th:replace="fragments/header :: nav-header"></th:block>
 
 <!-- Contents -->
-<div class="container">
+<div class="wrap">
 	<div class="row">
 		<!-- row 1 -->
 		<div class="col-lg-4 col-md-12">
@@ -28,9 +31,9 @@
 						<th>발주 코드</th>
 						<td>
 							<div class="input-group mb-3">
-								<input type="text" class="form-control" name="request_code" id="request_code" placeholder="Click to Button" aria-label="Recipient's username" aria-describedby="button-addon2" readonly>
+								<input type="text" class="form-control" id="request_code" name="request_code" placeholder="Click to Button" readonly>
 								<div class="input-group-append">
-									<button class="btn btn-outline-secondary" name="makeReqCode" type="button" id="button-addon2">코드 생성</button>
+									<button class="btn btn-outline-secondary" type="button" id="makeReqCode">코드 생성</button>
 								</div>
 							</div>
 						</td>
@@ -38,21 +41,21 @@
 					<tr>
 						<th>상품 코드</th>
 						<td>
-							<select class="custom-select" name="product_code">
+							<select class="custom-select" id="product_code" name="product_code">
 								<option value="">선택하기</option>
-								<option th:each="code : ${list}" th:text="${code}" th:value="${code}"></option>
+								<option th:each="item : ${list}"
+										th:text="${item.product_code}"
+										th:value="${item.product_code}"
+										th:data="${item.gender}"
+										th:selected="${prod != null} and ${prod.product_code == code}">
+								</option>
 							</select>
 						</td>
 					</tr>
 					<tr>
-						<th>상품 성별</th>
+						<th>성별 코드</th>
 						<td>
-							<input type="radio" id="gd_rd1" name="gender" value="C" checked>
-							<label for="gd_rd1">공용</label>
-							<input type="radio" id="gd_rd2" name="gender" value="M">
-							<label for="gd_rd2">남자</label>
-							<input type="radio" id="gd_rd3" name="gender" value="W">
-							<label for="gd_rd3">여자</label>
+							<input type="text" class="form-control" id="gender" name="gender" th:value="${prod != null ? prod.gender : ''}" readonly>
 						</td>
 					</tr>
 					<tr>
@@ -70,7 +73,7 @@
 						<th>단가</th>
 						<td>
 							<div class="input-group mb-3">
-								<input type="number" name="unit_price" value="0" class="form-control" aria-label="Recipient's username" aria-describedby="basic-addon2">
+								<input type="number" name="unit_price" value="0" class="form-control" th:value="${prod != null ? prod.unit_price : ''}">
 								<div class="input-group-append">
 									<span class="input-group-text" id="basic-addon2">원</span>
 								</div>
@@ -80,13 +83,13 @@
 					<tr>
 						<th>공장 이름</th>
 						<td>
-							<input class="form-control" type="text" name="make_factory" placeholder="제조사 명 입력">
+							<input class="form-control" type="text" name="make_factory" placeholder="제조사 명 입력" th:value="${prod != null ? prod.make_factory : ''}">
 						</td>
 					</tr>
 					<!--<tr>
 						<th>제조일</th>
 						<td>
-							<input class="form-control" type="date" name="manufature_day">
+							<input class="form-control" type="date" name="manufacture_day">
 							<input name="file" value="" type="hidden"> &lt;!&ndash; 파일 업로드 구현시 삭제 &ndash;&gt;
 						</td>
 					</tr>
@@ -130,15 +133,6 @@
 				</tr>
 				</thead>
 				<tbody id="detail_tbody">
-				<!--<tr>
-					<td><input class="form-control" type="text" name="color_name" required></td>
-					<td><input class="form-control" type="number" name="s" value="0"></td>
-					<td><input class="form-control" type="number" name="m" value="0"></td>
-					<td><input class="form-control" type="number" name="l" value="0"></td>
-					<td><input class="form-control" type="number" name="xl" value="0"></td>
-					<td><input class="form-control" type="number" name="free" value="0"></td>
-					<td><input class="form-control" type="text" name="total" value="0" readonly></td>
-				</tr>-->
 				</tbody>
 			</table>
 		</div>
@@ -147,79 +141,7 @@
 	<!-- ./ .row -->
 </div>
 <!-- ./container -->
-	<script th:src="@{/resources/js/request.js}"></script>
-
-<script>
-	let prod_cd;
-	$('select[name=product_code]').change(function (){
-		if(detail_tbody.rows.length > 0 && this.value !== prod_cd){
-			if(!confirm('코드를 변경하면 기존의 내용이 유지되지않습니다. 변경하시겠습니까?')){
-				$(this).val(prod_cd);
-				$(this).find('option[value=' + prod_cd + ']').attr('selected', 'selected');
-				return;
-			}
-		}
-		prod_cd = this.value;
-		$(detail_tbody).empty();
-		// console.log(this.value);
-		if(this.value === '' || this.value === undefined || this.value === null) return;
-		$.ajax({
-			type: "get",
-			url: "/req/async/selectProdDetail",
-			data : { product_code : this.value },
-			dataType: "json",
-			success: function (xml){
-				if(xml.code === 200)
-					xml.details.forEach(e => addDetail(e));
-			},
-			error: function(request, status, error) {
-				console.log("code:" + status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
-				alert('콘솔보셈');
-			}
-		});
-	});
-
-	function addDetail(e) {
-		let row = detail_tbody.insertRow();
-		//색상
-		row.insertCell(0).innerHTML = '<label class="form-control mb-0">' + e.color_name + '</label>' +
-				'<input type="hidden" name="color_name" value="'+e.color_name+'">';
-		//사이즈(s~free), 총 수량
-		for (let i = 0; i < rowName.length; i++)
-			row.insertCell(i+1).innerHTML = '<input class="form-control" type="' + rowType[i]+'" name="' + rowName[i] + '" value="0">';
-
-		$(row).find('input[name=total]').attr('readonly', 'readonly');
-		$(row).find('input[type=number]').keyup(numberSet).keydown(numberSet).keypress(numberSet);
-		$(row).find('input[type=number]').keyup(func_total_sum).keypress(func_total_sum).keydown(func_total_sum);
-	}
-
-	// 발주등록 버튼
-	$('#reqAdd').click(function() {
-		// js 에서는 ' 홑 따옴표를 쓴다'
-		if (!confirm('해당 발주를 등록 하시겠습니까?')) return;
-		let data = reqObj();
-		console.log(data);
-		// return;
-		$.ajax({
-			type: "post",
-			url: "/req/async/reqAdd",
-			data: data,
-			dataType: "json",
-			success: function(xml) {
-				if (xml.code == 200) {
-					console.log('success');
-					alert('등록 완료');
-				} else {
-					console.log(xml.code + ':: error');
-					alert('등록 실패. 잠시 후 다시시도하셈');
-				}
-			},
-			error: function(request, status, error) {
-				console.log("code:" + status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
-				alert('콘솔보셈');
-			}
-		});
-	});
-</script>
+	<script th:src="@{/resources/js/req/req_utils.js}"></script>
+	<script th:src="@{/resources/js/req/req_add.js}"></script>
 </body>
 </html>

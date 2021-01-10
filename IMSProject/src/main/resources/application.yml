@@ -3,7 +3,7 @@ spring:
   datasource:
     hikari:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      jdbc-url: jdbc:mysql://52.14.36.21:3306/im_db?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&useSSL=false
+      jdbc-url: jdbc:mysql://3.133.81.172:3306/im_db?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&useSSL=false&allowMultiQueries=true
       username: im_user
       password: cloth
       connection-test-query: SELECT NOW() FROM dual

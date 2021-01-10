@@ -55,7 +55,7 @@
                             <input type="radio" id="gn_rd0" name="gender" value="" th:checked="${map.gender} == ''">
                             <label for="gn_rd0">전체</label>
                             <input type="radio" id="gn_rd1" name="gender" value="C" th:checked="${map.gender} == 'C'">
-                            <label for="gn_rd1">공용(C)</label>
+                            <label for="gn_rd1">혼성(C)</label>
                             <input type="radio" id="gn_rd2" name="gender" value="W" th:checked="${map.gender} == 'M'">
                             <label for="gn_rd2">남성(M)</label>
                             <input type="radio" id="gn_rd3" name="gender" value="M" th:checked="${map.gender} == 'W'">
@@ -64,7 +64,6 @@
                         <th>발주 코드</th>
                         <td><input type="text" name="request_code" th:value="${map.request_code}"></td>
                     </tr>
-                    <!--            <input type="text" name="product_code" th:value="${map.request_code}">-->
                     <tr>
                         <th>조회 건수</th>
                         <td>
@@ -118,7 +117,7 @@
                     <td th:text="${row.make_factory}"></td>
                     <td th:text="${row.unit_price}"></td>
                     <td th:text="${row.get_date}"></td>
-                    <td th:text="${row.manufature_day}"></td>
+                    <td th:text="${row.manufacture_day}"></td>
                     <td th:text="${row.total_order_quantity}"></td>
                     <td>
                         <select class="custom-select" name="status" th:disabled="${row.request_status == '입고' || row.request_status == '취소'}">
@@ -129,11 +128,12 @@
                             <option value="입고" th:selected="${row.request_status}=='입고'">입고</option>
                         </select>
                     </td>
-                    <td> <input type="button" value="이름이쁘노" name="reqModButton"> </td>
+                    <td>
+                        <button class="btn btn-outline-primary" type="button" name="reqModButton">수정</button>
+                    </td>
                 </tr>
                 </tbody>
             </table>
-            <!--<p th:text="${paging}"></p>-->
             <!-- End of Table -->
 
             <!-- Paging -->
@@ -145,7 +145,7 @@
                             <span class="sr-only" th:text="${paging.getPrevPageNo()}"></span>
                         </a>
                     </li><!-- ${#numbers.sequence(paging.getStartPageNo(), paging.getEndPageNo())} -->
-                    <li class="page-item" th:each="num : ${#numbers.sequence(1, 5)}" th:classappend="${num} == 1 ? 'active' : ''">
+                    <li class="page-item" th:each="num : ${#numbers.sequence(paging.getStartPageNo(), paging.getEndPageNo())}" th:classappend="${num == paging.getPageNo()} ? 'active' : ''">
                         <a class="page-link" href="#">
                             <span aria-hidden="true" th:text="${num}"></span>
                             <span class="sr-only" th:text="${num}"></span>
@@ -164,8 +164,7 @@
         <!-- End of Row 2 -->
     </div>
 </div>
-
-<!-- Optional JavaScript; choose one of the two! -->
-<script th:src="@{/resources/js/request.js}"></script>
+<script th:src="@{/resources/js/cmn_main.js}"></script>
+<script th:src="@{/resources/js/req/req_main.js}"></script>
 </body>
 </html>

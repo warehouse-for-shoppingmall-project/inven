@@ -12,7 +12,7 @@ public class ProductInformation {
     private String gender;
     private String unit_price;
     private String make_factory;
-    private Date final_update;
+    private String final_update;
     private String make_code;
     private String product_status;
 

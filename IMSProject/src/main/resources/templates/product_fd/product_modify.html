@@ -3,73 +3,43 @@
 
 <head>
     <th:block th:replace="fragments/cmnHead :: main-head"></th:block>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>상품 수정</title>
     <style>
-        #product_title_table {
-            width: 240px;
-            display: inline-block;
-            float: left;
-        }
-
-        #product_title_table input {
-            width: 100px;
-        }
-
-        #product_title_table #file {
-            width: 200px;
-        }
-
-        #product_title_table #manufacturing_date {
-            width: 120px;
-        }
-
-        #product_detail_table {
-            display: inline-table;
-            width: 300px;
-            /* float: right; */
-        }
-
-        #product_detail_table input {
-            width: 70px;
-        }
-
-        #modifyForm {
-            font-weight: bold;
+        .caption_table th {
+            background-color: cornsilk;
         }
     </style>
 </head>
 <body>
 <!-- Contents -->
 <div class="container">
-
     <div class="row">
-
         <!-- row 1 -->
-        <div class="alert alert-warning alert-dismissible fade w-100" id="alert" role="alert">
+        <!--<div class="alert alert-warning alert-dismissible fade w-100 h-0" id="alert" role="alert">
             <p id="alt-c"><small></small></p>
             <button type="button" class="close" onclick="javascript:$('#alert').removeClass('show');">
                 <span aria-hidden="true">&times;</span>
             </button>
-        </div>
+        </div>-->
 
         <div class="col-lg-12">
-            <table>
+            <table class="caption_table w-100">
                 <tr>
                     <th th:text="|상품코드 ${product_code}|" colspan="2"></th>
                     <td>
                         <input class="btn btn-primary float-right" type="button" id="prodMod" value="완료">
                     </td>
                 </tr>
-                <tr>
-                    <th style="width: 130px;" scope="col">COLOR</th>
-                    <th style="width: 140px;" scope="col">CHANGE COLOR</th>
-                </tr>
             </table>
-            <table id="product_detail_table" th:data="${product_code}">
+            <table id="product_detail_table" th:data="${product_code}" class="w-100">
                 <thead id="detail_thead">
-                    <tr th:each="detail : ${detail}">
+                    <tr>
+                        <th scope="col">OLD</th>
+                        <th scope="col">NEW</th>
+                    </tr>
+                    <tr th:if="${details == null}">
+                        <th>색이 없습니다. 추가하세요.</th>
+                    </tr>
+                    <tr th:each="detail : ${details}">
                         <td>
                             <input class="form-control" type="text" name="old_color_name" th:value="${detail.getColor_name()}" readonly>
                         </td>
@@ -80,7 +50,7 @@
                 </thead>
                 <tbody id="detail_tbody">
                     <tr>
-                        <td style="width: 130px;">NEW COLOR</td>
+                        <td scope="col">(+)NEW COLOR</td>
                         <td>
                             <input class="btn btn-success" type="button" value="(+)추가" id="addButton" onclick="addDetail()">
                         </td>
@@ -98,7 +68,7 @@
 </script>
 
 
-<script th:src="@{/resources/js/prod_js/modify.js}"></script>
+<script th:src="@{/resources/js/prod/prod_mod.js}"></script>
 
 </body>
 </html>

@@ -17,7 +17,7 @@ public class ProductTitle {
     private String gender;
     private String make_factory;
     private String unit_price;
-    private Date final_update;
+    private String final_update;
     private String make_code;
     private String product_status;
 

@@ -1,39 +1,25 @@
 package com.inven.controller;
 
-import com.google.gson.Gson;
-import com.inven.common.CommonUtils;
 import com.inven.common.model.ProductTitle;
 import com.inven.param.ProductInformation;
 import com.inven.service.ProductServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.bind.annotation.*;
 
-import javax.transaction.Transactional;
 import java.util.Map;
-import javax.annotation.Resource;
-import java.util.List;
 
-
-/*
- * Class 에도 부모 annotation 설정 가능
- * ex) 여기에 RequestMapping(value="common")
- * 해두면 이 밑에 맵핑들은 다 common/___ 으로 접근해야함
- */
 
 @SuppressWarnings("unchecked")
 @Slf4j
 @RequestMapping(value = "/prod/async/*")
-@RestController // <- Json형태로 반환     // Controller <- html을 반환
+@RestController
 public class ProductAjaxController {
 
-    @Resource(name = "productService")
-    ProductServiceImpl prodService;
+	@Autowired
+	ProductServiceImpl prodService;
 
-    //	json -> @RequestBody 로 받아야함
-    //	x-www-urlencoded -> @RequestParam 로 받아야함
     @PutMapping("/upStatus")
     public boolean upStatus(@RequestBody ProductInformation productInformation) {
 
@@ -45,18 +31,17 @@ public class ProductAjaxController {
         return true;
     }
 
-    // 상품코드 중복검사
-    @GetMapping("/overlapCheck")
-    public JSONObject overlapCheck(@RequestParam Map<String, Object> map) {
-        log.debug("Request Param : " + map);
-        JSONObject jobj = new JSONObject();
-        jobj.put("code", 400);
-        int rs = prodService.overlapCheck(map);
-        if (rs == 0) jobj.put("code", 200);
-        return jobj;
-    }
+	@GetMapping("/overlapCheck")
+	public JSONObject overlapCheck(@RequestParam String product_code) {
+		log.debug("Request Param : " + product_code);
+		JSONObject jobj = new JSONObject();
 
-    @Transactional()
+		int rs = prodService.overlapCheck(product_code);
+
+		jobj.put("code", rs == 0 ? 200 : 400);
+		return jobj;
+	}
+
     @PostMapping(value = "/prodAdd")
     public JSONObject prodAdd(@RequestParam Map<String, Object> map) {
 
@@ -67,12 +52,9 @@ public class ProductAjaxController {
 
         int addResult = prodService.addProductData(map);
 
-        if (addResult > 0)
-            jobj.put("code", 200);
-        else if (addResult == 0)
-            jobj.put("code", 300);
-        else if (addResult == -1)
-            jobj.put("code", 400);
+        if (addResult > 0) jobj.put("code", 200);
+        else if (addResult == 0) jobj.put("code", 300);
+        else if (addResult == -1) jobj.put("code", 400);
 
         return jobj;
     }
@@ -86,34 +68,9 @@ public class ProductAjaxController {
 
         int rs = prodService.updateColumn(map);
 
-        if(rs == 1) jobj.put("code", 200);
-        else jobj.put("code", 400);
+        jobj.put("code", rs == 1 ? 200 : 400);
 
         return jobj;
     }
-
-
-    /* JSONObject Key => code
-     * value 의미
-     * 200 : Success
-     * 400 : Error */
-
-//	@GetMapping("/prodTest.do")
-////	@RequestMapping(value = "/index.do", method = RequestMethod.GET)
-//	public JSONObject test(@RequestParam Map<String, Object> map) {
-//		log.info("Request Parameter : " + map);
-//
-//		JSONObject jobj = new JSONObject();
-//		jobj.put("code", 400);
-//
-//		List<Map<String, Object>> list = prodService.selectAll(map);
-//		if(list != null) {
-//			jobj.put("code", 200);
-//			jobj.put("list", list);
-//		}
-//
-//		return jobj;
-//	}
-
 
 }

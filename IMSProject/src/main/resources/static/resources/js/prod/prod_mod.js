@@ -1,9 +1,5 @@
-// 이 페이지를 읽고나면 key event 에 numberSet 함수를 적용.
-$('input[type=number]').keyup(numberSet).keydown(numberSet).keypress(numberSet);
-
 <!-- 버튼 클릭 시 detail 테이블 열 추가 -->
 function addDetail() {
-
     let detail_tbody = document.getElementById("detail_tbody");
     let row = detail_tbody.insertRow();
     let cell = row.insertCell();
@@ -19,14 +15,6 @@ function delDetail(row) {
 
 let product_code = $('#product_detail_table').attr('data');
 
-// let eachObj = (i, e) => {
-//     // let ;
-//     $(this).find('input').each((i, e) => {
-//         let name = $(e).attr('name');
-//         let val = $(e).val();
-//     });
-// }
-
 function prodObj(){
 
     let update_data = [];
@@ -36,9 +24,10 @@ function prodObj(){
 
     update_tr.each(
         (i, e) => {
+            if(i === 0) return true;
             console.log(i, e);
             let input = $(e).find('input[name=update_color_name]');
-            let obj = {product_code : product_code};
+            let obj = { product_code : product_code };
             if (input[0].value.trim()) {
                 $(e).find('input').each(    (i, e) =>  obj[$(e).attr('name')] = $(e).val().trim()   );
                 update_data.push(obj);
@@ -50,9 +39,9 @@ function prodObj(){
         (i, e) => {
             if(i === 0) return true;
             let input = $(e).find('input[name=new_color_name]');
-            let obj = {product_code : product_code};
+            let obj = { product_code : product_code };
             if (input[0].value.trim()) {
-                $(e).find('input').each((i, e) =>  obj[$(e).attr('name')] = $(e).val().trim());
+                $(e).find('input').each(    (i, e) =>  obj.color_name = $(e).val().trim()   );
                 insert_data.push(obj);
             }
         }
@@ -73,8 +62,6 @@ function prodObj(){
     console.log(data);
     return data;
 }
-
-
 
 function isDuplicate(arr)  {
     const isDup = arr.some(function(x) {
@@ -101,6 +88,7 @@ $('#prodMod').click(function() {
 
     tr.each(
         (i, e) => {
+            if(i === 0) return true;
             push(arr, $(e).find('input[name=old_color_name]').val().trim());
             push(arr, $(e).find('input[name=update_color_name]').val().trim());
         }

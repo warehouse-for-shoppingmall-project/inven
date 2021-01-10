@@ -3,51 +3,9 @@
 <mapper namespace="com.inven.mapper.ProductMapper">
 
     <!-- SQL -->
-    <sql id="columns">
-        *
+    <sql id="titleColumn">
+        product_code, gender, make_factory, unit_price, IFNULL(DATE(final_update), '-') AS final_update, make_code, product_status
     </sql>
-
-    <!-- Select -->
-
-    <select id="overlapCheck" parameterType="hashMap" resultType="int">
-        select count(*)
-        from product_title
-        where product_code = #{product_code}
-    </select>
-
-
-    <select id="getProductList" resultType="com.inven.common.model.ProductTitle">
-        select *
-        from product_title
-    </select>
-
-    <select id="selectAll" parameterType="hashMap" resultType="hashmap">
-        select
-        <include refid="columns"/>
-        from product_title pt
-        join product_detail pd
-        on pt.product_code = pd.product_code
-    </select>
-
-    <select id="selectDetail" parameterType="com.inven.common.model.ProductDetail"
-            resultType="com.inven.common.model.ProductDetail">
-        select *
-        from product_detail
-        where product_code = #{product_code}
-    </select>
-
-    <select id="search2" parameterType="com.inven.common.model.SearchParam" resultType="com.inven.common.model.ProductTitle">
-        select *
-        from product_title
-        <include refid="searchCondition"/>
-        LIMIT #{start_idx}, #{end_idx}
-    </select>
-
-    <select id="searchCount" resultType="int" parameterType="com.inven.common.model.SearchParam">
-        SELECT count(*)
-        FROM product_title
-        <include refid="searchCondition"/>
-    </select>
 
     <sql id="searchCondition">
         WHERE product_code LIKE concat('%', #{productCode}, '%')
@@ -62,10 +20,31 @@
         </if>
     </sql>
 
-    <!--    상품수정 시 detail 조회    -->
-    <select id="modReadDetail" parameterType="string" resultType="com.inven.common.model.ProductDetail" >
-        select  *
+    <!-- Select -->
+
+    <select id="selectDetail" parameterType="string" resultType="com.inven.common.model.ProductDetail">
+        select *
         from product_detail
+        where product_code = #{product_code}
+    </select>
+
+    <select id="searchSelect" parameterType="com.inven.common.model.SearchParam" resultType="com.inven.common.model.ProductTitle">
+        select <include refid="titleColumn"/>
+        from product_title
+        <include refid="searchCondition"/>
+        ORDER BY in_date DESC
+        LIMIT #{start_idx}, #{end_idx}
+    </select>
+
+    <select id="searchCount" resultType="int" parameterType="com.inven.common.model.SearchParam">
+        SELECT count(*)
+        FROM product_title
+        <include refid="searchCondition"/>
+    </select>
+
+    <select id="overlapCheck" parameterType="string" resultType="int">
+        select count(*)
+        from product_title
         where product_code = #{product_code}
     </select>
 
@@ -79,7 +58,7 @@
         <result property="make_code" column="make_code" />
         <result property="product_status" column="product_status" />
     </resultMap>
-<!--  이 Map은 니가 바꾼거가 ㅇㅇ 왜 바꿨어? 이렇게 안하니까 detail아닌 놈들ㅇ ㅏㅈ어이나이나이아니 이거랑 -->
+
     <resultMap id="modDetailMap" type="com.inven.common.model.ProductDetail">
         <result property="product_code" column="product_code" />
         <result property="color_name" column="color_name" />
@@ -92,53 +71,24 @@
         <result property="manufacture_day" column="manufacture_day" />
     </resultMap>
 
-
     <!-- ADD -->
     <insert id="addTitle" parameterType="hashMap">
         INSERT INTO product_title(product_code, gender)
-        values(#{product_code}, #{gender})
+        VALUES(#{product_code}, #{gender})
     </insert>
 
     <insert id="addDetails" parameterType="java.util.List">
         INSERT INTO product_detail(product_code, color_name)
-        values
+        VALUES
         <foreach collection="details" item="item" separator=",">
             (#{item.product_code}, #{item.color_name})
         </foreach>
     </insert>
 
-    <insert id="productTitlesAdd" parameterType="com.inven.common.model.ProductTitle">
-        insert into product_title(product_code,
-                                  gender,
-                                  make_factory,
-                                  unit_price,
-                                  final_update,
-                                  make_code)
-        values (#{product_code}, #{gender},
-                #{make_factory}, #{unit_price},
-                #{final_update}, #{make_code})
-
-    </insert>
-
-    <insert id="productDetailsAdd" parameterType="com.inven.common.model.ProductDetail">
-        insert into product_detail(product_code,
-                                   color_name,
-                                   s,
-                                   m,
-                                   l,
-                                   xl,
-                                   f,
-                                   total,
-                                   manufacture_day)
-        values (
-                   #{product_code}, #{color_name}, #{s}, #{m}, #{l}, #{xl}, #{f}, #{total},DATE(#{manufacture_day})
-               )
-    </insert>
-
-<!--    새로운 색상 추가 시     -->
+    <!--    새로운 색상 추가 시     -->
     <insert id="addColor" parameterType="java.util.List">
         INSERT INTO product_detail(product_code, color_name)
-        values
+        VALUES
         <foreach collection="list" item="item" separator=",">
             (#{item.product_code}, #{item.new_color_name})
         </foreach>
@@ -153,7 +103,7 @@
     </update>
 
     <update id="modColor" parameterType="java.util.List">
-        <foreach collection="list" item="item" separator=";">
+        <foreach collection="list" item="item" separator=";" close=";">
             UPDATE product_detail
             SET color_name = #{item.update_color_name}
             WHERE product_code = #{item.product_code} AND color_name = #{item.old_color_name}
