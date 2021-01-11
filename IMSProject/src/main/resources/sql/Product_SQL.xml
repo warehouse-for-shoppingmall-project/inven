@@ -32,7 +32,7 @@
         select <include refid="titleColumn"/>
         from product_title
         <include refid="searchCondition"/>
-        ORDER BY in_date DESC
+        ORDER BY input_date DESC
         LIMIT #{start_idx}, #{end_idx}
     </select>
 

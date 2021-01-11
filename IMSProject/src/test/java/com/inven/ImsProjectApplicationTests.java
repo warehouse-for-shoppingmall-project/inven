@@ -1,6 +1,5 @@
 package com.inven;
 
-import java.util.List;
 import java.util.Map;
 
 import org.json.simple.JSONObject;
@@ -17,27 +16,27 @@ import com.inven.service.ProductServiceImpl;
 class ImsProjectApplicationTests {
 	
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
-	
+
 	@Autowired
 	ProductServiceImpl prodService;
-	
+
 //	@Test
 	void contextLoads() {
 	}
-	
+
 	@Test
 	public JSONObject test(@RequestParam Map<String, Object> map) {
 		log.info("Request Parameter : " + map);
-		
+
 		JSONObject jobj = new JSONObject();
-		jobj.put("code", 400); 
+		jobj.put("code", 400);
 
 //		List<Map<String, Object>> list = prodService.(map);
 //		if(list != null) {
 //			jobj.put("code", 200);
 //			jobj.put("list", list);
 //		}
-		
+
 		return jobj;
 	}
 }

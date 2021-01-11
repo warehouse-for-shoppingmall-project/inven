@@ -59,7 +59,7 @@
 		SELECT <include refid="titleColumn"/>
 		FROM request_title
 		<include refid="search"/>
-		ORDER BY in_date DESC
+		ORDER BY request_date DESC
 		LIMIT #{start_idx}, #{end_idx}
 	</select>
 
