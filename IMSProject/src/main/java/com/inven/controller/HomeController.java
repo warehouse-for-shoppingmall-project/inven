@@ -10,11 +10,10 @@ import java.util.Map.Entry;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.inven.service.CommonServiceImpl;
 import com.inven.service.inter.CommonService;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
@@ -37,31 +36,31 @@ import com.inven.common.CommandMap;
 public class HomeController {
 
     @Autowired
-    CommonService commonService;
+    CommonServiceImpl commonService;
 
-    /*
-     * url annotation
-     * 복수 지정방식 : value = { "url", "url", "url"}
-     * 단일 지정방식 : value = "url"
-     * */
+    // Impl 은 놔두고 여기다가 만들면 됨
+    CommonService service = new CommonService() {
+        @Override
+        public boolean loginCheck(Map<String, Object> map) {
+
+            return false;
+        }
+
+        @Override
+        public boolean loginChange(Map<String, Object> map) {
+
+            return false;
+        }
+    };
 
     @GetMapping(value = {"/", "login"})
     public ModelAndView home(HttpServletRequest req) {
-        ModelAndView mv = new ModelAndView();
-        mv.setViewName("login");
+        ModelAndView mv = new ModelAndView("login");
+
         if(req.getSession().getAttribute("connect") != null)
             mv.setViewName("redirect:/req/list");
         return mv;
     }
-//    @PostMapping(value = {"loginChange"})
-//    public ModelAndView loginChange(@RequestParam Map<String,Object> map) {
-//        ModelAndView mv = new ModelAndView();
-//        mv.setViewName("loginChange");
-////        if(req.getSession().getAttribute("connect") != null)
-////            mv.setViewName("redirect:/req/list");
-//
-//        return mv;
-//    }
 
     @GetMapping(value = "logout")
     public ModelAndView logout(HttpServletRequest req) {
@@ -74,6 +73,11 @@ public class HomeController {
     @GetMapping(value = "main")
     public ModelAndView movePageMain(@RequestParam Map<String, Object> map) {
         return new ModelAndView("pageMain");
+    }
+
+    @GetMapping(value="changePass")
+    public String changePass(){
+        return "change_pass";
     }
 
 	@ResponseBody
@@ -93,7 +97,7 @@ public class HomeController {
         JSONObject jobj = new JSONObject();
         jobj.put("code", 400);
         if (map.containsKey("pwd")) {
-            boolean rs = commonService.loginCheck(map);
+            boolean rs = service.loginCheck(map);
             if (rs) {
                 jobj.put("code", 200);
                 HttpSession s = req.getSession();
@@ -104,10 +108,6 @@ public class HomeController {
         return jobj;
     }
 
-    @GetMapping(value="changePass")
-    public String changePass(){
-        return "change_pass";
-    }
 
     @ResponseBody
     @PutMapping(value="changePass")
@@ -117,10 +117,10 @@ public class HomeController {
 
         jobj.put("code", 400);
         if (map.containsKey("pwd")) {
-            boolean rs = commonService.loginCheck(map);
+            boolean rs = service.loginCheck(map);
             log.info("loginCheck 는? : " + rs);
             if (rs) {
-                boolean lc = commonService.loginChange(map);
+                boolean lc = service.loginChange(map);
                 log.info("loginChange 는? : "+ lc);
                 if(lc){
                     jobj.put("code", 200);
@@ -128,20 +128,6 @@ public class HomeController {
             }
         }
         return jobj;
-    }
-
-    @RequestMapping(value = "/sample/testMapArgumentResolver")
-    public ModelAndView testMapArgumentResolver(CommandMap commandMap) throws Exception {
-        ModelAndView mv = new ModelAndView();
-        if (!commandMap.isEmpty()) {
-            Iterator<Entry<String, Object>> iterator = commandMap.getMap().entrySet().iterator();
-            Entry<String, Object> entry;
-            while (iterator.hasNext()) {
-                entry = iterator.next();
-                log.debug("key : " + entry.getKey() + ", value : " + entry.getValue());
-            }
-        }
-        return mv;
     }
 
 }

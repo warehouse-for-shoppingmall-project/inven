@@ -36,7 +36,6 @@ $('#overlapCheck').click(function() {
         validCheck(false, '기다려주세요.');
         return;
     }
-    confirm_1 = true;
 
     let value = $('#ip_prod_cd').val();
     if(value === ''){
@@ -45,6 +44,7 @@ $('#overlapCheck').click(function() {
         return;
     }
 
+    confirm_1 = true;
     $.ajax({
         type: "GET",
         url: "/prod/async/overlapCheck",
@@ -71,11 +71,13 @@ $('#overlapCheck').click(function() {
 
 // 상품등록
 $('#prodAdd').click(function() {
+    // 유효성 검사 출력용
+    let clrValid = $('div[name=color_valid]');
     if(confirm_2){
-        validCheck(false, '기다려주세요.');
+        clrValid.text('기다려주세요.');
         return;
     }
-    confirm_2 = true;
+
 
     // js 에서는 ' 홑 따옴표를 쓴다'
     if(overlapCheckTN) {
@@ -89,9 +91,6 @@ $('#prodAdd').click(function() {
 
     // 함수 정지용용
    let inputYN = false;
-
-    // 유효성 검사 출력용
-    let clrValid = $('div[name=color_valid]');
 
     // 중복검사용 변수
     let names = [];
@@ -122,6 +121,7 @@ $('#prodAdd').click(function() {
     }
 
     console.log(data);
+    confirm_2 = true;
     // return;
     $.ajax({
         type: "post",
@@ -134,6 +134,7 @@ $('#prodAdd').click(function() {
                 $('#alert').addClass('show');
                 confirm_2 = false;
                 setTimeout(function (){
+                    window.opener.location.reload();
                     window.open('','_self').close();
                 }, 1000);
             } else {

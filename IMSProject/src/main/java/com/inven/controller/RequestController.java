@@ -24,24 +24,6 @@ public class RequestController {
     @Autowired
     RequestServiceImpl reqService;
 
-    @RequestMapping(value = "/test", method = RequestMethod.GET)
-    public ModelAndView test(@RequestParam Map<String, Object> map) {
-        log.info("Request Parameter : " + map);
-        ModelAndView mv = new ModelAndView("/layout/write");
-
-        List<Map<String, Object>> list = reqService.searchWhere(map);
-        mv.addObject("list", list);
-
-        return mv;
-    }
-
-    /*
-     * mapping 주소가 /list 이면서 Method는 Get이고
-     * request_fd안에 request_main.html로 가는 mv를 만들고
-     * searchTitle의 값을 받아서 mv에 담아서 보내는 함수를 만들어봐
-     * */
-    // mappingurl이랑method이름을통일하면method이름이겹칠일이없다
-
     private void setFirstAccess(Map<String, Object> map){
         Date date = new Date();
         // sql 인자로 보낼 값
@@ -58,9 +40,9 @@ public class RequestController {
         /* request_code product_code request_status pageSize start_date end_Date */
     }
 
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    @GetMapping("/list")
     public ModelAndView list(@RequestParam Map<String, Object> map) {
-        ModelAndView mv = new ModelAndView("/request_fd/request_main");
+        ModelAndView mv = new ModelAndView("request_fd/request_main");
         List<Map<String, Object>> list = null;
         Paging paging = null;
 

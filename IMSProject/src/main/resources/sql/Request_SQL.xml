@@ -87,6 +87,7 @@
 	<!--	발주등록 시 상품코드 select 해서 고를 수 있게 상품코드 조회 후 html 로 전송-->
 	<select id="getAllProdCd" resultType="hashMap">
 		SELECT product_code, gender FROM product_title
+		ORDER BY input_date DESC
 	</select>
 
 	<!-- request_title 발주 수정 시 -->

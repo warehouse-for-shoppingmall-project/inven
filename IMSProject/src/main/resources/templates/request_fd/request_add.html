@@ -47,7 +47,7 @@
 										th:text="${item.product_code}"
 										th:value="${item.product_code}"
 										th:data="${item.gender}"
-										th:selected="${prod != null} and ${prod.product_code == code}">
+										th:selected="${prod != null} and ${prod.product_code == item.product_code}">
 								</option>
 							</select>
 						</td>

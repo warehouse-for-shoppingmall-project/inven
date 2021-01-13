@@ -18,6 +18,12 @@ mybatis:
   configuration:
     map-underscore-to-camel-case: true # 스네이크 형식으로 변경해줌? VO를 안써서 안쓸듯? <-?
 
+# interceptor path
 interceptor:
   exclude: /resources/**, /*.ico
 
+# Error 보게해줌?
+server:
+  error:
+    whitelabel:
+      enabled: false

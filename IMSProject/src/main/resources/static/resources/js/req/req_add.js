@@ -37,7 +37,7 @@ $('#reqAdd').click(function() {
     if (!confirm('해당 발주를 등록 하시겠습니까?')) return;
 
     console.log(data);
-    return;
+
     $.ajax({
         type: "post",
         url: "/req/async/reqAdd",
