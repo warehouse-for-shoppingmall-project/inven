@@ -68,7 +68,7 @@ public class ProductAjaxController {
 
         int rs = prodService.updateColumn(map);
 
-        jobj.put("code", rs == 1 ? 200 : 400);
+        jobj.put("code", rs > 0 ? 200 : 400);
 
         return jobj;
     }

@@ -22,12 +22,12 @@ $('select[name=status]').change(function () {
                 alert('적용 완료');
             } else {
                 console.log('error');
-                alert('적용 실패. 잠시 후 다시시도하셈');
+                alert('적용 실패. 잠시 후 다시시도해주세요');
             }
         },
         error: function (request, status, error) {
             console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
-            alert('콘솔보셈');
+            alert('변경 오류');
         }
     });
 });

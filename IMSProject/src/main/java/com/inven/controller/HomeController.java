@@ -129,6 +129,8 @@ public class HomeController {
                 if(lc){
                     jobj.put("code", 200);
                 }
+            }else{
+                jobj.put("code", 300);
             }
         }
         return jobj;

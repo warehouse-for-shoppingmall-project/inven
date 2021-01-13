@@ -51,12 +51,12 @@ $('#overlapCheck').click(function() {
         data: { product_code : value },
         dataType: "json",
         success: function(xml) {
+                confirm_1 = false;
             if (xml.code === 200) {
                 validCheck(true);
                 $('input[name=product_code]').val(value);
                 $('#ip_prod_cd').attr('readonly', 'readonly');
                 overlapCheckTN = false;
-                confirm_1 = false;
             } else {
                 console.log(xml.code + ':: error');
                 validCheck(false, '이미 존재하는 코드입니다.');
@@ -64,7 +64,7 @@ $('#overlapCheck').click(function() {
         },
         error: function(request, status, error) {
             console.log("code:" + status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
-            alert('콘솔보셈');
+            alert('등록 오류.');
         }
     });
 });
@@ -147,7 +147,7 @@ $('#prodAdd').click(function() {
         },
         error: function(request, status, error) {
             console.log("code:" + status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
-            alert('콘솔보셈');
+            alert('등록 오류');
         }
     });
 });

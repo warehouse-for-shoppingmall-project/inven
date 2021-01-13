@@ -20,7 +20,7 @@ document.getElementById('submit_btn').addEventListener('click',
                     if (obj.code === 200) {
                         location.href = "req/list";
                     } else {
-                        alert('비밀번호 잘못입력');
+                        alert('비밀번호를 잘못입력하셨습니다.');
                         frm.pwd.value = '';/* 틀린 비밀번호 지워주기 */
                     }
                 } else {

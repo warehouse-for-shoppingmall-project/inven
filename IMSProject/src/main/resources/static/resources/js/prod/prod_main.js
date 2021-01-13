@@ -7,14 +7,14 @@ $('select[name=status]').change(function () {
     };
     console.log(data);
     $.ajax({
-        type: "post",
+        type: "PUT",
         url: "/prod/async/upStatus",
         data: JSON.stringify(data),
         dataType: "json",
         contentType: "application/json",
         success: function (res) {// response) {
             console.log(res);
-            /*if (res.code == 200) {
+            if (res) {
                 // if(select.val() === '수령')
                 //     select.attr('disabled', 'disabled');
                 console.log('success');
@@ -22,7 +22,7 @@ $('select[name=status]').change(function () {
             } else {
                 console.log('error');
                 alert('적용 실패. 잠시 후 다시시도하셈');
-            }*/
+            }
         },
         error: function (request, status, error) {
             console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);

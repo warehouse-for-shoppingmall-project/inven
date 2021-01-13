@@ -114,7 +114,7 @@ $('#prodMod').click(function() {
     console.log('ajax 송신 중 proData : ',  data);
 
     if(isEmpty(data)){
-        alert('변경사항이.없구먼!!.끌.끌.끌.끌.이잉.요즘.젊은것들은@@@');
+        alert('변경사항이 존재하지 않습니다.');
         return;
     }
 
@@ -130,12 +130,12 @@ $('#prodMod').click(function() {
                 location.reload();
             } else {
                 console.log(xml.code + ':: error');
-                alert('수정 실패. 잠시 후 다시시도하셈');
+                alert('수정 실패. 잠시 후 다시시도해주세요.');
             }
         },
         error: function(request, status, error) {
             console.log("code:" + status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
-            alert('콘솔보셈');
+            alert('수정 오류');
         }
     });
 });

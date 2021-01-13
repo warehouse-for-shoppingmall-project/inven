@@ -38,14 +38,17 @@
                     console.log('success');
                     alert('비밀번호 변경 완료 다시 로그인 해주세요.');;
                     location.href = "/logout"
+                } else if(xml.code == 300){
+                    console.log(xml.code + ':: error');
+                    alert('기존 비밀번호가 동일하지 않습니다.');
                 } else {
                     console.log(xml.code + ':: error');
-                    alert('변경 실패. 잠시 후 다시시도하셈');
+                    alert('변경 실패. 잠시 후 다시시도해주세요.');
                 }
             },
             error: function(request, status, error) {
                 console.log("code:" + status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
-                alert('콘솔보셈');
+                alert('변경 오류');
             }
         });
     });

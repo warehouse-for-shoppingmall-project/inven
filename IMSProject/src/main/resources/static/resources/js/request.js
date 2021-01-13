@@ -24,9 +24,10 @@ $('select[name=status]').change(function () {
                     select.attr('disabled', 'disabled');
                 console.log('success');
                 alert('적용 완료');
+                location.reload();
             } else {
                 console.log('error');
-                alert('적용 실패. 잠시 후 다시시도하셈');
+                alert('적용 실패. 잠시 후 다시시도해주세요.');
             }
         },
         error: function (request, status, error) {
@@ -188,12 +189,12 @@ $('#reqMod').click(function() {
                 location.href = "list";
             } else {
                 console.log(xml.code + ':: error');
-                alert('수정 실패. 잠시 후 다시시도하셈');
+                alert('수정 실패. 잠시 후 다시시도해주세요.');
             }
         },
         error: function(request, status, error) {
             console.log("code:" + status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
-            alert('콘솔보셈');
+            alert('수정 오류.');
         }
     });
 });
@@ -206,7 +207,7 @@ let rowType = ['number', 'number', 'number', 'number', 'number', 'text'];
 
 //발주 코드 생성
 let makeCodeAjax = function(){
-    console.log("하는중");
+    console.log("발주코드 생성 중");
     $.ajax({
         type: "get",
         url: "/req/async/makeReqCode",
@@ -217,7 +218,7 @@ let makeCodeAjax = function(){
                 $('input#request_code').val(xml.request_code);
             } else {
                 console.log(xml.code + ' :: error');
-                alert('생성 실패. 다시 해보셈');
+                alert('생성에 실패하였습니다.. 다시 시도해주세요.');
             }
         },
         error: function(request, status, error) {
@@ -269,12 +270,12 @@ $('#reqAdd').click(function() {
                 location.href="list";
             } else {
                 console.log(xml.code + ':: error');
-                alert('등록 실패. 잠시 후 다시시도하셈');
+                alert('등록 실패. 잠시 후 다시 시도해주세요.');
             }
         },
         error: function(request, status, error) {
             console.log("code:" + status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
-            alert('콘솔보셈');
+            alert('등록 오류. 오류가 계속된다면 담당자에게 연락주세요.');
         }
     });
 });

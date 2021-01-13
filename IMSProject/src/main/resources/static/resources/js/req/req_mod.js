@@ -13,9 +13,10 @@ $('#reqMod').click(function() {
             if (xml.code === 200) {
                 console.log('success');
                 alert('수정 완료');
+                location.href = "list";
             } else {
                 console.log(xml.code + ':: error');
-                alert('수정 실패. 잠시 후 다시시도하셈');
+                alert('수정 실패. 잠시 후 다시시도해주세요.');
             }
         },
         error: function(request, status, error) {
