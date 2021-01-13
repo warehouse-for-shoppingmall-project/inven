@@ -2,4 +2,29 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.inven.mapper.CommonMapper">
 
+    <!-- SQL -->
+
+
+    <!-- Select -->
+
+    <select id="loginCheck" parameterType="integer" resultType="String">
+        select count(*)
+        from access
+        where pwd = #{pwd}
+    </select>
+
+
+    <!-- ADD -->
+
+
+    <!--    update    -->
+    <update id="loginChange" parameterType="hashmap">
+        UPDATE access
+        SET pwd = #{newPwd}
+        WHERE pwd = #{pwd}
+    </update>
+
+
+    <!-- Delete -->
+
 </mapper>

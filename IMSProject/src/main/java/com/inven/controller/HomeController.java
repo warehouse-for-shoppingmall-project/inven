@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.inven.mapper.CommonMapper;
 import com.inven.service.CommonServiceImpl;
 import com.inven.service.inter.CommonService;
 import lombok.extern.slf4j.Slf4j;
@@ -35,21 +36,25 @@ import com.inven.common.CommandMap;
 @Controller
 public class HomeController {
 
+    // 파일 변경 방식 사용 시 commonService로 함수 변경 하면 됨.
     @Autowired
     CommonServiceImpl commonService;
 
     // Impl 은 놔두고 여기다가 만들면 됨
+    @Autowired
     CommonService service = new CommonService() {
+
+        @Autowired
+        CommonMapper mapper;
+
         @Override
         public boolean loginCheck(Map<String, Object> map) {
-
-            return false;
+            return mapper.loginCheck(map.get("pwd").toString()) == 1;
         }
 
         @Override
         public boolean loginChange(Map<String, Object> map) {
-
-            return false;
+            return mapper.loginChange(map) == 1;
         }
     };
 
@@ -107,7 +112,6 @@ public class HomeController {
         }
         return jobj;
     }
-
 
     @ResponseBody
     @PutMapping(value="changePass")
