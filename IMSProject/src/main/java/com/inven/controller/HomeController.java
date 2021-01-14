@@ -3,9 +3,7 @@ package com.inven.controller;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -22,16 +20,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.inven.common.CommandMap;
-
-
-/*
- * Class 에도 부모 annotation 설정 가능
- * ex) 여기에 RequestMapping(value="common")
- * 해두면 이 밑에 맵핑들은 다 common/___ 으로 접근해야함
- */
-
-@SuppressWarnings("unchecked")
 @Slf4j
 @Controller
 public class HomeController {
@@ -43,12 +31,13 @@ public class HomeController {
     // Impl 은 놔두고 여기다가 만들면 됨
     @Autowired
     CommonService service = new CommonService() {
-
         @Autowired
         CommonMapper mapper;
 
         @Override
-        public boolean loginCheck(Map<String, Object> map) { return mapper.loginCheck(map.get("pwd").toString()) == 1; }
+        public boolean loginCheck(Map<String, Object> map) {
+            return mapper.loginCheck(map.get("pwd").toString()) == 1;
+        }
 
         @Override
         public boolean loginChange(Map<String, Object> map) {
@@ -75,7 +64,7 @@ public class HomeController {
     }
 
     @GetMapping(value = "main")
-    public ModelAndView movePageMain(@RequestParam Map<String, Object> map) {
+    public ModelAndView main(@RequestParam Map<String, Object> map) {
         return new ModelAndView("pageMain");
     }
 

@@ -5,10 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
-import javax.transaction.Transactional;
-
-import com.google.gson.Gson;
-import com.inven.common.CommonUtils;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,12 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import com.inven.service.RequestServiceImpl;
 
-
-/*
- * Class 에도 부모 annotation 설정 가능
- * ex) 여기에 RequestMapping(value="common")
- * 해두면 이 밑에 맵핑들은 다 common/___ 으로 접근해야함
- */
 
 @SuppressWarnings("unchecked")
 @RequestMapping(value = "/req/async/*")
