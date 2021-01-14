@@ -6,8 +6,6 @@ import java.util.Map;
 
 @Mapper
 public interface CommonMapper {
-
     int loginCheck(String pwd);
-
     int loginChange(Map<String, Object> map);
 }

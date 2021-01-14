@@ -48,9 +48,7 @@ public class HomeController {
         CommonMapper mapper;
 
         @Override
-        public boolean loginCheck(Map<String, Object> map) {
-            return mapper.loginCheck(map.get("pwd").toString()) == 1;
-        }
+        public boolean loginCheck(Map<String, Object> map) { return mapper.loginCheck(map.get("pwd").toString()) == 1; }
 
         @Override
         public boolean loginChange(Map<String, Object> map) {
@@ -58,11 +56,12 @@ public class HomeController {
         }
     };
 
+
     @GetMapping(value = {"/", "login"})
     public ModelAndView home(HttpServletRequest req) {
         ModelAndView mv = new ModelAndView("login");
 
-        if(req.getSession().getAttribute("connect") != null)
+        if (req.getSession().getAttribute("connect") != null)
             mv.setViewName("redirect:/req/list");
         return mv;
     }
@@ -70,7 +69,7 @@ public class HomeController {
     @GetMapping(value = "logout")
     public ModelAndView logout(HttpServletRequest req) {
         HttpSession s = req.getSession();
-        if(s.getAttribute("connect") != null)
+        if (s.getAttribute("connect") != null)
             s.invalidate();
         return new ModelAndView("redirect:/");
     }
@@ -80,19 +79,19 @@ public class HomeController {
         return new ModelAndView("pageMain");
     }
 
-    @GetMapping(value="changePass")
-    public String changePass(){
+    @GetMapping(value = "changePass")
+    public String changePass() {
         return "change_pass";
     }
 
-	@ResponseBody
-	@GetMapping(value="readFile")
-	public String readFileTest() throws IOException {
-		DefaultResourceLoader drl = new DefaultResourceLoader();
-		Resource resource = drl.getResource("classpath:static/resources/pass/pwd.txt");
+    @ResponseBody
+    @GetMapping(value = "readFile")
+    public String readFileTest() throws IOException {
+        DefaultResourceLoader drl = new DefaultResourceLoader();
+        Resource resource = drl.getResource("classpath:static/resources/pass/pwd.txt");
 
-		return Files.readString(Path.of(resource.getURI()));
-	}
+        return Files.readString(Path.of(resource.getURI()));
+    }
 
     /* 비동기 서버통신(Ajax) 접근할 때 @ResponseBody */
     @ResponseBody
@@ -107,14 +106,14 @@ public class HomeController {
                 jobj.put("code", 200);
                 HttpSession s = req.getSession();
                 s.setAttribute("connect", true);
-                s.setMaxInactiveInterval(60*60*12);
+                s.setMaxInactiveInterval(60 * 60 * 12);
             }
         }
         return jobj;
     }
 
     @ResponseBody
-    @PutMapping(value="changePass")
+    @PutMapping(value = "changePass")
     public JSONObject changePass(@RequestParam Map<String, Object> map) throws IOException {
         log.debug("Request Parameter : " + map);
         JSONObject jobj = new JSONObject();
@@ -125,11 +124,11 @@ public class HomeController {
             log.info("loginCheck 는? : " + rs);
             if (rs) {
                 boolean lc = service.loginChange(map);
-                log.info("loginChange 는? : "+ lc);
-                if(lc){
+                log.info("loginChange 는? : " + lc);
+                if (lc) {
                     jobj.put("code", 200);
                 }
-            }else{
+            } else {
                 jobj.put("code", 300);
             }
         }
