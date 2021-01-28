@@ -113,11 +113,11 @@
 	<!--발주등록 페이지에서 등록 요청 시 request_title 테이블에 insert-->
 	<insert id="addTitle" parameterType="hashMap" >
 		INSERT INTO request_title (
-			request_code, product_code, request_status, unit_price,
+			request_code, product_code, request_status, unit_price, gender,
 			make_factory, total_order_quantity, etc
 		)
 		VALUES (
-			#{request_code}, #{product_code}, #{request_status}, #{unit_price},
+			#{request_code}, #{product_code}, #{request_status}, #{unit_price}, #{gender},
 			#{make_factory}, #{total_order_quantity}, #{etc}
 		)
    </insert>

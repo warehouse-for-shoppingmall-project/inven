@@ -28,12 +28,18 @@ $('button#makeReqCode').click(makeCodeAjax);
 
 // 발주등록 버튼
 $('#reqAdd').click(function() {
+
     if(codeCheck) {
         alert('발주코드를 생성해주세요');
         return;
     }
+
     let data = makeReqObj();
-    if(isEmpty(data.details))
+    if(isEmpty(data.details)) {
+        alert('잘못됐다.');
+        return;
+    }
+
     if (!confirm('해당 발주를 등록 하시겠습니까?')) return;
 
     console.log(data);

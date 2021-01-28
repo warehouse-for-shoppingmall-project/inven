@@ -22,7 +22,7 @@ function makeReqObj(){
                 }
             );
             // console.log(i, row_data);
-            details.push(row_data)
+            details.push(row_data);
         }
     );
     title["total_order_quantity"] = total_order_quantity;
