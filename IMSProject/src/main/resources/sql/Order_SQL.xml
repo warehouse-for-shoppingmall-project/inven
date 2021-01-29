@@ -2,54 +2,30 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.inven.mapper.OrderMapper">
 
-    <!-- SQL -->
-
-    <!--    예시용으로 나둔것   -->
-    <sql id="titleColumn">
-        product_code, gender, make_factory, unit_price, IFNULL(DATE(final_update), '-') AS final_update, make_code, product_status
-    </sql>
-
     <sql id="searchCondition">
-        WHERE product_code LIKE concat('%', #{productCode}, '%')
-        <if test="!gender.equals('')">
-            AND gender = #{gender}
+        WHERE DATE(orderTime) BETWEEN DATE(#{startDate}) AND DATE(#{endDate})
+        <if test="!orderStatus.equals('')">
+            AND orderStatus = #{orderStatus}
         </if>
-        <if test="!startDate.equals('') and !endDate.equals('')">
-            AND DATE(final_update) BETWEEN DATE(#{startDate}) AND DATE(#{endDate})
-        </if>
-        <if test="!productStatus.equals('')">
-            AND product_status = #{productStatus}
+        <if test="!custId.equals('')">
+            AND custId LIKE concat('%',#{custId},'%')
         </if>
     </sql>
 
-    <!-- Select -->
-    <select id="selectOrder" parameterType="string" resultType="com.inven.common.model.OrderManage">
-        select * from order_manage
-    </select>
-
-
-<!--    예시용으로 나둔것   -->
-    <select id="searchSelect" parameterType="com.inven.common.model.SearchParam" resultType="com.inven.common.model.ProductTitle">
-        select <include refid="titleColumn"/>
-        from product_title
+    <!--    Select   -->
+    <select id="searchOrder" parameterType="com.inven.common.model.OrderManage" resultType="com.inven.common.model.OrderManage">
+        SELECT * FROM shop_db.order_manage
         <include refid="searchCondition"/>
-        ORDER BY input_date DESC
+        ORDER BY orderNo DESC
         LIMIT #{start_idx}, #{end_idx}
     </select>
 
-
-
+    <select id="orderCount" parameterType="com.inven.common.model.OrderManage" resultType="integer">
+        SELECT count(*) FROM shop_db.order_manage
+        <include refid="searchCondition"/>
+    </select>
 
     <!--    update    -->
-
-<!--    예시용으로 나둔것   -->
-    <update id="modColor" parameterType="java.util.List">
-        <foreach collection="list" item="item" separator=";" close=";">
-            UPDATE product_detail
-            SET color_name = #{item.update_color_name}
-            WHERE product_code = #{item.product_code} AND color_name = #{item.old_color_name}
-        </foreach>
-    </update>
 
 
 

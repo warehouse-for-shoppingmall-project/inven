@@ -18,8 +18,8 @@ public class OrderServiceImpl implements OrderService {
     private OrderMapper orderMapper;
 
     /************* Select **************/
-    public List<OrderManage> selectOrderManage() { return orderMapper.selectOrderManage(); }
-
+    public List<OrderManage> searchOrder(OrderManage orderManage) { return orderMapper.searchOrder(orderManage); }
+    public int orderCount(OrderManage orderManage) { return orderMapper.orderCount(orderManage); }
     /************* Insert **************/
 
     /************* Update **************/

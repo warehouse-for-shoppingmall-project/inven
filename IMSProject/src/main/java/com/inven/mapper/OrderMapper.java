@@ -14,8 +14,8 @@ public interface OrderMapper {
 
 	/************* Select **************/
 
-	@Select("select * from shop_db.order_manage")
-	List<OrderManage> selectOrderManage();
+	List<OrderManage> searchOrder(OrderManage orderManage);
+	int orderCount(OrderManage orderManage);
 
 	/************* Insert **************/
 

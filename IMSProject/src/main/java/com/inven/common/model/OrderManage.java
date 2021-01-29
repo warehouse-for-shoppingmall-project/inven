@@ -1,6 +1,6 @@
 package com.inven.common.model;
 
-import com.inven.param.ProductInformation;
+import com.inven.common.CommonUtils;
 import lombok.*;
 
 import java.sql.Date;
@@ -16,7 +16,7 @@ public class OrderManage {
     private int orderNo;                //주문 번호(PK)
     private String custId;              //회원 ID
     private String custName;            //회원 명
-    private String orderStatus;         //주문 상태 ( 1. 주문 2. 발송 3. 수령)
+    private String orderStatus;         //주문 상태 ( 1. 주문 2. 발송 3. 수령 4.취소)
 
     private String prodName;            //제품 명
     private String prodCode;            //제품 코드
@@ -41,6 +41,29 @@ public class OrderManage {
     private String phone;               //핸드폰 번호
 
 
-    public OrderManage(){}              //생성자는 필요하면 추가하려고...
+    // 검색, 페이징
+    private String startDate;
+    private String endDate;
+    private int start_idx;
+    private int end_idx;
+    private int pageSize;
+    private int pageNo;
+
+    public OrderManage(){
+        this.custId= "";
+        this.orderStatus = "";
+        //조회 시 오늘이 1월이면 시작 날짜는 1/1 마지막 날짜는 1/31일이 되게끔 함  ==> default로 현재 월만 결과에 나오게...
+        this.startDate = CommonUtils.getDate("start");
+        this.endDate = CommonUtils.getDate("end");
+        this.pageNo = 1;
+        this.pageSize = 10;
+    }
+
+//    public OrderManage(String custId, String orderStatus, String startDate, String endDate){
+//        this.custId= custId;
+//        this.orderStatus = orderStatus;
+//        this.startDate = startDate;
+//        this.endDate = endDate;
+//    }
 
 }
