@@ -22,7 +22,14 @@ public class OrderServiceImpl implements OrderService {
     public int orderCount(OrderManage orderManage) { return orderMapper.orderCount(orderManage); }
     /************* Insert **************/
 
+    public String makeTrackingNumber() {
+       return orderMapper.makeTrackingNumber();
+    }
+
     /************* Update **************/
+    public void upStatus(OrderManage orderManage){
+        orderMapper.upStatus(orderManage);
+    }
 
 
 

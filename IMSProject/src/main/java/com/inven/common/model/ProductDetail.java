@@ -2,11 +2,7 @@ package com.inven.common.model;
 
 
 import com.inven.param.ProductInformation;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.Date;
 
@@ -15,6 +11,7 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @ToString // String 보기좋게 변환
+@NoArgsConstructor
 public class ProductDetail {
     private String product_code;
     private String color_name;

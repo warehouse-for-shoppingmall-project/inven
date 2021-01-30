@@ -48,37 +48,47 @@
                     상품 코드
                 </th>
                 <td>
-                    <input id="productCodeInput" type="text" name="productCode" placeholder="Search" th:value="${searchParams.getProductCode()}">
+                    <input id="productCodeInput" type="text" name="productCode" placeholder="Search"
+                           th:value="${searchParams.getProductCode()}">
                 </td>
             </tr>
             <tr>
                 <th>성별</th>
                 <td>
-                    <input type="radio" id="gn_rd0" name="gender" value="" th:checked="${searchParams.getGender() == ''}">
+                    <input type="radio" id="gn_rd0" name="gender" value=""
+                           th:checked="${searchParams.getGender() == ''}">
                     <label for="gn_rd0">전체</label>
-                    <input type="radio" id="gn_rd1" name="gender" value="C" th:checked="${searchParams.getGender() == 'C'}">
+                    <input type="radio" id="gn_rd1" name="gender" value="C"
+                           th:checked="${searchParams.getGender() == 'C'}">
                     <label for="gn_rd1">공용(C)</label>
-                    <input type="radio" id="gn_rd2" name="gender" value="M" th:checked="${searchParams.getGender() == 'M'}">
+                    <input type="radio" id="gn_rd2" name="gender" value="M"
+                           th:checked="${searchParams.getGender() == 'M'}">
                     <label for="gn_rd2">남성(M)</label>
-                    <input type="radio" id="gn_rd3" name="gender" value="W" th:checked="${searchParams.getGender() == 'W'}">
+                    <input type="radio" id="gn_rd3" name="gender" value="W"
+                           th:checked="${searchParams.getGender() == 'W'}">
                     <label for="gn_rd3">여성(W)</label>
                 </td>
                 <th>
                     입고 날짜
                 </th>
                 <td>
-                    <input id="dateInput" class="dateInput" type="date" name="startDate" th:value="${searchParams.getStartDate()}"> ~
-                    <input id="dateInput2" class="dateInput" type="date" name="endDate" th:value="${searchParams.getEndDate()}">
+                    <input id="dateInput" class="dateInput" type="date" name="startDate"
+                           th:value="${searchParams.getStartDate()}"> ~
+                    <input id="dateInput2" class="dateInput" type="date" name="endDate"
+                           th:value="${searchParams.getEndDate()}">
                 </td>
             </tr>
             <tr>
                 <th>조회 건수</th>
                 <td>
-                    <input type="radio" id="ps_rd1" name="pageSize" value="10" th:checked="${searchParams.getPageSize() == 10}">
+                    <input type="radio" id="ps_rd1" name="pageSize" value="10"
+                           th:checked="${searchParams.getPageSize() == 10}">
                     <label for="ps_rd1">10</label>
-                    <input type="radio" id="ps_rd2" name="pageSize" value="20" th:checked="${searchParams.getPageSize() == 20}">
+                    <input type="radio" id="ps_rd2" name="pageSize" value="20"
+                           th:checked="${searchParams.getPageSize() == 20}">
                     <label for="ps_rd2">20</label>
-                    <input type="radio" id="ps_rd3" name="pageSize" value="30" th:checked="${searchParams.getPageSize() == 30}">
+                    <input type="radio" id="ps_rd3" name="pageSize" value="30"
+                           th:checked="${searchParams.getPageSize() == 30}">
                     <label for="ps_rd3">30</label>
                 </td>
                 <td></td>
@@ -126,8 +136,12 @@
                         <option value="준비" th:selected="${title.getProduct_status() == '준비'}">준비</option>
                     </select>
                 </td>
-                <td><button class="btn btn-primary" name="mod_popup">수정</button></td>
-                <td><button class="btn btn-primary" name="reqAddBtn">발주</button></td>
+                <td>
+                    <button class="btn btn-primary" name="mod_popup">수정</button>
+                </td>
+                <td>
+                    <button class="btn btn-primary" name="reqAddBtn">발주</button>
+                </td>
             </tr>
             </tbody>
         </table>
@@ -136,19 +150,23 @@
         <nav aria-label="Page navigation example ml-auto">
             <ul class="pagination" th:if="${paging != null}">
                 <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Previous" th:disabled="${paging.getPageNo() == paging.getStartPageNo()}">
+                    <a class="page-link" href="#" aria-label="Previous"
+                       th:disabled="${paging.getPageNo() == paging.getStartPageNo()}">
                         <span aria-hidden="true">&laquo;</span>
                         <span class="sr-only" th:text="${paging.getPrevPageNo()}"></span>
                     </a>
                 </li><!-- ${#numbers.sequence(paging.getStartPageNo(), paging.getEndPageNo())} -->
-                <li class="page-item" th:each="num : ${#numbers.sequence(paging.getStartPageNo(), paging.getEndPageNo())}" th:classappend="${num == paging.getPageNo()} ? 'active' : ''">
+                <li class="page-item"
+                    th:each="num : ${#numbers.sequence(paging.getStartPageNo(), paging.getEndPageNo())}"
+                    th:classappend="${num == paging.getPageNo()} ? 'active' : ''">
                     <a class="page-link" href="#">
                         <span aria-hidden="true" th:text="${num}"></span>
                         <span class="sr-only" th:text="${num}"></span>
                     </a>
                 </li>
                 <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Next" th:disabled="${paging.getPageNo() == paging.getFinalPageNo()}">
+                    <a class="page-link" href="#" aria-label="Next"
+                       th:disabled="${paging.getPageNo() == paging.getFinalPageNo()}">
                         <span aria-hidden="true">&raquo;</span>
                         <span class="sr-only" th:text="${paging.getNextPageNo()}"></span>
                     </a>

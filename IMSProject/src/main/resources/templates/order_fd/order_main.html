@@ -3,11 +3,14 @@
 <head>
     <th:block th:replace="fragments/cmnHead :: main-head"></th:block>
     <style>
-        .sh-tb{
+        .sh-tb {
             width: 100%;
             background-color: aliceblue;
         }
-        .sh-tb tfoot{ text-align: right}
+
+        .sh-tb tfoot {
+            text-align: right
+        }
     </style>
 </head>
 
@@ -19,25 +22,34 @@
     <div class="prodTitle">
         <h1 class="d-inline">주문 조회</h1>
     </div>
+    <form name="saveParamForm">
+
+        <input type="hidden" name="pageNo" th:value="${orderManages.getPageNo()}">
+    </form>
     <form name="searchForm" action="/order/list" method="get" th:object="${orderManages}">
         <table class="sh-tb">
             <tbody>
             <tr>
                 <th>주문 상태</th>
                 <td>
-                    <input type="radio" id="sr_rd1" name="orderStatus" value="" th:checked="${orderManages.getOrderStatus()} == ''">
+                    <input type="radio" id="sr_rd1" name="orderStatus" value=""
+                           th:checked="${orderManages.getOrderStatus()} == ''">
                     <label for="sr_rd1">전체</label>
 
-                    <input type="radio" id="sr_rd2" name="orderStatus" value="주문" th:checked="${orderManages.getOrderStatus()} == '주문'">
+                    <input type="radio" id="sr_rd2" name="orderStatus" value="주문"
+                           th:checked="${orderManages.getOrderStatus()} == '주문'">
                     <label for="sr_rd2">주문</label>
 
-                    <input type="radio" id="sr_rd3" name="orderStatus" value="발송" th:checked="${orderManages.getOrderStatus()} == '발송'">
+                    <input type="radio" id="sr_rd3" name="orderStatus" value="발송"
+                           th:checked="${orderManages.getOrderStatus()} == '발송'">
                     <label for="sr_rd3">발송</label>
 
-                    <input type="radio" id="sr_rd4" name="orderStatus" value="수령" th:checked="${orderManages.getOrderStatus()} == '수령'">
+                    <input type="radio" id="sr_rd4" name="orderStatus" value="수령"
+                           th:checked="${orderManages.getOrderStatus()} == '수령'">
                     <label for="sr_rd3">수령</label>
 
-                    <input type="radio" id="sr_rd5" name="orderStatus" value="취소" th:checked="${orderManages.getOrderStatus()} == '취소'">
+                    <input type="radio" id="sr_rd5" name="orderStatus" value="취소"
+                           th:checked="${orderManages.getOrderStatus()} == '취소'">
                     <label for="sr_rd3">취소</label>
                 </td>
                 <th>
@@ -50,19 +62,24 @@
             <tr>
                 <th>조회 건수</th>
                 <td>
-                    <input type="radio" id="ps_rd1" name="pageSize" value="10" th:checked="${orderManages.getPageSize() == 10}">
+                    <input type="radio" id="ps_rd1" name="pageSize" value="10"
+                           th:checked="${orderManages.getPageSize() == 10}">
                     <label for="ps_rd1">10</label>
-                    <input type="radio" id="ps_rd2" name="pageSize" value="20" th:checked="${orderManages.getPageSize() == 20}">
+                    <input type="radio" id="ps_rd2" name="pageSize" value="20"
+                           th:checked="${orderManages.getPageSize() == 20}">
                     <label for="ps_rd2">20</label>
-                    <input type="radio" id="ps_rd3" name="pageSize" value="30" th:checked="${orderManages.getPageSize() == 30}">
+                    <input type="radio" id="ps_rd3" name="pageSize" value="30"
+                           th:checked="${orderManages.getPageSize() == 30}">
                     <label for="ps_rd3">30</label>
                 </td>
                 <th>
                     주문 날짜
                 </th>
                 <td>
-                    <input id="dateInput" class="dateInput" type="date" name="startDate" th:value="${orderManages.getStartDate()}"> ~
-                    <input id="dateInput2" class="dateInput" type="date" name="endDate" th:value="${orderManages.getEndDate()}">
+                    <input id="dateInput" class="dateInput" type="date" name="startDate"
+                           th:value="${orderManages.getStartDate()}"> ~
+                    <input id="dateInput2" class="dateInput" type="date" name="endDate"
+                           th:value="${orderManages.getEndDate()}">
                     <button type="submit" style="float: right;" class="btn btn-success">Search</button>
                 </td>
             </tr>
@@ -73,52 +90,60 @@
     <div class="col-lg-12">
         <table class="table table-hover">
             <thead class="thead-dark">
-                <tr>
-                    <th scope="col">주문 번호</th>
-                    <th scope="col">회원 ID</th>
-                    <th scope="col">회원 명</th>
-                    <th scope="col">주문 상태</th>
-                    <th scope="col">상품 명</th>
-                    <th scope="col">상품 코드</th>
-                    <th scope="col">색상</th>
-                    <th scope="col">사이즈</th>
-                    <th scope="col">수량</th>
-                    <th scope="col">주문 금액</th>
-                    <th scope="col">주소</th>
-                    <th scope="col">택배사</th>
-                    <th scope="col">운송장 번호</th>
-                    <th scope="col">주문 시각</th>
-                </tr>
+            <tr>
+                <th scope="col">주문 번호</th>
+                <th scope="col">회원 ID</th>
+                <th scope="col">회원 명</th>
+                <th scope="col">주문 상태</th>
+                <th scope="col">상품 명</th>
+                <th scope="col">상품 코드</th>
+                <th scope="col">색상</th>
+                <th scope="col">사이즈</th>
+                <th scope="col">수량</th>
+                <th scope="col">주문 금액</th>
+                <th scope="col">주소</th>
+                <th scope="col">택배사</th>
+                <th scope="col">운송장 번호</th>
+                <th scope="col">주문 시각</th>
+            </tr>
             </thead>
             <tbody>
-                <tr th:if="${orderList}== null">
-                    <td colspan="9">
-                        검색결과에 맞는 데이터가 없습니다
-                    </td>
-                </tr>
-                <tr th:each="order : ${orderList}" name="each_data_tbody">
-                    <td th:text="${order.getOrderNo()}">orderNO</td>
-                    <td th:text="${order.getCustId()}">custID</td>
-                    <td th:text="${order.getCustName()}">custName</td>
-                    <td>
-                        <select class="custom-select" name="orderStatus">
-                            <option value="주문" th:selected="${order.getOrderStatus() == '주문'}">주문</option>
-                            <option value="발송" th:selected="${order.getOrderStatus() == '발송'}">발송</option>
-                            <option value="수령" th:selected="${order.getOrderStatus() == '수령'}">수령</option>
-                            <option value="취소" th:selected="${order.getOrderStatus() == '취소'}">취소</option>
-                        </select>
-                    </td>
-                    <td th:text="${order.getProdName()}">prodName</td>
-                    <td th:text="${order.getProdCode()}">prodCode</td>
-                    <td th:text="${order.getColor()}">color</td>
-                    <td th:text="${order.getSize()}">size</td>
-                    <td th:text="${order.getQty()}">quantity</td>
-                    <td th:text="${order.getPrice()}">price</td>
-                    <td th:text="${order.getAddr()} + ' ' + ${order.getAddr2()}" >address</td>
-                    <td th:text="${order.getDeliveryNum()}">deliveryNum</td>
-                    <td th:text="${order.getDeliveryCompany()}">deliveryCompany</td>
-                    <td th:text="${order.getOrderTime()}">orderTime</td>
-                </tr>
+            <tr th:if="${orderList}== null">
+                <td colspan="9">
+                    검색결과에 맞는 데이터가 없습니다
+                </td>
+            </tr>
+            <tr th:each="order : ${orderList}" name="each_data_tbody" th:data="${order.getOrderNo()}">
+                <td th:text="${order.getOrderNo()}">orderNO</td>
+                <td th:text="${order.getCustId()}">custID</td>
+                <td th:text="${order.getCustName()}">custName</td>
+                <td>
+                    <select class="custom-select" name="orderStatus">
+                        <option value="주문" th:selected="${order.getOrderStatus() == '주문'}">주문</option>
+                        <option value="발송" th:selected="${order.getOrderStatus() == '발송'}">발송</option>
+                        <option value="수령" th:selected="${order.getOrderStatus() == '수령'}">수령</option>
+                        <option value="취소" th:selected="${order.getOrderStatus() == '취소'}">취소</option>
+                    </select>
+                </td>
+                <td th:text="${order.getProdName()}">prodName</td>
+                <td th:text="${order.getProdCode()}">prodCode</td>
+                <td th:text="${order.getColor()}">color</td>
+                <td th:text="${order.getSize()}">size</td>
+                <td th:text="${order.getQty()}">quantity</td>
+                <td th:text="${order.getPrice()}">price</td>
+                <td th:text="${order.getAddr()} + ' ' + ${order.getAddr2()}">address</td>
+                <td th:text="${order.getDeliveryCompany()}">deliveryCompany</td>
+                <td>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" name="deliveryNum" readonly>
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button" name="makeTrackingNum">송장 번호 생성
+                            </button>
+                        </div>
+                    </div>
+                </td>
+                <td th:text="${order.getOrderTime()}">orderTime</td>
+            </tr>
             </tbody>
         </table>
 
@@ -126,19 +151,23 @@
         <nav aria-label="Page navigation example ml-auto">
             <ul class="pagination" th:if="${paging } != null">
                 <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Previous" th:disabled="${paging.getPageNo() == paging.getStartPageNo()}">
+                    <a class="page-link" href="#" aria-label="Previous"
+                       th:disabled="${paging.getPageNo() == paging.getStartPageNo()}">
                         <span aria-hidden="true">&laquo;</span>
                         <span class="sr-only" th:text="${paging.getPrevPageNo()}"></span>
                     </a>
                 </li>
-                <li class="page-item" th:each="num : ${#numbers.sequence(paging.getStartPageNo(), paging.getEndPageNo())}" th:classappend="${num == paging.getPageNo()} ? 'active' : ''">
+                <li class="page-item"
+                    th:each="num : ${#numbers.sequence(paging.getStartPageNo(), paging.getEndPageNo())}"
+                    th:classappend="${num == paging.getPageNo()} ? 'active' : ''">
                     <a class="page-link" href="#">
                         <span aria-hidden="true" th:text="${num}"></span>
                         <span class="sr-only" th:text="${num}"></span>
                     </a>
                 </li>
                 <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Next" th:disabled="${paging.getPageNo() == paging.getFinalPageNo()}">
+                    <a class="page-link" href="#" aria-label="Next"
+                       th:disabled="${paging.getPageNo() == paging.getFinalPageNo()}">
                         <span aria-hidden="true">&raquo;</span>
                         <span class="sr-only" th:text="${paging.getNextPageNo()}"></span>
                     </a>
@@ -149,5 +178,8 @@
     </div>
 </div>
 
+
+<script th:src="@{/resources/js/cmn_main.js}"></script>
+<script th:src="@{/resources/js/order/order_main.js}"></script>
 </body>
 </html>

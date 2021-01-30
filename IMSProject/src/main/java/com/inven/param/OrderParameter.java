@@ -1,19 +1,11 @@
-package com.inven.common.model;
+package com.inven.param;
 
-import com.inven.common.CommonUtils;
-import com.inven.param.OrderParameter;
-import com.inven.param.ProductInformation;
-import lombok.*;
+import lombok.Data;
 
 import java.sql.Date;
 
-
 @Data
-@Getter
-@Setter
-@ToString
-@AllArgsConstructor
-public class OrderManage {
+public class OrderParameter {
 
     private int orderNo;                //주문 번호(PK)
     private String custId;              //회원 ID
@@ -42,28 +34,5 @@ public class OrderManage {
     //phone은 우리쪽에서 필요한 정보일까 싶어서 html에서 뿌리진 않았음
     private String phone;               //핸드폰 번호
 
-
-    // 검색, 페이징
-    private String startDate;
-    private String endDate;
-    private int start_idx;
-    private int end_idx;
-    private int pageSize;
-    private int pageNo;
-
-    public OrderManage(){
-        this.custId= "";
-        this.orderStatus = "";
-        //조회 시 오늘이 1월이면 시작 날짜는 1/1 마지막 날짜는 1/31일이 되게끔 함  ==> default로 현재 월만 결과에 나오게...
-        this.startDate = CommonUtils.getDate("start");
-        this.endDate = CommonUtils.getDate("end");
-        this.pageNo = 1;
-        this.pageSize = 10;
-    }
-
-    public OrderManage(int orderNo, String orderStatus) {
-        this.orderNo = orderNo;
-        this.orderStatus = orderStatus;
-    }
 
 }

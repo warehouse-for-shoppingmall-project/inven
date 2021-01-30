@@ -12,6 +12,10 @@
         </if>
     </sql>
 
+    <select id="makeTrackingNumber" resultType="String">
+		SELECT shop_db.FN_MAKE_TRACKING_NUMBER()
+	</select>
+
     <!--    Select   -->
     <select id="searchOrder" parameterType="com.inven.common.model.OrderManage" resultType="com.inven.common.model.OrderManage">
         SELECT * FROM shop_db.order_manage
@@ -26,7 +30,11 @@
     </select>
 
     <!--    update    -->
-
+    <update id="upStatus" parameterType="com.inven.common.model.OrderManage">
+        UPDATE shop_db.order_manage
+        SET orderStatus = #{orderStatus}
+        WHERE orderNo = #{orderNo}
+    </update>
 
 
 </mapper>
