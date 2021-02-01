@@ -58,7 +58,7 @@ public class RequestAjaxController {
     }
 
     @GetMapping(value = "/makeReqCode")
-    public JSONObject makeReqCode() {
+    public JSONObject makeReqCode(String orderNo) {
         log.info("Request Parameter : 발주코드 생성 버튼 클릭");
 
         JSONObject jobj = new JSONObject();

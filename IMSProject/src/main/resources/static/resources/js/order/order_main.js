@@ -39,11 +39,11 @@ $('button[name=makeTrackingNum]').click(function (){
     let orderNo = $(this).parents('tr').attr('data');
     console.log('orderNo : ' + orderNo);
     $.ajax({
-        type: "get",
+        type: "post",
         url: "/order/async/makeTrackingNumber",
         data: JSON.stringify(orderNo),
         dataType: "json",
-        // contentType: "application/json",
+        contentType: "application/json",
         success: function(xml) {
             if (xml.code === 200) {
                 input.val(xml.deliveryNum);
