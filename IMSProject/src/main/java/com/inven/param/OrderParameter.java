@@ -27,7 +27,6 @@ public class OrderParameter {
     private String addr4;               //우편 번호
     private String addr5;               //뭔지 모르겠뜸 (~~동) 이렇게만 되어있음
 
-    private String deliveryCompany;     //배송사(택배회사)
     private String deliveryNum;         //운송장번호
     private Date orderTime;             //주문 시각
 

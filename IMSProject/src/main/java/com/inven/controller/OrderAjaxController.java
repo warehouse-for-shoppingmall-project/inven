@@ -26,13 +26,14 @@ public class OrderAjaxController {
     /************* Insert **************/
 
     @GetMapping(value = "/makeTrackingNumber")
-    public JSONObject makeTrackingNumber() {
+    @ResponseBody
+    public JSONObject makeTrackingNumber(int orderNo) {
         log.info("송장번호 생성 버튼 클릭");
 
         JSONObject jobj = new JSONObject();
         jobj.put("code", 400);
-
-        String deliveryNum= orderService.makeTrackingNumber();
+        log.info("orderNo > " + orderNo);
+        String deliveryNum= orderService.makeTrackingNumber(orderNo);
         if (deliveryNum != null) {
             jobj.put("code", 200);
             jobj.put("deliveryNum", deliveryNum);

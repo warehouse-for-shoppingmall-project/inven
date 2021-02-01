@@ -18,7 +18,7 @@ public interface OrderMapper {
 
 	/************* Insert **************/
 
-	String makeTrackingNumber();
+	String makeTrackingNumber(int orderNo);
 
 	/************* Update **************/
 

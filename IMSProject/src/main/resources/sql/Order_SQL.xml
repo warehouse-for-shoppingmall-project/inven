@@ -12,8 +12,8 @@
         </if>
     </sql>
 
-    <select id="makeTrackingNumber" resultType="String">
-		SELECT shop_db.FN_MAKE_TRACKING_NUMBER()
+    <select id="makeTrackingNumber" parameterType="integer" resultType="String">
+		SELECT shop_db.FN_MAKE_TRACKING_NUMBER(#{orderNo})
 	</select>
 
     <!--    Select   -->

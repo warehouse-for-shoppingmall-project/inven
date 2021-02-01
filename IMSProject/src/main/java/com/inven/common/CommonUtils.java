@@ -166,13 +166,13 @@ public class CommonUtils {
 
     public static String getDate(String when){
         Calendar cal = Calendar.getInstance();
-        String year = "" + cal.get(Calendar.YEAR);
-        String month = "" + cal.get(Calendar.MONTH)+1 ;     // +1 해주는 이유: calendar에서 1월은 0으로 되어있기 때문에.
+        String year =  cal.get(Calendar.YEAR) + "";
+        String month = (cal.get(Calendar.MONTH)+1) + "" ;     // +1 해주는 이유: calendar에서 1월은 0으로 되어있기 때문에.
         if(month.length() == 1) month = "0" + month;
         String lastDay = "" + cal.getActualMaximum(Calendar.DAY_OF_MONTH);
 
         if(when.equals("start")){
-            return year + "-" + month + "-01";
+            return year + "-01" + "-01";
         }else{
             return year + "-" + month + "-" + lastDay;
         }

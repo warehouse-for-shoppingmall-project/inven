@@ -20,10 +20,11 @@ public class OrderServiceImpl implements OrderService {
     /************* Select **************/
     public List<OrderManage> searchOrder(OrderManage orderManage) { return orderMapper.searchOrder(orderManage); }
     public int orderCount(OrderManage orderManage) { return orderMapper.orderCount(orderManage); }
+
     /************* Insert **************/
 
-    public String makeTrackingNumber() {
-       return orderMapper.makeTrackingNumber();
+    public String makeTrackingNumber(int orderNo) {
+       return orderMapper.makeTrackingNumber(orderNo);
     }
 
     /************* Update **************/

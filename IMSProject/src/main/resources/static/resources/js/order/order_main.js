@@ -33,14 +33,15 @@ $('select[name=orderStatus]').change(function () {
 
 $('button[name=makeTrackingNum]').click(function (){
     let input = $(this).parent().prev();
-    if (!confirm('송장번호 생성 하시겠습니까?')) return;
+    if (!confirm('송장번호를 생성 하시겠습니까?')) return;
     let button = $(this);
 
-    console.log('data');
-$.ajax({
+    let orderNo = $(this).parents('tr').attr('data');
+    console.log('orderNo : ' + orderNo);
+    $.ajax({
         type: "get",
         url: "/order/async/makeTrackingNumber",
-        // data: JSON.stringify(data),
+        data: JSON.stringify(orderNo),
         dataType: "json",
         // contentType: "application/json",
         success: function(xml) {
@@ -50,7 +51,7 @@ $.ajax({
                 button.hide();
             } else {
                 console.log(xml.code + ' :: error');
-                alert('생성 실패. 다시 해보셈');
+                alert('생성 실패. 다시 해보세요');
             }
         },
         error: function(request, status, error) {

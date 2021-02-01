@@ -23,7 +23,6 @@
         <h1 class="d-inline">주문 조회</h1>
     </div>
     <form name="saveParamForm">
-
         <input type="hidden" name="pageNo" th:value="${orderManages.getPageNo()}">
     </form>
     <form name="searchForm" action="/order/list" method="get" th:object="${orderManages}">
@@ -132,7 +131,6 @@
                 <td th:text="${order.getQty()}">quantity</td>
                 <td th:text="${order.getPrice()}">price</td>
                 <td th:text="${order.getAddr()} + ' ' + ${order.getAddr2()}">address</td>
-                <td th:text="${order.getDeliveryCompany()}">deliveryCompany</td>
                 <td>
                     <div class="input-group mb-3">
                         <input type="text" class="form-control" name="deliveryNum" readonly>
