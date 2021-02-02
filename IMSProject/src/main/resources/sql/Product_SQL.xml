@@ -23,9 +23,9 @@
     <!-- Select -->
 
     <select id="selectDetail" parameterType="string" resultType="com.inven.common.model.ProductDetail">
-        select *
+        select color_name, s, m, l, xl, f, total
         from product_detail
-        where product_code = #{product_code}
+        where product_code = #{productCode}
     </select>
 
     <select id="searchSelect" parameterType="com.inven.common.model.SearchParam" resultType="com.inven.common.model.ProductTitle">
@@ -45,7 +45,7 @@
     <select id="overlapCheck" parameterType="string" resultType="int">
         select count(*)
         from product_title
-        where product_code = #{product_code}
+        where product_code = #{productCode}
     </select>
 
     <!--    resultMap   -->
@@ -98,8 +98,8 @@
     <!--    update    -->
     <update id="upStatus" parameterType="com.inven.common.model.ProductTitle">
         UPDATE product_title
-        SET product_status = #{product_status}
-        WHERE product_code = #{product_code}
+        SET product_status = #{productStatus}
+        WHERE product_code = #{productCode}
     </update>
 
     <update id="modColor" parameterType="java.util.List">

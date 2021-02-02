@@ -24,13 +24,13 @@
         <div class="col-lg-12">
             <table class="caption_table w-100">
                 <tr>
-                    <th th:text="|상품코드 ${product_code}|" colspan="2"></th>
+                    <th th:text="|상품코드 ${productCode}|" colspan="2"></th>
                     <td>
                         <input class="btn btn-primary float-right" type="button" id="prodMod" value="완료">
                     </td>
                 </tr>
             </table>
-            <table id="product_detail_table" th:data="${product_code}" class="w-100">
+            <table id="product_detail_table" th:data="${productCode}" class="w-100">
                 <thead id="detail_thead">
                     <tr>
                         <th scope="col">OLD</th>
@@ -41,10 +41,10 @@
                     </tr>
                     <tr th:each="detail : ${details}">
                         <td>
-                            <input class="form-control" type="text" name="old_color_name" th:value="${detail.getColor_name()}" readonly>
+                            <input class="form-control" type="text" name="old_color_name" th:value="${detail.getColorName()}" readonly>
                         </td>
                         <td>
-                            <input class="form-control" type="text" name="update_color_name" th:placeholder="${detail.getColor_name()}">
+                            <input class="form-control" type="text" name="update_color_name" th:placeholder="${detail.getColorName()}">
                         </td>
                     </tr>
                 </thead>

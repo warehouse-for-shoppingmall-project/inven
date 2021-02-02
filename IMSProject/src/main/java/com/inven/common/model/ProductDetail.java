@@ -13,19 +13,19 @@ import java.util.Date;
 @ToString // String 보기좋게 변환
 @NoArgsConstructor
 public class ProductDetail {
-    private String product_code;
-    private String color_name;
+    private String productCode;
+    private String colorName;
     private int s;
     private int m;
     private int l;
     private int xl;
     private int f;
     private int total;
-    private Date manufacture_day;
+    private Date manufactureDay;
 
     public ProductDetail(ProductInformation productInformation) {
-        this.product_code = productInformation.getProduct_code();
-        this.color_name = productInformation.getColor_name();
+        this.productCode = productInformation.getProductCode();
+        this.colorName = productInformation.getColorName();
         this.s = productInformation.getS();
         this.m = productInformation.getM();
         this.l = productInformation.getL();

@@ -121,19 +121,19 @@
                     검색결과에 맞는 데이터가 없습니다
                 </td>
             </tr>
-            <tr th:each="title : ${productTitles}" name="each_data_tbody" th:data="${title.getProduct_code()}">
-                <td th:text="${title.getProduct_code()}">code</td>
+            <tr th:each="title : ${productTitles}" name="each_data_tbody" th:data="${title.getProductCode()}">
+                <td th:text="${title.getProductCode()}">code</td>
                 <td th:text="${title.getGender()}">gender</td>
-                <td th:text="${title.getMake_factory()}">factory</td>
-                <td th:text="${title.getUnit_price()}">price</td>
-                <td th:text="${title.getFinal_update()}">update</td>
-                <td th:text="${title.getMake_code()}">make_code</td>
+                <td th:text="${title.getMakeFactory()}">factory</td>
+                <td th:text="${title.getUnitPrice()}">price</td>
+                <td th:text="${title.getFinalUpdate()}">update</td>
+                <td th:text="${title.getMakeCode()}">make_code</td>
                 <td>
                     <select class="custom-select" name="status">
-                        <option value="판매" th:selected="${title.getProduct_status() == '판매'}">판매</option>
-                        <option value="품절" th:selected="${title.getProduct_status() == '품절'}">품절</option>
-                        <option value="중단" th:selected="${title.getProduct_status() == '중단'}">중단</option>
-                        <option value="준비" th:selected="${title.getProduct_status() == '준비'}">준비</option>
+                        <option value="판매" th:selected="${title.getProductStatus() == '판매'}">판매</option>
+                        <option value="품절" th:selected="${title.getProductStatus() == '품절'}">품절</option>
+                        <option value="중단" th:selected="${title.getProductStatus() == '중단'}">중단</option>
+                        <option value="준비" th:selected="${title.getProductStatus() == '준비'}">준비</option>
                     </select>
                 </td>
                 <td>

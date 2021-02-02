@@ -28,7 +28,7 @@ public interface ProductMapper {
 	List<ProductTitle> searchSelect(SearchParam searchParam);
 
 	int searchCount(SearchParam searchParam);
-	int overlapCheck(String product_code);
+	int overlapCheck(String productCode);
 
 	//    Insert
 	int addTitle(Map<String, Object> title);

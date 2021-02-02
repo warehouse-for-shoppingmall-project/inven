@@ -23,8 +23,8 @@ public class ProductAjaxController {
     @PutMapping("/upStatus")
     public boolean upStatus(@RequestBody ProductInformation productInformation) {
 
-        ProductTitle productTitle = new ProductTitle(productInformation.getProduct_code(),
-                productInformation.getProduct_status());
+        ProductTitle productTitle = new ProductTitle(productInformation.getProductCode(),
+                productInformation.getProductStatus());
 
         prodService.upStatus(productTitle);
 
@@ -32,11 +32,11 @@ public class ProductAjaxController {
     }
 
 	@GetMapping("/overlapCheck")
-	public JSONObject overlapCheck(@RequestParam String product_code) {
-		log.debug("Request Param : " + product_code);
+	public JSONObject overlapCheck(@RequestParam String productCode) {
+		log.debug("Request Param : " + productCode);
 		JSONObject jobj = new JSONObject();
 
-		int rs = prodService.overlapCheck(product_code);
+		int rs = prodService.overlapCheck(productCode);
 
 		jobj.put("code", rs == 0 ? 200 : 400);
 		return jobj;

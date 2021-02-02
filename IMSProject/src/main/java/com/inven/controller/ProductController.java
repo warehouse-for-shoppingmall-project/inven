@@ -49,6 +49,7 @@ public class ProductController {
             searchParam.setEnd_idx(paging.getPageSize());
 
             productTitles = productService.searchSelect(searchParam);
+            log.debug(String.valueOf(productTitles));
         }
 
         mv.addObject("paging", paging);

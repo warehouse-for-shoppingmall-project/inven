@@ -13,28 +13,28 @@ import java.sql.Date;
 @ToString
 @AllArgsConstructor
 public class ProductTitle {
-    private String product_code;
+    private String productCode;
     private String gender;
-    private String make_factory;
-    private String unit_price;
-    private String final_update;
-    private String make_code;
-    private String product_status;
+    private String makeFactory;
+    private String unitPrice;
+    private String finalUpdate;
+    private String makeCode;
+    private String productStatus;
 
-    public ProductTitle(String product_code, String product_status) {
-        this.product_code = product_code;
-        this.product_status = product_status;
+    public ProductTitle(String productCode, String productStatus) {
+        this.productCode = productCode;
+        this.productStatus = productStatus;
     }
 
 
     public ProductTitle(ProductInformation productInformation) {
-        this.product_code = productInformation.getProduct_code();
+        this.productCode = productInformation.getProductCode();
         this.gender = productInformation.getGender();
-        this.make_factory = productInformation.getMake_factory();
-        this.unit_price = productInformation.getUnit_price();
-        this.final_update = productInformation.getFinal_update();
-        this.make_code = productInformation.getMake_code();
-        this.product_status = productInformation.getProduct_status();
+        this.makeFactory = productInformation.getMakeFactory();
+        this.unitPrice = productInformation.getUnitPrice();
+        this.finalUpdate = productInformation.getFinalUpdate();
+        this.makeCode = productInformation.getMakeCode();
+        this.productStatus = productInformation.getProductStatus();
     }
 
 }

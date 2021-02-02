@@ -38,8 +38,8 @@ public class ProductServiceImpl implements ProductService {
         return prodMapper.searchSelect(searchParam);
     }
 
-    public int overlapCheck(String product_code) {
-        return prodMapper.overlapCheck(product_code);
+    public int overlapCheck(String productCode) {
+        return prodMapper.overlapCheck(productCode);
     }
 
     public int searchCount(SearchParam searchParam) {
