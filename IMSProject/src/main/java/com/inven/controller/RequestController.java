@@ -33,8 +33,8 @@ public class RequestController {
         if (!map.containsKey("gender")) map.put("gender", "");
 
         // paging 에서 쓸 값
-        if (!map.containsKey("pageSize")) map.put("pageSize", "10");
-        if (!map.containsKey("pageNo")) map.put("pageNo", "1");
+        if (!map.containsKey("pageSize")) map.put("pageSize", 10);
+        if (!map.containsKey("pageNo")) map.put("pageNo", 1);
         /* request_code product_code request_status pageSize start_date end_Date */
     }
 
@@ -55,8 +55,8 @@ public class RequestController {
             int pageNo = Integer.parseInt(map.get("pageNo").toString());
             int pageSize = Integer.parseInt(map.get("pageSize").toString());
             paging.setPageNo(pageNo);
-            paging.setTotalCount(count);
             paging.setPageSize(pageSize);
+            paging.setTotalCount(count);
 
             map.put("start_idx", paging.getStartIndex());
             map.put("end_idx", paging.getPageSize());
@@ -77,7 +77,6 @@ public class RequestController {
 
         List<Map<String, Object>> details = reqService.selectReqDetail(code);
         mv.addObject("details", details);
-
         return mv;
     }
 

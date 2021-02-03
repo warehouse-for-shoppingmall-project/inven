@@ -4,7 +4,7 @@ let overlapCheckTN = true;
 <!-- 버튼 클릭 시 detail 테이블 열 추가 -->
 function addDetail() {
     let row = detail_tbody.insertRow();
-    row.insertCell().innerHTML += '<input class="form-control" type="text" name="color_name">';
+    row.insertCell().innerHTML += '<input class="form-control" type="text" name="colorName">';
     row.insertCell().innerHTML += '<input type="button" class="btn btn-secondary" value="-" onclick="delDetail(this)">';
 }
 
@@ -48,13 +48,13 @@ $('#overlapCheck').click(function() {
     $.ajax({
         type: "GET",
         url: "/prod/async/overlapCheck",
-        data: { product_code : value },
+        data: { productCode : value },
         dataType: "json",
         success: function(xml) {
                 confirm_1 = false;
             if (xml.code === 200) {
                 validCheck(true);
-                $('input[name=product_code]').val(value);
+                $('input[name=productCode]').val(value);
                 $('#ip_prod_cd').attr('readonly', 'readonly');
                 overlapCheckTN = false;
             } else {
@@ -96,14 +96,14 @@ $('#prodAdd').click(function() {
     let names = [];
 
     $('#detail_tbody > tr').each(function (i, e){
-        let input = $(e).find('input[name=color_name]');
+        let input = $(e).find('input[name=colorName]');
         if(input.val() === '') {
             clrValid.text('컬러 이름을 적으세요');
             input.focus();
             inputYN = true;
             return;
         }
-        let data = { product_code : title.product_code, color_name : input.val()};
+        let data = { productCode : title.productCode, colorName : input.val()};
         details.push(data);
         names.push(input.val());
     });

@@ -2,8 +2,8 @@
 $('select[name=status]').change(function () {
     if (!confirm('상태를 변경하시겠습니까?')) return;
     let data = {
-        product_status: $(this).val(),
-        product_code: $(this).parents('tr').attr('data')
+        productStatus: $(this).val(),
+        productCode: $(this).parents('tr').attr('data')
     };
     console.log(data);
     $.ajax({
@@ -18,7 +18,7 @@ $('select[name=status]').change(function () {
                 // if(select.val() === '수령')
                 //     select.attr('disabled', 'disabled');
                 console.log('success');
-                alert('적용 완료');
+                alert('적용이 완료되었습니다.');
             } else {
                 console.log('error');
                 alert('적용 실패. 잠시 후 다시시도하셈');

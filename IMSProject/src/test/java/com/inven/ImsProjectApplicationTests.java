@@ -1,7 +1,9 @@
 package com.inven;
 
+import java.util.List;
 import java.util.Map;
 
+import com.inven.common.model.ProductDetail;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -11,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.inven.service.ProductServiceImpl;
+import org.springframework.web.servlet.ModelAndView;
 
 @SpringBootTest
 class ImsProjectApplicationTests {
@@ -25,18 +28,11 @@ class ImsProjectApplicationTests {
 	}
 
 	@Test
-	public JSONObject test(@RequestParam Map<String, Object> map) {
-		log.info("Request Parameter : " + map);
+	public void test() {
+		List<ProductDetail> details = prodService.selectDetail("SHY001");
 
-		JSONObject jobj = new JSONObject();
-		jobj.put("code", 400);
-
-//		List<Map<String, Object>> list = prodService.(map);
-//		if(list != null) {
-//			jobj.put("code", 200);
-//			jobj.put("list", list);
-//		}
-
-		return jobj;
+		log.info("상품수정 detail 조회결과 : " + details);
 	}
+
+
 }

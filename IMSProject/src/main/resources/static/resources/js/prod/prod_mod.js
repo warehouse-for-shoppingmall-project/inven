@@ -13,7 +13,7 @@ function delDetail(row) {
     tr.parentNode.removeChild(tr);
 }   //end of addRow 함수
 
-let product_code = $('#product_detail_table').attr('data');
+let productCode = $('#product_detail_table').attr('data');
 
 function prodObj(){
 
@@ -27,7 +27,7 @@ function prodObj(){
             if(i === 0) return true;
             console.log(i, e);
             let input = $(e).find('input[name=update_color_name]');
-            let obj = { product_code : product_code };
+            let obj = { productCode : productCode };
             if (input[0].value.trim()) {
                 $(e).find('input').each(    (i, e) =>  obj[$(e).attr('name')] = $(e).val().trim()   );
                 update_data.push(obj);
@@ -39,9 +39,9 @@ function prodObj(){
         (i, e) => {
             if(i === 0) return true;
             let input = $(e).find('input[name=new_color_name]');
-            let obj = { product_code : product_code };
+            let obj = { productCode : productCode };
             if (input[0].value.trim()) {
-                $(e).find('input').each(    (i, e) =>  obj.color_name = $(e).val().trim()   );
+                $(e).find('input').each(    (i, e) =>  obj.colorName = $(e).val().trim()   );
                 insert_data.push(obj);
             }
         }

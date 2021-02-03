@@ -59,13 +59,18 @@
 		SELECT <include refid="titleColumn"/>
 		FROM request_title
 		<include refid="search"/>
-		ORDER BY request_date DESC
+		ORDER BY request_code DESC
 		LIMIT #{start_idx}, #{end_idx}
 	</select>
 
 	<!-- 발주코드 상세내역을 가져옴 -->
+	<!--
+			color_name as colorName	하는 이유
+			detail_view 팝업 창 띄울 때 product VO 카멜형식으로 변경해놔서 colorName으로 받아 쓰는데
+			여기서는 _ 형식으로 받아와서 에러나서 AS통해 변경
+	-->
 	<select id="selectReqDetail" parameterType="String" resultType="hashMap">
-		SELECT color_name, s, m, l, xl, f, total
+		SELECT color_name AS colorName, s, m, l, xl, f, total
 		FROM request_detail WHERE request_code = #{request_code}
 	</select>
 

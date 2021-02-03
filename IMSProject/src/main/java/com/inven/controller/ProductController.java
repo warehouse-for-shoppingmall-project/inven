@@ -83,7 +83,7 @@ public class ProductController {
         log.info("상품수정 detail 조회결과 : " + details);
 
         mv.addObject("details", details);
-        mv.addObject("product_code", productCode);
+        mv.addObject("productCode", productCode);
 
         return mv;
     }

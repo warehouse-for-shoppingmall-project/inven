@@ -55,7 +55,6 @@
         <result property="make_factory" column="make_factory" />
         <result property="unit_price" column="unit_price" />
         <result property="final_update" column="final_update" />
-        <result property="make_code" column="make_code" />
         <result property="product_status" column="product_status" />
     </resultMap>
 
@@ -74,14 +73,14 @@
     <!-- ADD -->
     <insert id="addTitle" parameterType="hashMap">
         INSERT INTO product_title(product_code, gender)
-        VALUES(#{product_code}, #{gender})
+        VALUES(#{productCode}, #{gender})
     </insert>
 
     <insert id="addDetails" parameterType="java.util.List">
         INSERT INTO product_detail(product_code, color_name)
         VALUES
         <foreach collection="details" item="item" separator=",">
-            (#{item.product_code}, #{item.color_name})
+            (#{item.productCode}, #{item.colorName})
         </foreach>
     </insert>
 
@@ -90,7 +89,7 @@
         INSERT INTO product_detail(product_code, color_name)
         VALUES
         <foreach collection="list" item="item" separator=",">
-            (#{item.product_code}, #{item.new_color_name})
+            (#{item.productCode}, #{item.new_color_name})
         </foreach>
     </insert>
 
@@ -106,7 +105,7 @@
         <foreach collection="list" item="item" separator=";" close=";">
             UPDATE product_detail
             SET color_name = #{item.update_color_name}
-            WHERE product_code = #{item.product_code} AND color_name = #{item.old_color_name}
+            WHERE product_code = #{item.productCode} AND color_name = #{item.old_color_name}
         </foreach>
     </update>
 

@@ -69,7 +69,7 @@
                     <label for="gn_rd3">여성(W)</label>
                 </td>
                 <th>
-                    입고 날짜
+                    검색 기간<br>(수정일 기준)
                 </th>
                 <td>
                     <input id="dateInput" class="dateInput" type="date" name="startDate"
@@ -108,8 +108,7 @@
                 <th scope="col">성별</th>
                 <th scope="col">제조공장</th>
                 <th scope="col">단가</th>
-                <th scope="col">마지막수정일</th>
-                <th scope="col">제조코드</th>
+                <th scope="col">마지막 수정일</th>
                 <th scope="col">상품상태</th>
                 <th scope="col">수정</th>
                 <th scope="col">발주넣기</th>
@@ -127,7 +126,6 @@
                 <td th:text="${title.getMakeFactory()}">factory</td>
                 <td th:text="${title.getUnitPrice()}">price</td>
                 <td th:text="${title.getFinalUpdate()}">update</td>
-                <td th:text="${title.getMakeCode()}">make_code</td>
                 <td>
                     <select class="custom-select" name="status">
                         <option value="판매" th:selected="${title.getProductStatus() == '판매'}">판매</option>
