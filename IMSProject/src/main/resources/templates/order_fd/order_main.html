@@ -86,7 +86,7 @@
         </table>
     </form>
     <!-- ./ navbar -->
-    <div class="col-lg-12">
+    <div class="col-lg-15 table-responsive-lg">
         <table class="table table-hover">
             <thead class="thead-dark">
             <tr>
@@ -111,12 +111,12 @@
                     검색결과에 맞는 데이터가 없습니다
                 </td>
             </tr>
-            <tr th:each="order : ${orderList}" name="each_data_tbody" th:data="${order.getOrderNo()}">
-                <td th:text="${order.getOrderNo()}">orderNO</td>
+            <tr th:each="order : ${orderList}" th:data="${order.getOrderNo()}">
+                <td style="width: 40px;" th:text="${order.getOrderNo()}">orderNO</td>
                 <td th:text="${order.getCustId()}">custID</td>
                 <td th:text="${order.getCustName()}">custName</td>
                 <td>
-                    <select class="custom-select" name="orderStatus">
+                    <select style="width: 72px;" class="custom-select" name="orderStatus">
                         <option value="주문" th:selected="${order.getOrderStatus() == '주문'}">주문</option>
                         <option value="발송" th:selected="${order.getOrderStatus() == '발송'}">발송</option>
                         <option value="수령" th:selected="${order.getOrderStatus() == '수령'}">수령</option>
@@ -130,11 +130,11 @@
                 <td th:text="${order.getQty()}">quantity</td>
                 <td th:text="${order.getPrice()}">price</td>
                 <td th:text="${order.getAddr()} + ' ' + ${order.getAddr2()}">address</td>
-                <td>
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" name="deliveryNum" readonly>
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-secondary" type="button" name="makeTrackingNum">송장 번호 생성
+                <td style="width: 135px;">
+                    <div class="input-group mb-2">
+                        <input th:if="${order.getDeliveryNum() != null}" type="text" class="form-control" name="deliveryNum" th:value="${order.getDeliveryNum()}" readonly>
+                        <div th:if="${order.getDeliveryNum() == null}" class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button" name="makeTrackingNum">송장생성
                             </button>
                         </div>
                     </div>
